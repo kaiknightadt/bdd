@@ -1120,6 +1120,11 @@ def contact():
     return send_from_directory("static/landing", "contact.html")
 
 
+@app.route("/pricing")
+def pricing():
+    return send_from_directory("static/landing", "pricing.html")
+
+
 @app.route("/register")
 def register_page():
     # If already registered, go straight to app

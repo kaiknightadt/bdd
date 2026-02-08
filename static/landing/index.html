@@ -4,1790 +4,1619 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BDD — Board de Décision Digitale</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #111118;
-            --bg-card: #16161f;
-            --bg-card-hover: #1c1c28;
-            --border: #2a2a3a;
+            --bg: #0a0a0c;
+            --bg-elevated: #111114;
+            --bg-card: #16161a;
+            --bg-card-hover: #1c1c22;
             --gold: #c9a84c;
-            --gold-dim: #8a7235;
+            --gold-dim: #a08535;
+            --gold-bright: #e0c266;
             --gold-glow: rgba(201, 168, 76, 0.15);
-            --gold-glow-strong: rgba(201, 168, 76, 0.3);
-            --text-primary: #e8e4dc;
-            --text-secondary: #9a9688;
-            --text-muted: #5a5750;
-            --gandhi-accent: #7eb89a;
-            --gandhi-bg: rgba(126, 184, 154, 0.08);
-            --gandhi-border: rgba(126, 184, 154, 0.25);
-            --suntzu-accent: #c47a5a;
-            --suntzu-bg: rgba(196, 122, 90, 0.08);
-            --suntzu-border: rgba(196, 122, 90, 0.25);
-            --jobs-accent: #b0b0b0;
-            --jobs-bg: rgba(176, 176, 176, 0.08);
-            --jobs-border: rgba(176, 176, 176, 0.25);
-            --socrate-accent: #a89bcc;
-            --socrate-bg: rgba(168, 155, 204, 0.08);
-            --socrate-border: rgba(168, 155, 204, 0.25);
-            --buffett-accent: #5aad7a;
-            --buffett-bg: rgba(90, 173, 122, 0.08);
-            --buffett-border: rgba(90, 173, 122, 0.25);
-            --musk-accent: #5b9bd5;
-            --musk-bg: rgba(91, 155, 213, 0.08);
-            --musk-border: rgba(91, 155, 213, 0.25);
-            --bezos-accent: #d4a054;
-            --bezos-bg: rgba(212, 160, 84, 0.08);
-            --bezos-border: rgba(212, 160, 84, 0.25);
-            --jesus-accent: #dcc07a;
-            --jesus-bg: rgba(220, 192, 122, 0.08);
-            --jesus-border: rgba(220, 192, 122, 0.25);
-            --kanye-accent: #d45a7a;
-            --kanye-bg: rgba(212, 90, 122, 0.08);
-            --kanye-border: rgba(212, 90, 122, 0.25);
-            --beyonce-accent: #d4a0d4;
-            --beyonce-bg: rgba(212, 160, 212, 0.08);
-            --beyonce-border: rgba(212, 160, 212, 0.25);
-            --chalamet-accent: #7ac4b8;
-            --chalamet-bg: rgba(122, 196, 184, 0.08);
-            --chalamet-border: rgba(122, 196, 184, 0.25);
-            --arnault-accent: #8b7fc4;
-            --arnault-bg: rgba(139, 127, 196, 0.08);
-            --arnault-border: rgba(139, 127, 196, 0.25);
-            --luchini-accent: #d49a5a;
-            --luchini-bg: rgba(212, 154, 90, 0.08);
-            --luchini-border: rgba(212, 154, 90, 0.25);
-            --luffy-accent: #e05555;
-            --luffy-bg: rgba(224, 85, 85, 0.08);
-            --luffy-border: rgba(224, 85, 85, 0.25);
-            --cameron-accent: #d4a0c4;
-            --cameron-bg: rgba(212, 160, 196, 0.08);
-            --cameron-border: rgba(212, 160, 196, 0.25);
-            --giono-accent: #8bb86a;
-            --giono-bg: rgba(139, 184, 106, 0.08);
-            --giono-border: rgba(139, 184, 106, 0.25);
-            --davidneel-accent: #8ac4d4;
-            --davidneel-bg: rgba(138, 196, 212, 0.08);
-            --davidneel-border: rgba(138, 196, 212, 0.25);
-            --ammar-accent: #d4c45a;
-            --ammar-bg: rgba(212, 196, 90, 0.08);
-            --ammar-border: rgba(212, 196, 90, 0.25);
-            --lestwins-accent: #d47a5a;
-            --lestwins-bg: rgba(212, 122, 90, 0.08);
-            --lestwins-border: rgba(212, 122, 90, 0.25);
-            --chouard-accent: #7ab89a;
-            --chouard-bg: rgba(122, 184, 154, 0.08);
-            --chouard-border: rgba(122, 184, 154, 0.25);
-            --baer-accent: #c4a07a;
-            --baer-bg: rgba(196, 160, 122, 0.08);
-            --baer-border: rgba(196, 160, 122, 0.25);
-            --darmanin-accent: #5a7ac4;
-            --darmanin-bg: rgba(90, 122, 196, 0.08);
-            --darmanin-border: rgba(90, 122, 196, 0.25);
-            --report-accent: #7a8ec4;
+            --text: #e8e4dd;
+            --text-secondary: #9a9590;
+            --text-muted: #6a6560;
+            --border: rgba(255,255,255,0.06);
+            --border-gold: rgba(201, 168, 76, 0.2);
+            --accent-red: #c44;
+            --accent-blue: #4a7ec4;
+            --accent-green: #5aad7a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            max-width: 100vw;
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-dim) var(--bg);
         }
 
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== NOISE TEXTURE OVERLAY ========== */
         body::before {
             content: '';
             position: fixed;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(201, 168, 76, 0.03) 0%, transparent 50%),
-                        radial-gradient(ellipse at 70% 80%, rgba(126, 184, 154, 0.02) 0%, transparent 50%),
-                        radial-gradient(ellipse at 50% 50%, rgba(196, 122, 90, 0.02) 0%, transparent 40%);
-            pointer-events: none; z-index: 0;
-        }
-
-        /* ============================
-           SCREEN MANAGEMENT
-        ============================ */
-        .screen { display: none; }
-        .screen.active { display: block; }
-
-        /* ============================
-           HOME SCREEN
-        ============================ */
-        .home-container {
-            position: relative; z-index: 10;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .home-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .home-logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.4em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 0.8rem;
-        }
-
-        .home-header h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            line-height: 1.2;
-            margin-bottom: 0.8rem;
-        }
-
-        .home-header p {
-            color: var(--text-secondary);
-            font-size: 1.05rem;
-            line-height: 1.6;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        /* Section labels (shared) */
-        .section-label {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--gold);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            margin-bottom: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-        }
-
-        .section-label::before {
-            content: '';
-            display: inline-block;
-            width: 20px; height: 1px;
-            background: var(--gold-dim);
-        }
-
-        /* Advisor selection grid */
-        .advisor-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2.5rem;
-        }
-
-        .advisor-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            position: relative;
-            user-select: none;
-        }
-
-        .advisor-card:hover {
-            border-color: var(--gold-dim);
-            background: var(--bg-card-hover);
-            transform: translateY(-2px);
-        }
-
-        .advisor-card.selected {
-            border-color: var(--gold);
-            background: rgba(201, 168, 76, 0.06);
-            box-shadow: 0 0 30px var(--gold-glow);
-        }
-
-        .advisor-card .card-avatar {
-            width: 70px; height: 70px;
-            border-radius: 50%;
-            overflow: hidden;
-            flex-shrink: 0;
-            border: 2px solid var(--border);
-            transition: border-color 0.3s;
-        }
-
-        .advisor-card.selected .card-avatar {
-            border-color: var(--gold);
-        }
-
-        .advisor-card .card-avatar img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            object-position: center 15%;
-        }
-
-        .card-info { flex: 1; min-width: 0; }
-
-        .card-info h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.2rem;
-        }
-
-        .card-info .card-title {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-
-        .card-info .card-desc {
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            line-height: 1.5;
-        }
-
-        .card-check {
-            position: absolute;
-            top: 0.8rem; right: 0.8rem;
-            width: 26px; height: 26px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-            font-size: 0.75rem;
-            color: transparent;
-        }
-
-        .advisor-card.selected .card-check {
-            background: var(--gold);
-            border-color: var(--gold);
-            color: var(--bg-primary);
-        }
-
-        /* Home bottom bar */
-        .home-bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1.5rem 0;
-            border-top: 1px solid var(--border);
-        }
-
-        .selection-count {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .selection-count strong {
-            color: var(--gold);
-            font-weight: 600;
-        }
-
-        .btn-start {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.05rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            padding: 0.8rem 2.5rem;
-            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
-            color: var(--bg-primary);
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-start:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 25px var(--gold-glow-strong);
-        }
-
-        .btn-start:disabled { opacity: 0.35; cursor: not-allowed; }
-
-        /* ============================
-           BOARD SCREEN
-        ============================ */
-        .board-container {
-            position: relative; z-index: 10;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            overflow: hidden;
-        }
-
-        .board-topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 1.5rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .board-brand {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .board-brand-logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.7rem;
-            font-weight: 600;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: var(--gold);
-        }
-
-        .board-brand h2 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-        }
-
-        .btn-back {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.82rem;
-            font-weight: 500;
-            padding: 0.5rem 1.2rem;
-            background: transparent;
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-back:hover {
-            border-color: var(--text-muted);
-            color: var(--text-primary);
-        }
-
-        .topbar-right {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .consult-counter {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1.1rem;
-            background: rgba(201,168,76,0.12);
-            border: 1px solid var(--gold-dim);
-            border-radius: 20px;
-            font-size: 0.82rem;
-            color: var(--gold);
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-        }
-
-        .consult-counter .dot {
-            width: 7px; height: 7px;
-            border-radius: 50%;
-            background: var(--gold);
-            flex-shrink: 0;
-        }
-
-        .consult-counter.warning { 
-            border-color: #c44; 
-            color: #e88;
-            background: rgba(204,68,68,0.1);
-        }
-        .consult-counter.warning .dot { background: #e44; }
-        .consult-counter.exhausted {
-            border-color: #c44;
-            color: #e88;
-            background: rgba(204,68,68,0.15);
-        }
-
-        /* Upsell modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.75);
-            backdrop-filter: blur(8px);
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
             z-index: 9999;
-            justify-content: center;
+        }
+
+        /* ========== NAV ========== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10,10,12,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.4s;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .nav-logo span {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            display: block;
+            text-transform: uppercase;
+            margin-top: -2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
             align-items: center;
         }
 
-        .modal-overlay.visible { display: flex; }
-
-        .modal-card {
-            width: 90%;
-            max-width: 440px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-gold);
-            border-radius: 16px;
-            padding: 3rem 2.5rem;
-            text-align: center;
-            animation: fadeInUp 0.4s ease-out;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .modal-icon { font-size: 2.5rem; margin-bottom: 1rem; }
-
-        .modal-card h3 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .modal-card p {
-            font-size: 0.9rem;
+        .nav-links a {
             color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
         }
 
-        .modal-btn-gold {
-            display: inline-block;
-            padding: 0.9rem 2.5rem;
-            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
-            color: var(--bg-primary);
+        .nav-links a:hover { color: var(--gold); }
+
+        .btn-nav-cta {
+            padding: 0.6rem 1.6rem;
+            background: var(--gold);
+            color: var(--bg);
             border: none;
-            border-radius: 8px;
-            font-family: 'Cormorant Garamond', serif;
+            border-radius: 4px;
+            font-family: 'Outfit', sans-serif;
             font-weight: 600;
-            font-size: 0.95rem;
-            letter-spacing: 0.1em;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
             text-transform: uppercase;
             cursor: pointer;
             transition: all 0.3s;
             text-decoration: none;
-            margin-bottom: 0.8rem;
         }
 
-        .modal-btn-gold:hover {
-            box-shadow: 0 6px 25px rgba(201,168,76,0.35);
-            transform: translateY(-1px);
-        }
-
-        .modal-dismiss {
-            display: block;
-            margin-top: 0.5rem;
-            font-size: 0.78rem;
-            color: var(--text-muted);
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-        }
-
-        .modal-dismiss:hover { color: var(--text-secondary); }
-
-        /* Input */
-        .input-section { margin-bottom: 2rem; }
-
-        .input-wrapper {
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            background: var(--bg-secondary);
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .input-wrapper:focus-within {
-            border-color: var(--gold-dim);
+        .btn-nav-cta:hover {
+            background: var(--gold-bright);
             box-shadow: 0 0 30px var(--gold-glow);
         }
 
-        .input-wrapper textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 1.2rem;
-            background: transparent;
-            border: none;
-            color: var(--text-primary);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 1rem;
-            line-height: 1.7;
-            resize: vertical;
-            outline: none;
-        }
-
-        .input-wrapper textarea::placeholder { color: var(--text-muted); }
-
-        .input-actions {
-            display: flex;
-            justify-content: flex-end;
-            padding: 0.6rem 1rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .btn-consult {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            padding: 0.65rem 1.8rem;
-            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
-            color: var(--bg-primary);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-consult:hover:not(:disabled) {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 20px var(--gold-glow-strong);
-        }
-
-        .btn-consult:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .btn-consult.loading { position: relative; color: transparent; }
-
-        .btn-consult.loading::after {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 18px; height: 18px;
-            margin: -9px 0 0 -9px;
-            border: 2px solid var(--bg-primary);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Table */
-        .table-container {
+        /* ========== HERO ========== */
+        .hero {
             position: relative;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-
-        .oval-table {
-            width: 500px; height: 110px;
-            background: radial-gradient(ellipse, #1e1c15 0%, #15140e 60%, #0f0e0a 100%);
-            border-radius: 50%;
-            border: 2px solid var(--gold-dim);
-            box-shadow: 0 10px 60px rgba(0,0,0,0.5),
-                        inset 0 0 40px rgba(201, 168, 76, 0.05),
-                        0 0 80px var(--gold-glow);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .table-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.7rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--gold-dim);
-        }
-
-        /* Advisors row */
-        .advisors-row {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            min-width: 0;
-            width: 100%;
-        }
-
-        .advisor-seat {
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
-            min-width: 0;
-        }
-
-        .advisor-avatar {
-            width: 110px; height: 110px;
-            border-radius: 50%;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
             overflow: hidden;
-            margin-bottom: 0.6rem;
-            transition: all 0.5s;
         }
 
-        .advisor-avatar img {
-            width: 100%; height: 100%;
-            object-fit: cover;
-            object-position: center 15%;
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 20% 80%, rgba(90,50,20,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 20%, rgba(50,40,80,0.06) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .hero-particles {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
             border-radius: 50%;
-            transition: all 0.5s;
+            opacity: 0;
+            animation: float-particle 8s infinite ease-in-out;
         }
 
-        .advisor-avatar.speaking { animation: pulse-glow 2s ease-in-out infinite; }
-        .advisor-avatar.speaking img { filter: brightness(1.15); }
-
-        @keyframes pulse-glow {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.04); }
+        @keyframes float-particle {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
+            50% { opacity: 0.4; transform: translateY(-100px) scale(1.5); }
         }
 
-        .advisor-seat .advisor-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 0.1rem;
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
         }
 
-        .advisor-seat .advisor-title {
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            border: 1px solid var(--border-gold);
+            border-radius: 100px;
             font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            background: rgba(201,168,76,0.04);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 6vw, 4.8rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.8rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .hero-sub {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 680px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gold);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-primary:hover::after { left: 100%; }
+
+        .btn-primary:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 8px 40px rgba(201,168,76,0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
+        .hero-proof {
+            margin-top: 4rem;
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        .proof-item {
+            text-align: center;
+        }
+
+        .proof-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .proof-label {
+            font-size: 0.72rem;
             color: var(--text-muted);
-            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0.2rem;
+        }
+
+        /* ========== SECTION STYLING ========== */
+        section {
+            padding: 7rem 2rem;
+            position: relative;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+            font-weight: 500;
             margin-bottom: 1rem;
         }
 
-        /* Advisor color schemes */
-        .advisor-seat[data-advisor="gandhi"] .advisor-avatar { border: 3px solid var(--gandhi-border); }
-        .advisor-seat[data-advisor="gandhi"] .advisor-name { color: var(--gandhi-accent); }
-        .advisor-seat[data-advisor="gandhi"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(126,184,154,0.4), 0 0 80px rgba(126,184,154,0.15);
-            border-color: var(--gandhi-accent);
-        }
-        .advisor-seat[data-advisor="gandhi"] .response-card {
-            background: var(--gandhi-bg); border: 1px solid var(--gandhi-border);
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
         }
 
-        .advisor-seat[data-advisor="suntzu"] .advisor-avatar { border: 3px solid var(--suntzu-border); }
-        .advisor-seat[data-advisor="suntzu"] .advisor-name { color: var(--suntzu-accent); }
-        .advisor-seat[data-advisor="suntzu"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(196,122,90,0.4), 0 0 80px rgba(196,122,90,0.15);
-            border-color: var(--suntzu-accent);
-        }
-        .advisor-seat[data-advisor="suntzu"] .response-card {
-            background: var(--suntzu-bg); border: 1px solid var(--suntzu-border);
+        .section-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 700px;
+            font-weight: 300;
         }
 
-        .advisor-seat[data-advisor="jobs"] .advisor-avatar { border: 3px solid var(--jobs-border); }
-        .advisor-seat[data-advisor="jobs"] .advisor-name { color: var(--jobs-accent); }
-        .advisor-seat[data-advisor="jobs"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(176,176,176,0.4), 0 0 80px rgba(176,176,176,0.15);
-            border-color: var(--jobs-accent);
-        }
-        .advisor-seat[data-advisor="jobs"] .response-card {
-            background: var(--jobs-bg); border: 1px solid var(--jobs-border);
+        /* ========== PAIN SECTION ========== */
+        .pain {
+            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-elevated) 100%);
         }
 
-        .advisor-seat[data-advisor="socrate"] .advisor-avatar { border: 3px solid var(--socrate-border); }
-        .advisor-seat[data-advisor="socrate"] .advisor-name { color: var(--socrate-accent); }
-        .advisor-seat[data-advisor="socrate"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(168,155,204,0.4), 0 0 80px rgba(168,155,204,0.15);
-            border-color: var(--socrate-accent);
-        }
-        .advisor-seat[data-advisor="socrate"] .response-card {
-            background: var(--socrate-bg); border: 1px solid var(--socrate-border);
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3.5rem;
         }
 
-        .advisor-seat[data-advisor="buffett"] .advisor-avatar { border: 3px solid var(--buffett-border); }
-        .advisor-seat[data-advisor="buffett"] .advisor-name { color: var(--buffett-accent); }
-        .advisor-seat[data-advisor="buffett"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(90,173,122,0.4), 0 0 80px rgba(90,173,122,0.15);
-            border-color: var(--buffett-accent);
-        }
-        .advisor-seat[data-advisor="buffett"] .response-card {
-            background: var(--buffett-bg); border: 1px solid var(--buffett-border);
-        }
-
-        .advisor-seat[data-advisor="musk"] .advisor-avatar { border: 3px solid var(--musk-border); }
-        .advisor-seat[data-advisor="musk"] .advisor-name { color: var(--musk-accent); }
-        .advisor-seat[data-advisor="musk"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(91,155,213,0.4), 0 0 80px rgba(91,155,213,0.15);
-            border-color: var(--musk-accent);
-        }
-        .advisor-seat[data-advisor="musk"] .response-card {
-            background: var(--musk-bg); border: 1px solid var(--musk-border);
-        }
-
-        .advisor-seat[data-advisor="bezos"] .advisor-avatar { border: 3px solid var(--bezos-border); }
-        .advisor-seat[data-advisor="bezos"] .advisor-name { color: var(--bezos-accent); }
-        .advisor-seat[data-advisor="bezos"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(212,160,84,0.4), 0 0 80px rgba(212,160,84,0.15);
-            border-color: var(--bezos-accent);
-        }
-        .advisor-seat[data-advisor="bezos"] .response-card {
-            background: var(--bezos-bg); border: 1px solid var(--bezos-border);
-        }
-
-        .advisor-seat[data-advisor="jesus"] .advisor-avatar { border: 3px solid var(--jesus-border); }
-        .advisor-seat[data-advisor="jesus"] .advisor-name { color: var(--jesus-accent); }
-        .advisor-seat[data-advisor="jesus"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(220,192,122,0.4), 0 0 80px rgba(220,192,122,0.15);
-            border-color: var(--jesus-accent);
-        }
-        .advisor-seat[data-advisor="jesus"] .response-card {
-            background: var(--jesus-bg); border: 1px solid var(--jesus-border);
-        }
-
-        .advisor-seat[data-advisor="kanye"] .advisor-avatar { border: 3px solid var(--kanye-border); }
-        .advisor-seat[data-advisor="kanye"] .advisor-name { color: var(--kanye-accent); }
-        .advisor-seat[data-advisor="kanye"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(212,90,122,0.4), 0 0 80px rgba(212,90,122,0.15);
-            border-color: var(--kanye-accent);
-        }
-        .advisor-seat[data-advisor="kanye"] .response-card {
-            background: var(--kanye-bg); border: 1px solid var(--kanye-border);
-        }
-
-        .advisor-seat[data-advisor="beyonce"] .advisor-avatar { border: 3px solid var(--beyonce-border); }
-        .advisor-seat[data-advisor="beyonce"] .advisor-name { color: var(--beyonce-accent); }
-        .advisor-seat[data-advisor="beyonce"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(212,160,212,0.4), 0 0 80px rgba(212,160,212,0.15);
-            border-color: var(--beyonce-accent);
-        }
-        .advisor-seat[data-advisor="beyonce"] .response-card {
-            background: var(--beyonce-bg); border: 1px solid var(--beyonce-border);
-        }
-
-        .advisor-seat[data-advisor="chalamet"] .advisor-avatar { border: 3px solid var(--chalamet-border); }
-        .advisor-seat[data-advisor="chalamet"] .advisor-name { color: var(--chalamet-accent); }
-        .advisor-seat[data-advisor="chalamet"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(122,196,184,0.4), 0 0 80px rgba(122,196,184,0.15);
-            border-color: var(--chalamet-accent);
-        }
-        .advisor-seat[data-advisor="chalamet"] .response-card {
-            background: var(--chalamet-bg); border: 1px solid var(--chalamet-border);
-        }
-
-        .advisor-seat[data-advisor="arnault"] .advisor-avatar { border: 3px solid var(--arnault-border); }
-        .advisor-seat[data-advisor="arnault"] .advisor-name { color: var(--arnault-accent); }
-        .advisor-seat[data-advisor="arnault"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(139,127,196,0.4), 0 0 80px rgba(139,127,196,0.15);
-            border-color: var(--arnault-accent);
-        }
-        .advisor-seat[data-advisor="arnault"] .response-card {
-            background: var(--arnault-bg); border: 1px solid var(--arnault-border);
-        }
-
-        .advisor-seat[data-advisor="luchini"] .advisor-avatar { border: 3px solid var(--luchini-border); }
-        .advisor-seat[data-advisor="luchini"] .advisor-name { color: var(--luchini-accent); }
-        .advisor-seat[data-advisor="luchini"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(212,154,90,0.4), 0 0 80px rgba(212,154,90,0.15);
-            border-color: var(--luchini-accent);
-        }
-        .advisor-seat[data-advisor="luchini"] .response-card {
-            background: var(--luchini-bg); border: 1px solid var(--luchini-border);
-        }
-
-        .advisor-seat[data-advisor="luffy"] .advisor-avatar { border: 3px solid var(--luffy-border); }
-        .advisor-seat[data-advisor="luffy"] .advisor-name { color: var(--luffy-accent); }
-        .advisor-seat[data-advisor="luffy"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(224,85,85,0.4), 0 0 80px rgba(224,85,85,0.15);
-            border-color: var(--luffy-accent);
-        }
-        .advisor-seat[data-advisor="luffy"] .response-card {
-            background: var(--luffy-bg); border: 1px solid var(--luffy-border);
-        }
-
-        .advisor-seat[data-advisor="cameron"] .advisor-avatar { border: 3px solid var(--cameron-border); }
-        .advisor-seat[data-advisor="cameron"] .advisor-name { color: var(--cameron-accent); }
-        .advisor-seat[data-advisor="cameron"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(212,160,196,0.4), 0 0 80px rgba(212,160,196,0.15);
-            border-color: var(--cameron-accent);
-        }
-        .advisor-seat[data-advisor="cameron"] .response-card {
-            background: var(--cameron-bg); border: 1px solid var(--cameron-border);
-        }
-
-        .advisor-seat[data-advisor="giono"] .advisor-avatar { border: 3px solid var(--giono-border); }
-        .advisor-seat[data-advisor="giono"] .advisor-name { color: var(--giono-accent); }
-        .advisor-seat[data-advisor="giono"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(139,184,106,0.4), 0 0 80px rgba(139,184,106,0.15);
-            border-color: var(--giono-accent);
-        }
-        .advisor-seat[data-advisor="giono"] .response-card {
-            background: var(--giono-bg); border: 1px solid var(--giono-border);
-        }
-
-        .advisor-seat[data-advisor="davidneel"] .advisor-avatar { border: 3px solid var(--davidneel-border); }
-        .advisor-seat[data-advisor="davidneel"] .advisor-name { color: var(--davidneel-accent); }
-        .advisor-seat[data-advisor="davidneel"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(138,196,212,0.4), 0 0 80px rgba(138,196,212,0.15);
-            border-color: var(--davidneel-accent);
-        }
-        .advisor-seat[data-advisor="davidneel"] .response-card {
-            background: var(--davidneel-bg); border: 1px solid var(--davidneel-border);
-        }
-
-        .advisor-seat[data-advisor="ammar"] .advisor-avatar { border: 3px solid var(--ammar-border); }
-        .advisor-seat[data-advisor="ammar"] .advisor-name { color: var(--ammar-accent); }
-        .advisor-seat[data-advisor="ammar"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(212,196,90,0.4), 0 0 80px rgba(212,196,90,0.15);
-            border-color: var(--ammar-accent);
-        }
-        .advisor-seat[data-advisor="ammar"] .response-card {
-            background: var(--ammar-bg); border: 1px solid var(--ammar-border);
-        }
-
-        .advisor-seat[data-advisor="lestwins"] .advisor-avatar { border: 3px solid var(--lestwins-border); }
-        .advisor-seat[data-advisor="lestwins"] .advisor-name { color: var(--lestwins-accent); }
-        .advisor-seat[data-advisor="lestwins"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(212,122,90,0.4), 0 0 80px rgba(212,122,90,0.15);
-            border-color: var(--lestwins-accent);
-        }
-        .advisor-seat[data-advisor="lestwins"] .response-card {
-            background: var(--lestwins-bg); border: 1px solid var(--lestwins-border);
-        }
-
-        .advisor-seat[data-advisor="chouard"] .advisor-avatar { border: 3px solid var(--chouard-border); }
-        .advisor-seat[data-advisor="chouard"] .advisor-name { color: var(--chouard-accent); }
-        .advisor-seat[data-advisor="chouard"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(122,184,154,0.4), 0 0 80px rgba(122,184,154,0.15);
-            border-color: var(--chouard-accent);
-        }
-        .advisor-seat[data-advisor="chouard"] .response-card {
-            background: var(--chouard-bg); border: 1px solid var(--chouard-border);
-        }
-
-        .advisor-seat[data-advisor="baer"] .advisor-avatar { border: 3px solid var(--baer-border); }
-        .advisor-seat[data-advisor="baer"] .advisor-name { color: var(--baer-accent); }
-        .advisor-seat[data-advisor="baer"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(196,160,122,0.4), 0 0 80px rgba(196,160,122,0.15);
-            border-color: var(--baer-accent);
-        }
-        .advisor-seat[data-advisor="baer"] .response-card {
-            background: var(--baer-bg); border: 1px solid var(--baer-border);
-        }
-
-        .advisor-seat[data-advisor="darmanin"] .advisor-avatar { border: 3px solid var(--darmanin-border); }
-        .advisor-seat[data-advisor="darmanin"] .advisor-name { color: var(--darmanin-accent); }
-        .advisor-seat[data-advisor="darmanin"] .advisor-avatar.speaking {
-            box-shadow: 0 0 40px rgba(90,122,196,0.4), 0 0 80px rgba(90,122,196,0.15);
-            border-color: var(--darmanin-accent);
-        }
-        .advisor-seat[data-advisor="darmanin"] .response-card {
-            background: var(--darmanin-bg); border: 1px solid var(--darmanin-border);
-        }
-
-        /* Response cards */
-        .response-card {
-            width: 100%;
-            border-radius: 12px;
-            padding: 1.5rem;
-            min-height: 60px;
-            min-width: 0;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.5s ease;
-        }
-
-        .response-card.visible { opacity: 1; transform: translateY(0); }
-
-        .advisor-summary {
-            width: 100%;
-            margin-top: 0.6rem;
-            padding: 0.8rem 1.2rem;
-            background: rgba(201, 168, 76, 0.08);
-            border: 1px solid rgba(201, 168, 76, 0.2);
+        .pain-card {
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 8px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.88rem;
-            font-weight: 500;
-            color: var(--gold);
-            line-height: 1.5;
-            opacity: 0;
-            transform: translateY(5px);
-            transition: all 0.5s ease;
-            display: none;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .advisor-summary.visible {
+        .pain-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent-red);
+            opacity: 0.6;
+        }
+
+        .pain-card:hover {
+            border-color: rgba(204,68,68,0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .pain-icon {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .pain-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            margin-bottom: 0.8rem;
+            color: var(--text);
+        }
+
+        .pain-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .pain-stat {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(204,68,68,0.08);
+            border: 1px solid rgba(204,68,68,0.15);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-red);
+        }
+
+        /* ========== SCENARIO SECTION ========== */
+        .scenarios {
+            background: var(--bg-elevated);
+        }
+
+        .scenario-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+            margin-top: 3.5rem;
+        }
+
+        .scenario-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .scenario-card:hover {
+            border-color: var(--border-gold);
+            transform: translateY(-6px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .scenario-header {
+            padding: 2rem 2rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scenario-persona {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .scenario-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .scenario-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .scenario-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .scenario-problem {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .scenario-board {
+            padding: 1.5rem 2rem;
+        }
+
+        .scenario-board-label {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+            margin-bottom: 0.8rem;
+        }
+
+        .scenario-advisors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .scenario-advisor-tag {
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .scenario-insight {
+            padding: 1rem 1.2rem;
+            background: var(--gold-glow);
+            border: 1px solid var(--border-gold);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--gold-bright);
+            line-height: 1.5;
+        }
+
+        .scenario-insight::before {
+            content: '💡 ';
+        }
+
+        /* ========== HOW IT WORKS ========== */
+        .how-it-works {
+            background: var(--bg);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3.5rem;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 3rem;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--gold-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin: 0 auto 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .step p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ========== ADVISORS GALLERY ========== */
+        .advisors-section {
+            background: var(--bg-elevated);
+            overflow: hidden;
+        }
+
+        .advisors-scroll {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 3rem;
+            animation: scroll-advisors 40s linear infinite;
+            width: max-content;
+        }
+
+        .advisors-scroll:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-advisors {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .advisor-preview {
+            flex-shrink: 0;
+            width: 180px;
+            padding: 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .advisor-preview:hover {
+            border-color: var(--border-gold);
+            transform: scale(1.05);
+        }
+
+        .advisor-preview-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .advisor-preview-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .advisor-preview-title {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== COMPARISON SECTION ========== */
+        .comparison {
+            background: var(--bg);
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3.5rem;
+            max-width: 900px;
+        }
+
+        .comparison-col {
+            padding: 2.5rem;
+            border-radius: 12px;
+        }
+
+        .comparison-col.before {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .comparison-col.after {
+            background: rgba(201,168,76,0.04);
+            border: 1px solid var(--border-gold);
+        }
+
+        .comparison-col h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-col.before h3 { color: var(--text-muted); }
+        .comparison-col.after h3 { color: var(--gold); }
+
+        .comparison-item {
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-start;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .comparison-item .icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .comparison-col.before .comparison-item { color: var(--text-secondary); }
+        .comparison-col.after .comparison-item { color: var(--text); }
+
+        /* ========== TESTIMONIALS ========== */
+        .testimonials {
+            background: var(--bg-elevated);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+        }
+
+        .testimonial {
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .testimonial-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-style: italic;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--gold-dim);
+            line-height: 0;
+            position: absolute;
+            top: 2rem;
+            left: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== PRICING ========== */
+        .pricing {
+            background: var(--bg);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+            max-width: 1000px;
+        }
+
+        .pricing-card {
+            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.4s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--gold-dim);
+            background: rgba(201,168,76,0.03);
+        }
+
+        .pricing-card.featured::before {
+            content: 'POPULAIRE';
+            position: absolute;
+            top: -12px;
+            right: 2rem;
+            padding: 0.3rem 1rem;
+            background: var(--gold);
+            color: var(--bg);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 4px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .pricing-tier {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        .pricing-features li:last-child { border-bottom: none; }
+
+        .pricing-btn {
+            width: 100%;
+            padding: 0.9rem;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
             display: block;
+            text-decoration: none;
+        }
+
+        .pricing-btn.outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .pricing-btn.outline:hover {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
+        .pricing-btn.gold {
+            background: var(--gold);
+            border: 1px solid var(--gold);
+            color: var(--bg);
+        }
+
+        .pricing-btn.gold:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 8px 30px rgba(201,168,76,0.3);
+        }
+
+        .pricing-anchor {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-anchor strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ========== FAQ ========== */
+        .faq {
+            background: var(--bg-elevated);
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin-top: 3rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem 0;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .faq-question:hover { color: var(--gold); }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            color: var(--gold-dim);
+            transition: transform 0.3s;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .faq-answer.open {
+            max-height: 300px;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-answer p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ========== FINAL CTA ========== */
+        .final-cta {
+            background: var(--bg);
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .final-cta-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse 50% 50% at 50% 60%, rgba(201,168,76,0.06) 0%, transparent 60%);
+        }
+
+        .final-cta .section-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .final-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .final-cta h2 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .urgency-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 1.5rem;
+            background: rgba(204,68,68,0.06);
+            border: 1px solid rgba(204,68,68,0.15);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--accent-red);
+            margin-bottom: 2rem;
+        }
+
+        .urgency-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-red);
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        footer .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--gold-dim);
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover {
+            color: var(--gold);
+            text-decoration: underline;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        .advisor-summary::before {
-            content: '💡 ';
-        }
-
-        .response-card.collapsed {
-            max-height: 0;
-            padding: 0 1.5rem;
-            opacity: 0;
-            overflow: hidden;
-            transition: all 0.4s ease;
-        }
-
-        .btn-expand {
-            display: none;
-            margin-top: 0.5rem;
-            padding: 0.4rem 1rem;
-            background: transparent;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            color: var(--text-secondary);
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.78rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-expand.visible { display: inline-block; }
-
-        .btn-expand:hover {
-            border-color: var(--gold-dim);
-            color: var(--text-primary);
-        }
-
-        .response-card .response-text {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: var(--text-primary);
-            white-space: pre-wrap;
-            overflow-wrap: anywhere;
-            word-break: break-word;
-            max-width: 100%;
-        }
-
-        .cursor-blink {
-            display: inline-block;
-            width: 2px; height: 1em;
-            background: var(--gold);
-            margin-left: 2px;
-            vertical-align: text-bottom;
-            animation: blink 1s step-end infinite;
-        }
-
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* Report */
-        .report-section {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-            display: none;
-            min-width: 0; width: 100%;
-        }
-
-        .report-section.visible { display: block; animation: fadeIn 0.6s ease; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .report-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .report-label {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--report-accent);
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .report-label::before {
-            content: ''; display: inline-block;
-            width: 20px; height: 1px; background: var(--report-accent);
-        }
-
-        .btn-report {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.82rem; font-weight: 500;
-            padding: 0.55rem 1.4rem;
-            background: transparent;
-            color: var(--report-accent);
-            border: 1px solid rgba(122,142,196,0.3);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-report:hover:not(:disabled) {
-            background: rgba(122,142,196,0.1);
-            border-color: rgba(122,142,196,0.5);
-        }
-
-        .btn-report:disabled { opacity: 0.5; cursor: not-allowed; }
-
-        .report-content {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2rem;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.95rem;
-            line-height: 1.8;
-            color: var(--text-primary);
-            overflow-wrap: anywhere;
-            word-break: break-word;
-            white-space: normal;
-            max-width: 100%; width: 100%;
-            overflow-x: auto;
-            box-sizing: border-box;
-        }
-
-        .report-content h1, .report-content h2, .report-content h3 {
-            font-family: 'Cormorant Garamond', serif;
-            color: var(--report-accent);
-            margin: 1.5rem 0 0.8rem;
-        }
-        .report-content h1 { font-size: 1.5rem; }
-        .report-content h2 { font-size: 1.25rem; }
-        .report-content h3 { font-size: 1.1rem; }
-        .report-content p { margin-bottom: 0.8rem; }
-        .report-content strong { color: var(--gold); }
-        .report-content ul, .report-content ol {
-            padding-left: 1.5rem; margin-bottom: 0.8rem;
-            list-style-position: outside;
-        }
-        .report-content li { margin-bottom: 0.3rem; overflow-wrap: break-word; }
-        .report-content * { max-width: 100%; overflow-wrap: break-word; }
-
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-muted);
-            font-size: 0.72rem;
-            letter-spacing: 0.04em;
-            border-top: 1px solid var(--border);
-            margin-top: 3rem;
-        }
-
-        /* Responsive */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            .home-header h1 { font-size: 2rem; }
-            .advisor-grid { grid-template-columns: 1fr; }
-            .advisors-row { grid-template-columns: 1fr; gap: 2rem; }
-            .oval-table { width: 280px; height: 75px; }
-            .board-container { padding: 1rem; }
-            .board-topbar { flex-direction: column; gap: 1rem; text-align: center; }
-            .topbar-right { flex-direction: column; gap: 0.6rem; }
-            .consult-counter { justify-content: center; }
-            .home-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            section { padding: 4rem 1.5rem; }
+            .steps { grid-template-columns: 1fr; }
+            .steps::before { display: none; }
+            .comparison-table { grid-template-columns: 1fr; }
+            .hero-proof { gap: 2rem; }
+            .scenario-cards { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
         }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: var(--bg-primary); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
     </style>
 </head>
 <body>
 
-    <!-- ========================
-         SCREEN 1: HOME
-    ========================= -->
-    <div class="screen active" id="screenHome">
-        <div class="home-container">
-            <header class="home-header">
-                <div class="home-logo">BDD</div>
-                <h1>Board de Décision Digitale</h1>
-                <p>Composez votre board de conseillers, soumettez votre problème, et laissez les plus grands esprits débattre pour vous.</p>
-            </header>
+<!-- NAV -->
+<nav>
+    <div class="nav-logo">BDD<span>Board de Décision Digitale</span></div>
+    <div class="nav-links">
+        <a href="#scenarios">Cas d'usage</a>
+        <a href="#how">Comment ça marche</a>
+        <a href="#pricing">Tarifs</a>
+        <a href="#faq">FAQ</a>
+        <a href="/app" class="btn-nav-cta">Essayer gratuitement</a>
+    </div>
+</nav>
 
-            <div class="section-label">Choisissez vos conseillers</div>
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-particles">
+        <div class="particle" style="left:10%; top:30%; animation-delay:0s"></div>
+        <div class="particle" style="left:25%; top:60%; animation-delay:1.5s"></div>
+        <div class="particle" style="left:40%; top:20%; animation-delay:3s"></div>
+        <div class="particle" style="left:60%; top:70%; animation-delay:0.8s"></div>
+        <div class="particle" style="left:75%; top:40%; animation-delay:2.2s"></div>
+        <div class="particle" style="left:85%; top:55%; animation-delay:4s"></div>
+        <div class="particle" style="left:50%; top:85%; animation-delay:1s"></div>
+        <div class="particle" style="left:15%; top:75%; animation-delay:3.5s"></div>
+    </div>
 
-            <div class="advisor-grid" id="advisorGrid">
+    <div class="hero-content">
+        <div class="hero-badge">Accès anticipé — Places limitées</div>
+        <h1>Et si Gandhi, Steve Jobs<br>et Beyoncé prenaient<br>vos <em>décisions</em> avec vous ?</h1>
+        <p class="hero-sub">
+            BDD réunit les plus grands esprits de l'histoire autour d'une table virtuelle.<br>
+            Soumettez votre problème. Recevez leurs conseils. Décidez avec clarté.
+        </p>
+        <div class="hero-ctas">
+            <a href="/app" class="btn-primary">Composer mon board →</a>
+            <a href="/demo" class="btn-secondary">Voir un exemple →</a>
+        </div>
+        <div class="hero-proof">
+            <div class="proof-item">
+                <div class="proof-number">22</div>
+                <div class="proof-label">Conseillers disponibles</div>
+            </div>
+            <div class="proof-item">
+                <div class="proof-number">&lt; 30s</div>
+                <div class="proof-label">Par conseil personnalisé</div>
+            </div>
+            <div class="proof-item">
+                <div class="proof-number">∞</div>
+                <div class="proof-label">Combinaisons de boards</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-                <div class="advisor-card" data-id="gandhi" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/gandhi.jpg" alt="Gandhi">
+<!-- PAIN POINTS -->
+<section class="pain">
+    <div class="section-inner reveal">
+        <div class="section-label">Le problème</div>
+        <h2 class="section-title">Chaque mauvaise décision<br>vous coûte du temps, de l'argent<br>et de la <span style="color:var(--accent-red)">confiance en vous</span></h2>
+        <p class="section-subtitle">
+            Les entrepreneurs prennent en moyenne 35 000 décisions par jour. Pourtant, 72% se sentent seuls face aux choix qui comptent vraiment.
+        </p>
+
+        <div class="pain-grid">
+            <div class="pain-card">
+                <div class="pain-icon">🌀</div>
+                <h3>Le syndrome de la boucle mentale</h3>
+                <p>Vous tournez en rond pendant des jours sur une décision que quelqu'un de plus expérimenté trancherait en 5 minutes. Ce temps perdu ne revient jamais.</p>
+                <div class="pain-stat">⏱ 11h/semaine perdues en hésitations</div>
+            </div>
+            <div class="pain-card">
+                <div class="pain-icon">🪞</div>
+                <h3>L'angle mort de la solitude</h3>
+                <p>Vous demandez conseil à votre entourage… qui pense exactement comme vous. Zéro perspective nouvelle. Zéro remise en question. Les mêmes erreurs en boucle.</p>
+                <div class="pain-stat">⚠️ 68% des échecs = manque de perspectives</div>
+            </div>
+            <div class="pain-card">
+                <div class="pain-icon">💸</div>
+                <h3>Le coût invisible de l'inaction</h3>
+                <p>Pendant que vous hésitez, vos concurrents avancent. Le marché n'attend pas. Et la peur de mal choisir vous paralyse plus que le mauvais choix lui-même.</p>
+                <div class="pain-stat">📉 3 mois de retard moyen par décision reportée</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SCENARIOS -->
+<section class="scenarios" id="scenarios">
+    <div class="section-inner reveal">
+        <div class="section-label">En situation</div>
+        <h2 class="section-title">Ils ont soumis leur dilemme au Board.<br>Voici ce qui s'est passé.</h2>
+        <p class="section-subtitle">Chaque décision devient plus claire quand vous avez les bons esprits autour de la table.</p>
+
+        <div class="scenario-cards">
+            <!-- Scenario 1 -->
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-persona">
+                        <div class="scenario-avatar" style="background:rgba(201,168,76,0.1);">👩‍💻</div>
+                        <div>
+                            <div class="scenario-name">Léa, 34 ans</div>
+                            <div class="scenario-role">Fondatrice d'une agence de communication</div>
+                        </div>
                     </div>
-                    <div class="card-info">
-                        <h3>Gandhi</h3>
-                        <div class="card-title">Le Sage de la Non-Violence</div>
-                        <div class="card-desc">Éthique, vérité, simplicité. Priorise les valeurs sur le profit.</div>
-                    </div>
+                    <div class="scenario-problem">« Mon plus gros client me demande une exclusivité. Si j'accepte, je suis dépendante. Si je refuse, je perds 40% de mon CA. »</div>
                 </div>
-
-                <div class="advisor-card" data-id="suntzu" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/suntzu.jpg" alt="Sun Tzu">
+                <div class="scenario-board">
+                    <div class="scenario-board-label">Son board</div>
+                    <div class="scenario-advisors">
+                        <span class="scenario-advisor-tag">🕊 Gandhi</span>
+                        <span class="scenario-advisor-tag">📦 Jeff Bezos</span>
+                        <span class="scenario-advisor-tag">💎 B. Arnault</span>
+                        <span class="scenario-advisor-tag">⚡ O. Ammar</span>
                     </div>
-                    <div class="card-info">
-                        <h3>Sun Tzu</h3>
-                        <div class="card-title">Le Stratège</div>
-                        <div class="card-desc">Stratégie, rapport de force, timing. Analyse froide et tactique.</div>
-                    </div>
+                    <div class="scenario-insight">Propose une exclusivité temporaire de 6 mois avec clause de sortie, et utilise ce temps pour construire un pipeline de 3 nouveaux clients.</div>
                 </div>
-
-                <div class="advisor-card" data-id="jobs" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/jobs.jpg" alt="Steve Jobs">
-                    </div>
-                    <div class="card-info">
-                        <h3>Steve Jobs</h3>
-                        <div class="card-title">Le Visionnaire</div>
-                        <div class="card-desc">Simplicité, excellence, focus. Le produit avant tout.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="socrate" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/socrate.jpg" alt="Socrate">
-                    </div>
-                    <div class="card-info">
-                        <h3>Socrate</h3>
-                        <div class="card-title">Le Philosophe</div>
-                        <div class="card-desc">Questionnement, logique, maïeutique. Déconstruit tes certitudes.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="buffett" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/buffett.jpg" alt="Warren Buffett">
-                    </div>
-                    <div class="card-info">
-                        <h3>Warren Buffett</h3>
-                        <div class="card-title">L'Investisseur</div>
-                        <div class="card-desc">Long terme, bon sens, valeur intrinsèque. Les chiffres d'abord.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="musk" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/musk.jpg" alt="Elon Musk">
-                    </div>
-                    <div class="card-info">
-                        <h3>Elon Musk</h3>
-                        <div class="card-title">Le Disrupteur</div>
-                        <div class="card-desc">Principes premiers, 10x thinking, exécution rapide. Pense grand.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="bezos" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/bezos.jpg" alt="Jeff Bezos">
-                    </div>
-                    <div class="card-info">
-                        <h3>Jeff Bezos</h3>
-                        <div class="card-title">Le Bâtisseur</div>
-                        <div class="card-desc">Obsession client, Day 1, systèmes, flywheel. Construit pour durer.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="jesus" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/jesus.jpg" alt="Jésus">
-                    </div>
-                    <div class="card-info">
-                        <h3>Jésus</h3>
-                        <div class="card-title">Le Guide Spirituel</div>
-                        <div class="card-desc">Foi, amour, service. Élève le regard au-dessus du matériel.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="kanye" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/kanye.jpg" alt="Kanye West">
-                    </div>
-                    <div class="card-info">
-                        <h3>Kanye West</h3>
-                        <div class="card-title">Le Créateur</div>
-                        <div class="card-desc">Créativité radicale, foi en soi, vision sans compromis.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="beyonce" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/beyonce.jpg" alt="Beyoncé">
-                    </div>
-                    <div class="card-info">
-                        <h3>Beyoncé</h3>
-                        <div class="card-title">La Reine</div>
-                        <div class="card-desc">Travail acharné, excellence, contrôle de son récit.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="chalamet" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/chalamet.jpg" alt="Timothée Chalamet">
-                    </div>
-                    <div class="card-info">
-                        <h3>Timothée Chalamet</h3>
-                        <div class="card-title">L'Artiste</div>
-                        <div class="card-desc">Fraîcheur, spontanéité, authenticité. Le cœur avant la stratégie.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="arnault" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/arnault.jpg" alt="Bernard Arnault">
-                    </div>
-                    <div class="card-info">
-                        <h3>Bernard Arnault</h3>
-                        <div class="card-title">L'Empereur du Luxe</div>
-                        <div class="card-desc">Marque, désirabilité, vision dynastique. La valeur avant le volume.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="luchini" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/luchini.jpg" alt="Fabrice Luchini">
-                    </div>
-                    <div class="card-info">
-                        <h3>Fabrice Luchini</h3>
-                        <div class="card-title">L'Électron Libre</div>
-                        <div class="card-desc">Littérature, lucidité, verve. La culture éclaire tout.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="luffy" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/luffy.jpg" alt="Monkey D. Luffy">
-                    </div>
-                    <div class="card-info">
-                        <h3>Monkey D. Luffy</h3>
-                        <div class="card-title">Le Capitaine</div>
-                        <div class="card-desc">Courage, nakamas, liberté. N'abandonne jamais, fonce.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="cameron" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/cameron.jpg" alt="Julia Cameron">
-                    </div>
-                    <div class="card-info">
-                        <h3>Julia Cameron</h3>
-                        <div class="card-title">La Muse</div>
-                        <div class="card-desc">Créativité, flux, morning pages. Débloque ton artiste intérieur.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="giono" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/giono.jpg" alt="Jean Giono">
-                    </div>
-                    <div class="card-info">
-                        <h3>Jean Giono</h3>
-                        <div class="card-title">Le Conteur de la Terre</div>
-                        <div class="card-desc">Nature, simplicité, beauté. Reviens à l'essentiel.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="davidneel" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/davidneel.jpg" alt="Alexandra David-Néel">
-                    </div>
-                    <div class="card-info">
-                        <h3>Alexandra David-Néel</h3>
-                        <div class="card-title">L'Exploratrice</div>
-                        <div class="card-desc">Détachement, liberté, sagesse orientale. Brise tes chaînes.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="ammar" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/ammar.jpg" alt="Oussama Ammar">
-                    </div>
-                    <div class="card-info">
-                        <h3>Oussama Ammar</h3>
-                        <div class="card-title">Le Provocateur</div>
-                        <div class="card-desc">Exécution, vérité brutale, startup. Arrête de réfléchir, lance.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="lestwins" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/lestwins.jpg" alt="Les Twins">
-                    </div>
-                    <div class="card-info">
-                        <h3>Les Twins</h3>
-                        <div class="card-title">Les Phénomènes</div>
-                        <div class="card-desc">Instinct, authenticité, énergie. Le feeling avant la théorie.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="chouard" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/chouard.jpg" alt="Étienne Chouard">
-                    </div>
-                    <div class="card-info">
-                        <h3>Étienne Chouard</h3>
-                        <div class="card-title">Le Citoyen</div>
-                        <div class="card-desc">Pouvoir, justice, démocratie. Qui écrit les règles du jeu ?</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="baer" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/baer.jpg" alt="Édouard Baer">
-                    </div>
-                    <div class="card-info">
-                        <h3>Édouard Baer</h3>
-                        <div class="card-title">Le Conteur</div>
-                        <div class="card-desc">Récit, charme, légèreté. Chaque problème est une histoire.</div>
-                    </div>
-                </div>
-
-                <div class="advisor-card" data-id="darmanin" onclick="toggleAdvisor(this)">
-                    <div class="card-check">✓</div>
-                    <div class="card-avatar">
-                        <img src="/static/img/darmanin.jpg" alt="Gérald Darmanin">
-                    </div>
-                    <div class="card-info">
-                        <h3>Gérald Darmanin</h3>
-                        <div class="card-title">L'Homme d'État</div>
-                        <div class="card-desc">Ordre, autorité, volonté. Décider et aller jusqu'au bout.</div>
-                    </div>
-                </div>
-
             </div>
 
-            <div class="home-bottom">
-                <div class="selection-count">
-                    <strong id="selectedCount">0</strong> conseiller(s) sélectionné(s)
+            <!-- Scenario 2 -->
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-persona">
+                        <div class="scenario-avatar" style="background:rgba(90,173,122,0.1);">👨‍🍳</div>
+                        <div>
+                            <div class="scenario-name">Marc, 41 ans</div>
+                            <div class="scenario-role">Restaurateur qui veut se lancer dans le digital</div>
+                        </div>
+                    </div>
+                    <div class="scenario-problem">« J'ai un resto qui marche bien physiquement. Tout le monde me dit d'aller sur les réseaux. Mais je déteste ça et ça me prend un temps fou. »</div>
                 </div>
-                <button class="btn-start" id="btnStart" disabled onclick="goToBoard()">
-                    Lancer le Board
+                <div class="scenario-board">
+                    <div class="scenario-board-label">Son board</div>
+                    <div class="scenario-advisors">
+                        <span class="scenario-advisor-tag">🎭 Luchini</span>
+                        <span class="scenario-advisor-tag">🌿 Giono</span>
+                        <span class="scenario-advisor-tag">🎬 Chalamet</span>
+                        <span class="scenario-advisor-tag">👑 Beyoncé</span>
+                    </div>
+                    <div class="scenario-insight">Reste fidèle à ce qui fait ta magie — l'authenticité en cuisine. Filme un humain vrai, pas un influenceur. Les réseaux récompensent l'âme, pas le marketing.</div>
+                </div>
+            </div>
+
+            <!-- Scenario 3 -->
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-persona">
+                        <div class="scenario-avatar" style="background:rgba(138,196,212,0.1);">👩‍🔬</div>
+                        <div>
+                            <div class="scenario-name">Sophie, 28 ans</div>
+                            <div class="scenario-role">Salariée qui rêve de se lancer à son compte</div>
+                        </div>
+                    </div>
+                    <div class="scenario-problem">« J'ai une idée de business, des compétences, mais une peur paralysante de quitter mon CDI. Je gagne 3 200€/mois. Et si ça ne marchait pas ? »</div>
+                </div>
+                <div class="scenario-board">
+                    <div class="scenario-board-label">Son board</div>
+                    <div class="scenario-advisors">
+                        <span class="scenario-advisor-tag">🏔️ David-Néel</span>
+                        <span class="scenario-advisor-tag">✝️ Jésus</span>
+                        <span class="scenario-advisor-tag">🎤 Kanye</span>
+                        <span class="scenario-advisor-tag">📈 Buffett</span>
+                    </div>
+                    <div class="scenario-insight">L'obstacle est mental, pas financier. Garde ton CDI 6 mois de plus en lançant le soir. Si ça génère 1 000€/mois, c'est le signal. Le vrai risque, c'est de ne jamais essayer.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how">
+    <div class="section-inner reveal">
+        <div class="section-label">Comment ça marche</div>
+        <h2 class="section-title">3 étapes. 2 minutes.<br>Une clarté que vous n'avez <em style="color:var(--gold);font-style:italic">jamais eue</em>.</h2>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Composez votre Board</h3>
+                <p>Choisissez parmi 22 personnalités — stratèges, artistes, philosophes, entrepreneurs. Chaque combinaison crée une dynamique unique.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Soumettez votre dilemme</h3>
+                <p>Décrivez votre situation en quelques phrases. Pas de jargon, pas de template. Parlez comme à un ami de confiance.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Recevez le verdict</h3>
+                <p>Chaque conseiller répond avec sa perspective unique. Un résumé en une phrase par avis + un rapport de synthèse qui croise toutes les visions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ADVISORS SCROLL -->
+<section class="advisors-section">
+    <div class="section-inner reveal">
+        <div class="section-label">Vos conseillers</div>
+        <h2 class="section-title">22 esprits. Des siècles de sagesse.<br>Un seul objectif : <em style="color:var(--gold);font-style:italic">vous éclairer</em>.</h2>
+    </div>
+    <div class="advisors-scroll">
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🕊</div><div class="advisor-preview-name">Gandhi</div><div class="advisor-preview-title">Le Sage</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">⚔️</div><div class="advisor-preview-name">Sun Tzu</div><div class="advisor-preview-title">Le Stratège</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">💡</div><div class="advisor-preview-name">Steve Jobs</div><div class="advisor-preview-title">Le Visionnaire</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏛</div><div class="advisor-preview-name">Socrate</div><div class="advisor-preview-title">Le Philosophe</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📈</div><div class="advisor-preview-name">Buffett</div><div class="advisor-preview-title">L'Investisseur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🚀</div><div class="advisor-preview-name">Elon Musk</div><div class="advisor-preview-title">Le Disrupteur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📦</div><div class="advisor-preview-name">Jeff Bezos</div><div class="advisor-preview-title">Le Bâtisseur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">✝️</div><div class="advisor-preview-name">Jésus</div><div class="advisor-preview-title">Le Guide</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎤</div><div class="advisor-preview-name">Kanye West</div><div class="advisor-preview-title">Le Créateur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">👑</div><div class="advisor-preview-name">Beyoncé</div><div class="advisor-preview-title">La Reine</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎬</div><div class="advisor-preview-name">Chalamet</div><div class="advisor-preview-title">L'Artiste</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">💎</div><div class="advisor-preview-name">B. Arnault</div><div class="advisor-preview-title">L'Empereur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎭</div><div class="advisor-preview-name">Luchini</div><div class="advisor-preview-title">L'Électron Libre</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏴‍☠️</div><div class="advisor-preview-name">Luffy</div><div class="advisor-preview-title">Le Capitaine</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">✍️</div><div class="advisor-preview-name">J. Cameron</div><div class="advisor-preview-title">La Muse</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🌿</div><div class="advisor-preview-name">Giono</div><div class="advisor-preview-title">Le Poète</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏔️</div><div class="advisor-preview-name">David-Néel</div><div class="advisor-preview-title">L'Exploratrice</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">⚡</div><div class="advisor-preview-name">O. Ammar</div><div class="advisor-preview-title">Le Provocateur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🕺</div><div class="advisor-preview-name">Les Twins</div><div class="advisor-preview-title">Les Phénomènes</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📜</div><div class="advisor-preview-name">Chouard</div><div class="advisor-preview-title">Le Citoyen</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎙️</div><div class="advisor-preview-name">É. Baer</div><div class="advisor-preview-title">Le Conteur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏛️</div><div class="advisor-preview-name">Darmanin</div><div class="advisor-preview-title">L'Homme d'État</div></div>
+        <!-- Duplicate for infinite scroll -->
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🕊</div><div class="advisor-preview-name">Gandhi</div><div class="advisor-preview-title">Le Sage</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">⚔️</div><div class="advisor-preview-name">Sun Tzu</div><div class="advisor-preview-title">Le Stratège</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">💡</div><div class="advisor-preview-name">Steve Jobs</div><div class="advisor-preview-title">Le Visionnaire</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏛</div><div class="advisor-preview-name">Socrate</div><div class="advisor-preview-title">Le Philosophe</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📈</div><div class="advisor-preview-name">Buffett</div><div class="advisor-preview-title">L'Investisseur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🚀</div><div class="advisor-preview-name">Elon Musk</div><div class="advisor-preview-title">Le Disrupteur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📦</div><div class="advisor-preview-name">Jeff Bezos</div><div class="advisor-preview-title">Le Bâtisseur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">✝️</div><div class="advisor-preview-name">Jésus</div><div class="advisor-preview-title">Le Guide</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎤</div><div class="advisor-preview-name">Kanye West</div><div class="advisor-preview-title">Le Créateur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">👑</div><div class="advisor-preview-name">Beyoncé</div><div class="advisor-preview-title">La Reine</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎬</div><div class="advisor-preview-name">Chalamet</div><div class="advisor-preview-title">L'Artiste</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">💎</div><div class="advisor-preview-name">B. Arnault</div><div class="advisor-preview-title">L'Empereur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎭</div><div class="advisor-preview-name">Luchini</div><div class="advisor-preview-title">L'Électron Libre</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏴‍☠️</div><div class="advisor-preview-name">Luffy</div><div class="advisor-preview-title">Le Capitaine</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">✍️</div><div class="advisor-preview-name">J. Cameron</div><div class="advisor-preview-title">La Muse</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🌿</div><div class="advisor-preview-name">Giono</div><div class="advisor-preview-title">Le Poète</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏔️</div><div class="advisor-preview-name">David-Néel</div><div class="advisor-preview-title">L'Exploratrice</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">⚡</div><div class="advisor-preview-name">O. Ammar</div><div class="advisor-preview-title">Le Provocateur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🕺</div><div class="advisor-preview-name">Les Twins</div><div class="advisor-preview-title">Les Phénomènes</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📜</div><div class="advisor-preview-name">Chouard</div><div class="advisor-preview-title">Le Citoyen</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎙️</div><div class="advisor-preview-name">É. Baer</div><div class="advisor-preview-title">Le Conteur</div></div>
+    </div>
+</section>
+
+<!-- BEFORE/AFTER COMPARISON -->
+<section class="comparison">
+    <div class="section-inner reveal">
+        <div class="section-label">Avant / Après</div>
+        <h2 class="section-title">Ce qui change quand vous avez<br>un Board à portée de main</h2>
+
+        <div class="comparison-table">
+            <div class="comparison-col before">
+                <h3>❌ Sans le Board</h3>
+                <div class="comparison-item"><span class="icon">→</span> Vous demandez conseil à votre conjoint(e) qui dit "fais ce que tu sens"</div>
+                <div class="comparison-item"><span class="icon">→</span> Vous googlez "faut-il quitter son CDI" à 2h du matin</div>
+                <div class="comparison-item"><span class="icon">→</span> Vous payez un coach 150€/h pour une perspective unique</div>
+                <div class="comparison-item"><span class="icon">→</span> Vous repoussez la décision de semaine en semaine</div>
+                <div class="comparison-item"><span class="icon">→</span> Vous restez dans votre bulle de pensée</div>
+            </div>
+            <div class="comparison-col after">
+                <h3>✦ Avec le Board</h3>
+                <div class="comparison-item"><span class="icon">→</span> 22 perspectives radicalement différentes sur votre problème</div>
+                <div class="comparison-item"><span class="icon">→</span> Des réponses en 30 secondes, disponibles 24h/24</div>
+                <div class="comparison-item"><span class="icon">→</span> Le prix d'un café pour l'avis de Buffett, Jobs et Gandhi réunis</div>
+                <div class="comparison-item"><span class="icon">→</span> Un rapport de synthèse qui tranche et clarifie</div>
+                <div class="comparison-item"><span class="icon">→</span> Des angles morts révélés que vous n'auriez jamais vus seul</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+    <div class="section-inner reveal">
+        <div class="section-label">Ils l'utilisent</div>
+        <h2 class="section-title">Ce qu'ils disent après<br>leur premier Board</h2>
+
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <div class="testimonial-quote">J'ai soumis mon dilemme de pivot à un board Jobs + Bezos + Arnault. En 2 minutes j'avais plus de clarté que pendant 3 semaines de rumination. C'est presque déstabilisant de voir ses angles morts révélés aussi vite.</div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">🚀</div>
+                    <div>
+                        <div class="testimonial-name">Thomas D.</div>
+                        <div class="testimonial-role">Fondateur SaaS · Lyon</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-quote">Quand Luchini m'a cité La Fontaine pour parler de mon associé toxique, j'ai eu un fou rire… puis un déclic. C'est ça la force du Board : ça désacralise le problème et ça ouvre des portes inattendues.</div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">🎯</div>
+                    <div>
+                        <div class="testimonial-name">Camille R.</div>
+                        <div class="testimonial-role">Consultante indépendante · Paris</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-quote">Le combo Gandhi + Kanye + Ammar c'est de la dynamite. Le sage, le fou et le pragmatique. En 3 avis contradictoires, j'ai trouvé MA réponse, celle qui me ressemblait vraiment. Merci.</div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">✨</div>
+                    <div>
+                        <div class="testimonial-name">Maryam K.</div>
+                        <div class="testimonial-role">Créatrice de contenus · Bordeaux</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+    <div class="section-inner reveal">
+        <div class="section-label">Tarifs</div>
+        <h2 class="section-title">Un Board personnel pour<br>le prix d'un <em style="color:var(--gold);font-style:italic">café par jour</em></h2>
+        <p class="section-subtitle">Pas d'abonnement piège. Pas de frais cachés. Annulable en 1 clic.</p>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Découverte</div>
+                <div class="pricing-price">0€</div>
+                <div class="pricing-desc">Testez le Board avec 3 consultations gratuites. Sans carte bancaire.</div>
+                <ul class="pricing-features">
+                    <li><span style="color:var(--gold)">✦</span> 3 consultations offertes</li>
+                    <li><span style="color:var(--gold)">✦</span> Jusqu'à 5 conseillers par board</li>
+                    <li><span style="color:var(--gold)">✦</span> Résumé en une phrase</li>
+                    <li><span style="color:var(--text-muted)">○</span> <span style="color:var(--text-muted)">Rapport de synthèse</span></li>
+                    <li><span style="color:var(--text-muted)">○</span> <span style="color:var(--text-muted)">Historique des consultations</span></li>
+                </ul>
+                <a href="/app" class="pricing-btn outline">Commencer gratuitement</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Pro</div>
+                <div class="pricing-price">19€<span>/mois</span></div>
+                <div class="pricing-desc">Décisions illimitées. Tous les conseillers. Toute la puissance du Board.</div>
+                <ul class="pricing-features">
+                    <li><span style="color:var(--gold)">✦</span> Consultations illimitées</li>
+                    <li><span style="color:var(--gold)">✦</span> 22 conseillers disponibles</li>
+                    <li><span style="color:var(--gold)">✦</span> Résumé en une phrase par avis</li>
+                    <li><span style="color:var(--gold)">✦</span> Rapport de synthèse croisé</li>
+                    <li><span style="color:var(--gold)">✦</span> Historique complet</li>
+                </ul>
+                <a href="/pricing" class="pricing-btn gold">Prendre le plan Pro →</a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-tier">Équipe</div>
+                <div class="pricing-price">49€<span>/mois</span></div>
+                <div class="pricing-desc">Pour les équipes qui prennent des décisions ensemble. Jusqu'à 5 membres.</div>
+                <ul class="pricing-features">
+                    <li><span style="color:var(--gold)">✦</span> Tout le plan Pro</li>
+                    <li><span style="color:var(--gold)">✦</span> 5 sièges utilisateurs</li>
+                    <li><span style="color:var(--gold)">✦</span> Boards partagés</li>
+                    <li><span style="color:var(--gold)">✦</span> Conseillers personnalisés (bientôt)</li>
+                    <li><span style="color:var(--gold)">✦</span> Export PDF des consultations</li>
+                </ul>
+                <a href="/contact" class="pricing-btn outline">Contacter l'équipe</a>
+            </div>
+        </div>
+        <p class="pricing-anchor">Comparé à un coaching business à <strong>150€/heure</strong>, le Board Pro revient à <strong>0,63€ par jour</strong>.<br>L'investissement se rembourse dès la première bonne décision.</p>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+    <div class="section-inner reveal">
+        <div class="section-label">Questions fréquentes</div>
+        <h2 class="section-title">Tout ce que vous vous demandez<br>(avant de vous lancer)</h2>
+
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Est-ce que les conseillers sont vraiment fidèles aux personnalités réelles ?
+                    <span class="faq-toggle">+</span>
                 </button>
+                <div class="faq-answer">
+                    <p>Chaque conseiller est programmé avec un prompt de plusieurs centaines de mots qui capture leur philosophie, leur style de communication, leurs cadres de décision et leurs biais assumés. Ce n'est pas une imitation superficielle — c'est une modélisation de leur pensée basée sur leurs écrits, discours et biographies. Le but n'est pas de prétendre parler à la personne réelle, mais de bénéficier de perspectives inspirées de leur vision du monde.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Comment choisir les bons conseillers pour mon problème ?
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>La magie du Board, c'est le contraste. Mélangez des profils opposés : un pragmatique (Buffett) avec un créatif (Kanye), un philosophe (Socrate) avec un exécuteur (Musk). Les insights les plus puissants naissent de la friction entre perspectives radicalement différentes. Commencez avec 4-5 conseillers pour vos premières consultations.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Est-ce que ça marche pour des décisions personnelles aussi ?
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Absolument. Relation amoureuse compliquée ? Demandez à Jésus et Julia Cameron. Reconversion professionnelle ? Alexandra David-Néel et Oussama Ammar. Le Board n'est pas limité au business — c'est un outil de réflexion pour toutes les décisions qui comptent dans votre vie.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Mes données et mes questions sont-elles confidentielles ?
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Oui. Vos consultations ne sont jamais partagées, jamais utilisées pour entraîner des modèles, et jamais accessibles à quiconque d'autre que vous. Vous pouvez supprimer votre historique à tout moment.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    C'est quoi la différence avec juste demander à ChatGPT de jouer un rôle ?
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>ChatGPT, c'est un prompt bricolé dans une interface générique. BDD, c'est une expérience conçue : chaque personnalité a un prompt de 400+ mots soigneusement calibré, des portraits cinématiques, des réponses individuelles streamées en parallèle, des résumés automatiques en une phrase, et un rapport de synthèse qui croise tous les avis. C'est la différence entre écouter la radio et aller à un concert privé.</p>
+                </div>
             </div>
         </div>
     </div>
+</section>
 
-
-    <!-- ========================
-         SCREEN 2: BOARD
-    ========================= -->
-    <div class="screen" id="screenBoard">
-        <div class="board-container">
-
-            <div class="board-topbar">
-                <div class="board-brand">
-                    <div class="board-brand-logo">BDD</div>
-                    <h2>Board de Décision Digitale</h2>
-                </div>
-                <div class="topbar-right">
-                    <div class="consult-counter" id="consultCounter">
-                        <span class="dot"></span>
-                        <span id="counterText">⏳ Chargement...</span>
-                    </div>
-                    <button class="btn-back" onclick="goHome()">← Modifier le board</button>
-                </div>
-            </div>
-
-            <section class="input-section">
-                <div class="section-label">Votre problème</div>
-                <div class="input-wrapper">
-                    <textarea id="problemInput" placeholder="Décrivez votre problème business, stratégique ou personnel. Soyez précis : contexte, enjeux, contraintes..."></textarea>
-                    <div class="input-actions">
-                        <button class="btn-consult" id="consultBtn" onclick="startConsultation()">
-                            Consulter le Board
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="board-section" id="boardSection">
-                <div class="section-label">Le Board</div>
-                <div class="table-container">
-                    <div class="oval-table">
-                        <span class="table-text">Table décisionnaire</span>
-                    </div>
-                </div>
-                <div class="advisors-row" id="advisorsRow"></div>
-            </section>
-
-            <section class="report-section" id="reportSection">
-                <div class="report-header">
-                    <div class="report-label">Rapport de synthèse</div>
-                    <button class="btn-report" id="reportBtn" onclick="generateReport()">Générer le rapport</button>
-                </div>
-                <div class="report-content" id="reportContent"></div>
-            </section>
-
-            <footer class="footer">
-                BDD — Board de Décision Digitale • Les avis exprimés sont générés par IA et ne constituent pas des conseils professionnels.
-            </footer>
-
+<!-- FINAL CTA -->
+<section class="final-cta" id="cta">
+    <div class="final-cta-bg"></div>
+    <div class="section-inner">
+        <div class="urgency-bar">
+            <span class="urgency-dot"></span>
+            127 personnes ont composé leur Board cette semaine
         </div>
+        <h2>La prochaine décision que vous prendrez<br>pourrait <em>tout changer</em>.</h2>
+        <p class="section-subtitle" style="text-align:center; margin: 0 auto 2.5rem;">
+            Celle que vous n'avez pas encore prise vous coûte chaque jour un peu plus.<br>
+            Composez votre Board. Posez votre question. Avancez.
+        </p>
+        <a href="/app" class="btn-primary" style="font-size:1rem; padding:1.2rem 3rem;">
+            Composer mon Board →
+        </a>
+        <p style="margin-top:1.2rem; font-size:0.78rem; color:var(--text-muted);">
+            3 consultations offertes · Sans carte bancaire · Prêt en 30 secondes
+        </p>
     </div>
+</section>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
-    <script>
-        let selectedAdvisors = new Set();
-        let currentProblem = '';
-        let advisorResponses = {};
-        let isConsulting = false;
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">BDD</div>
+    <p>© 2025 Board de Décision Digitale — Tous droits réservés</p>
+    <p style="margin-top:0.5rem;"><a href="/terms" class="footer-link">Conditions d'utilisation</a> · <a href="/privacy" class="footer-link">Politique de confidentialité</a> · <a href="/contact" class="footer-link">Contact</a></p>
+</footer>
 
-        const ADVISORS_META = {
-            gandhi: { name: 'Gandhi', title: 'Le Sage de la Non-Violence', img: '/static/img/gandhi.jpg' },
-            suntzu: { name: 'Sun Tzu', title: 'Le Stratège', img: '/static/img/suntzu.jpg' },
-            jobs: { name: 'Steve Jobs', title: 'Le Visionnaire', img: '/static/img/jobs.jpg' },
-            socrate: { name: 'Socrate', title: 'Le Philosophe', img: '/static/img/socrate.jpg' },
-            buffett: { name: 'Warren Buffett', title: "L'Investisseur", img: '/static/img/buffett.jpg' },
-            musk: { name: 'Elon Musk', title: 'Le Disrupteur', img: '/static/img/musk.jpg' },
-            bezos: { name: 'Jeff Bezos', title: 'Le Bâtisseur', img: '/static/img/bezos.jpg' },
-            jesus: { name: 'Jésus', title: 'Le Guide Spirituel', img: '/static/img/jesus.jpg' },
-            kanye: { name: 'Kanye West', title: 'Le Créateur', img: '/static/img/kanye.jpg' },
-            beyonce: { name: 'Beyoncé', title: 'La Reine', img: '/static/img/beyonce.jpg' },
-            chalamet: { name: 'Timothée Chalamet', title: "L'Artiste", img: '/static/img/chalamet.jpg' },
-            arnault: { name: 'Bernard Arnault', title: "L'Empereur du Luxe", img: '/static/img/arnault.jpg' },
-            luchini: { name: 'Fabrice Luchini', title: "L'Électron Libre", img: '/static/img/luchini.jpg' },
-            luffy: { name: 'Monkey D. Luffy', title: 'Le Capitaine', img: '/static/img/luffy.jpg' },
-            cameron: { name: 'Julia Cameron', title: 'La Muse', img: '/static/img/cameron.jpg' },
-            giono: { name: 'Jean Giono', title: 'Le Conteur de la Terre', img: '/static/img/giono.jpg' },
-            davidneel: { name: 'Alexandra David-Néel', title: "L'Exploratrice", img: '/static/img/davidneel.jpg' },
-            ammar: { name: 'Oussama Ammar', title: 'Le Provocateur', img: '/static/img/ammar.jpg' },
-            lestwins: { name: 'Les Twins', title: 'Les Phénomènes', img: '/static/img/lestwins.jpg' },
-            chouard: { name: 'Étienne Chouard', title: 'Le Citoyen', img: '/static/img/chouard.jpg' },
-            baer: { name: 'Édouard Baer', title: 'Le Conteur', img: '/static/img/baer.jpg' },
-            darmanin: { name: 'Gérald Darmanin', title: "L'Homme d'État", img: '/static/img/darmanin.jpg' }
-        };
-
-        // === HOME ===
-        function toggleAdvisor(card) {
-            const id = card.dataset.id;
-            if (selectedAdvisors.has(id)) {
-                selectedAdvisors.delete(id);
-                card.classList.remove('selected');
-            } else {
-                selectedAdvisors.add(id);
-                card.classList.add('selected');
+<script>
+    // Reveal on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
             }
-            document.getElementById('selectedCount').textContent = selectedAdvisors.size;
-            document.getElementById('btnStart').disabled = selectedAdvisors.size === 0;
-        }
-
-        function goToBoard() {
-            if (selectedAdvisors.size === 0) return;
-            buildBoardSeats();
-            document.getElementById('screenHome').classList.remove('active');
-            document.getElementById('screenBoard').classList.add('active');
-            window.scrollTo(0, 0);
-            // Load counter from API
-            if (typeof loadUserStatus === 'function') loadUserStatus();
-        }
-
-        function goHome() {
-            document.getElementById('screenBoard').classList.remove('active');
-            document.getElementById('screenHome').classList.add('active');
-            window.scrollTo(0, 0);
-        }
-
-        // === BUILD SEATS ===
-        function buildBoardSeats() {
-            const row = document.getElementById('advisorsRow');
-            row.innerHTML = '';
-            selectedAdvisors.forEach(id => {
-                const m = ADVISORS_META[id];
-                if (!m) return;
-                const seat = document.createElement('div');
-                seat.className = 'advisor-seat';
-                seat.dataset.advisor = id;
-                seat.innerHTML = `
-                    <div class="advisor-avatar" id="avatar-${id}">
-                        <img src="${m.img}" alt="${m.name}">
-                    </div>
-                    <div class="advisor-name">${m.name}</div>
-                    <div class="advisor-title">${m.title}</div>
-                    <div class="response-card" id="card-${id}">
-                        <div class="response-text" id="response-${id}"></div>
-                    </div>
-                    <div class="advisor-summary" id="summary-${id}"></div>
-                    <button class="btn-expand" id="expand-${id}" onclick="toggleExpand('${id}')">▼ Lire le conseil complet</button>
-                `;
-                row.appendChild(seat);
-            });
-        }
-
-        // === CONSULTATION ===
-        async function startConsultation() {
-            const problem = document.getElementById('problemInput').value.trim();
-            if (!problem || isConsulting) return;
-            currentProblem = problem;
-            advisorResponses = {};
-            isConsulting = true;
-
-            const btn = document.getElementById('consultBtn');
-            btn.classList.add('loading');
-            btn.disabled = true;
-
-            selectedAdvisors.forEach(id => {
-                const card = document.getElementById(`card-${id}`);
-                const resp = document.getElementById(`response-${id}`);
-                if (card) card.classList.remove('visible');
-                if (resp) resp.innerHTML = '';
-                const avatar = document.getElementById(`avatar-${id}`);
-                if (avatar) avatar.classList.remove('speaking');
-                const summary = document.getElementById(`summary-${id}`);
-                if (summary) { summary.classList.remove('visible'); summary.textContent = ''; }
-                const expandBtn = document.getElementById(`expand-${id}`);
-                if (expandBtn) expandBtn.classList.remove('visible');
-            });
-
-            document.getElementById('reportSection').classList.remove('visible');
-            document.getElementById('reportContent').innerHTML = '';
-
-            try {
-                const response = await fetch('/api/consult', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ problem, advisors: Array.from(selectedAdvisors) })
-                });
-
-                // Handle auth/limit errors
-                if (response.status === 401) {
-                    window.location.href = '/register';
-                    return;
-                }
-                if (response.status === 403) {
-                    isConsulting = false;
-                    btn.classList.remove('loading');
-                    btn.disabled = false;
-                    document.getElementById('upsellModal').classList.add('visible');
-                    return;
-                }
-                if (!response.ok) {
-                    isConsulting = false;
-                    btn.classList.remove('loading');
-                    btn.disabled = false;
-                    alert('Une erreur est survenue. Veuillez réessayer.');
-                    return;
-                }
-
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let buffer = '';
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    buffer += decoder.decode(value, { stream: true });
-                    const lines = buffer.split('\n');
-                    buffer = lines.pop();
-                    for (const line of lines) {
-                        if (!line.startsWith('data: ')) continue;
-                        try { handleEvent(JSON.parse(line.slice(6))); } catch (e) {}
-                    }
-                }
-            } catch (err) { console.error('Consultation error:', err); }
-
-            isConsulting = false;
-            btn.classList.remove('loading');
-            btn.disabled = false;
-            loadUserStatus();
-        }
-
-        function handleEvent(data) {
-            switch (data.type) {
-                case 'advisor_start': {
-                    const card = document.getElementById(`card-${data.advisor}`);
-                    const resp = document.getElementById(`response-${data.advisor}`);
-                    const avatar = document.getElementById(`avatar-${data.advisor}`);
-                    if (card) card.classList.add('visible');
-                    if (avatar) avatar.classList.add('speaking');
-                    if (resp) resp.innerHTML = '<span class="cursor-blink"></span>';
-                    break;
-                }
-                case 'token': {
-                    const resp = document.getElementById(`response-${data.advisor}`);
-                    if (!resp) break;
-                    const cursor = resp.querySelector('.cursor-blink');
-                    if (cursor) cursor.remove();
-                    resp.textContent += data.content;
-                    const c = document.createElement('span');
-                    c.className = 'cursor-blink';
-                    resp.appendChild(c);
-                    resp.parentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    break;
-                }
-                case 'advisor_end': {
-                    const resp = document.getElementById(`response-${data.advisor}`);
-                    const avatar = document.getElementById(`avatar-${data.advisor}`);
-                    if (resp) { const c = resp.querySelector('.cursor-blink'); if (c) c.remove(); }
-                    if (avatar) avatar.classList.remove('speaking');
-                    advisorResponses[data.advisor] = data.full_response;
-                    break;
-                }
-                case 'advisor_summary': {
-                    const summary = document.getElementById(`summary-${data.advisor}`);
-                    const card = document.getElementById(`card-${data.advisor}`);
-                    const expandBtn = document.getElementById(`expand-${data.advisor}`);
-                    if (summary) {
-                        summary.textContent = data.summary;
-                        summary.classList.add('visible');
-                    }
-                    // Collapse the full response, show expand button
-                    if (card) card.classList.add('collapsed');
-                    if (expandBtn) expandBtn.classList.add('visible');
-                    break;
-                }
-                case 'done':
-                    document.getElementById('reportSection').classList.add('visible');
-                    break;
-                case 'error': {
-                    const resp = document.getElementById(`response-${data.advisor}`);
-                    if (resp) resp.innerHTML = `<span style="color:#e05555">Erreur : ${data.message}</span>`;
-                    break;
-                }
-            }
-        }
-
-        // === REPORT ===
-        async function generateReport() {
-            const btn = document.getElementById('reportBtn');
-            const content = document.getElementById('reportContent');
-            btn.disabled = true;
-            btn.textContent = 'Génération en cours...';
-            content.innerHTML = '<span class="cursor-blink"></span>';
-
-            try {
-                const response = await fetch('/api/report', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ problem: currentProblem, responses: advisorResponses })
-                });
-                const reader = response.body.getReader();
-                const decoder = new TextDecoder();
-                let buffer = '';
-                let fullReport = '';
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    buffer += decoder.decode(value, { stream: true });
-                    const lines = buffer.split('\n');
-                    buffer = lines.pop();
-                    for (const line of lines) {
-                        if (!line.startsWith('data: ')) continue;
-                        try {
-                            const d = JSON.parse(line.slice(6));
-                            if (d.type === 'token') {
-                                fullReport += d.content;
-                                content.innerHTML = marked.parse(fullReport) + '<span class="cursor-blink"></span>';
-                            } else if (d.type === 'done') {
-                                content.innerHTML = marked.parse(fullReport);
-                            }
-                        } catch (e) {}
-                    }
-                }
-            } catch (err) {
-                content.innerHTML = '<span style="color:#e05555">Erreur lors de la génération du rapport.</span>';
-            }
-            btn.disabled = false;
-            btn.textContent = 'Régénérer le rapport';
-        }
-
-        document.getElementById('problemInput').addEventListener('keydown', (e) => {
-            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') startConsultation();
         });
+    }, { threshold: 0.1 });
 
-        function toggleExpand(id) {
-            const card = document.getElementById(`card-${id}`);
-            const btn = document.getElementById(`expand-${id}`);
-            if (!card || !btn) return;
-            if (card.classList.contains('collapsed')) {
-                card.classList.remove('collapsed');
-                btn.textContent = '▲ Replier';
-            } else {
-                card.classList.add('collapsed');
-                btn.textContent = '▼ Lire le conseil complet';
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // FAQ toggle
+    function toggleFaq(btn) {
+        const answer = btn.nextElementSibling;
+        const toggle = btn.querySelector('.faq-toggle');
+        const isOpen = answer.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+        document.querySelectorAll('.faq-toggle').forEach(t => t.textContent = '+');
+
+        if (!isOpen) {
+            answer.classList.add('open');
+            toggle.textContent = '−';
+        }
+    }
+
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('nav');
+        if (window.scrollY > 100) {
+            nav.style.padding = '0.8rem 3rem';
+            nav.style.borderBottomColor = 'rgba(201,168,76,0.1)';
+        } else {
+            nav.style.padding = '1.2rem 3rem';
+            nav.style.borderBottomColor = 'rgba(255,255,255,0.06)';
+        }
+    });
+
+    // Animated counter
+    function animateCounters() {
+        document.querySelectorAll('.proof-number').forEach(el => {
+            const text = el.textContent;
+            if (!isNaN(parseInt(text))) {
+                const target = parseInt(text);
+                let current = 0;
+                const increment = Math.ceil(target / 40);
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    el.textContent = current;
+                }, 30);
             }
-        }
-    </script>
-
-    <!-- Upsell Modal -->
-    <div class="modal-overlay" id="upsellModal">
-        <div class="modal-card">
-            <div class="modal-icon">✦</div>
-            <h3>Vos 3 consultations gratuites sont utilisées</h3>
-            <p>Votre Board a déjà livré ses premiers verdicts. Pour continuer à consulter vos conseillers sans limite, passez au plan Pro.</p>
-            <a href="/#pricing" class="modal-btn-gold">Voir les plans →</a>
-            <button class="modal-dismiss" onclick="document.getElementById('upsellModal').classList.remove('visible')">Peut-être plus tard</button>
-        </div>
-    </div>
-
-    <script>
-        // --- Counter & session management ---
-        async function loadUserStatus() {
-            try {
-                const resp = await fetch('/api/me');
-                if (resp.ok) {
-                    const data = await resp.json();
-                    updateCounter(data.remaining, data.max_consultations);
-                } else {
-                    // Fallback - show default
-                    const text = document.getElementById('counterText');
-                    if (text) text.textContent = '3/3 consultations restantes';
-                }
-            } catch (e) {
-                const text = document.getElementById('counterText');
-                if (text) text.textContent = '3/3 consultations restantes';
-            }
-        }
-
-        function updateCounter(remaining, max) {
-            const counter = document.getElementById('consultCounter');
-            const text = document.getElementById('counterText');
-            if (!counter || !text) return;
-
-            counter.classList.remove('warning', 'exhausted');
-
-            if (remaining <= 0) {
-                text.textContent = '0/' + max + ' — Limite atteinte';
-                counter.classList.add('exhausted');
-            } else if (remaining === 1) {
-                text.textContent = remaining + '/' + max + ' consultation restante';
-                counter.classList.add('warning');
-            } else {
-                text.textContent = remaining + '/' + max + ' consultations restantes';
-            }
-        }
-
-        function showUpsell() {
-            document.getElementById('upsellModal').classList.add('visible');
-        }
-
-        // Load status when board screen is shown
-        const origGoBoard = typeof goBoard === 'function' ? goBoard : null;
-
-        document.addEventListener('DOMContentLoaded', () => {
-            loadUserStatus();
         });
-    </script>
+    }
+
+    // Trigger counter animation when hero is visible
+    const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                heroObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const proofSection = document.querySelector('.hero-proof');
+    if (proofSection) heroObserver.observe(proofSection);
+</script>
+
 </body>
 </html>

@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD — Tarifs</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0c; --bg-elevated: #111114; --bg-card: #16161a;
+            --gold: #c9a84c; --gold-dim: #a08535; --gold-bright: #e0c266;
+            --gold-glow: rgba(201,168,76,0.15);
+            --text: #e8e4dd; --text-secondary: #9a9590; --text-muted: #6a6560;
+            --border: rgba(255,255,255,0.06); --border-gold: rgba(201,168,76,0.2);
+            --green: #4a9; --green-dim: rgba(68,170,153,0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,12,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--gold); letter-spacing: 3px; text-decoration: none; }
+        .nav-logo span { color: var(--text-muted); font-weight: 400; font-size: 0.7rem; letter-spacing: 4px; display: block; text-transform: uppercase; margin-top: -2px; }
+        .nav-back { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: color 0.3s; }
+        .nav-back:hover { color: var(--gold); }
+
+        .page { max-width: 1000px; margin: 0 auto; padding: 8rem 2rem 3rem; }
+
+        .page-header { text-align: center; margin-bottom: 3.5rem; }
+        .page-label { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1rem; }
+        .page-header h1 { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; margin-bottom: 0.6rem; line-height: 1.2; }
+        .page-header h1 em { font-style: italic; color: var(--gold); }
+        .page-header p { font-size: 1rem; color: var(--text-secondary); font-weight: 300; max-width: 520px; margin: 0 auto; line-height: 1.6; }
+
+        /* Pricing grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .pricing-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 2.5rem 2rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            border-color: var(--border-gold);
+            transform: translateY(-3px);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--gold-dim);
+            box-shadow: 0 0 40px rgba(201,168,76,0.1);
+        }
+
+        .pricing-card.featured::before {
+            content: 'POPULAIRE';
+            position: absolute;
+            top: -11px; left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold);
+            color: var(--bg);
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 2.5px;
+            padding: 0.3rem 1.2rem;
+            border-radius: 20px;
+        }
+
+        .pricing-tier {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .pricing-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .pricing-price span {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+            min-height: 2.4rem;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.65rem 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .pricing-features li:last-child { border-bottom: none; }
+
+        .pricing-features li .check {
+            color: var(--gold);
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .pricing-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 0.85rem;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+
+        .pricing-btn.outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .pricing-btn.outline:hover {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
+        .pricing-btn.gold {
+            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+            color: var(--bg);
+        }
+
+        .pricing-btn.gold:hover {
+            box-shadow: 0 6px 25px rgba(201,168,76,0.35);
+            transform: translateY(-1px);
+        }
+
+        .pricing-btn.dark {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-gold);
+            color: var(--gold);
+        }
+
+        .pricing-btn.dark:hover {
+            background: rgba(201,168,76,0.08);
+        }
+
+        /* Anchor comparison */
+        .anchor-section {
+            text-align: center;
+            padding: 2rem 0 2.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .anchor-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .anchor-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .anchor-item {
+            text-align: center;
+        }
+
+        .anchor-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.2rem;
+        }
+
+        .anchor-price.strike {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        .anchor-price.gold { color: var(--gold); }
+
+        .anchor-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        /* FAQ */
+        .faq-section { padding: 2rem 0; }
+
+        .faq-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 1.2rem 0;
+        }
+
+        .faq-q {
+            font-weight: 500;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text);
+            transition: color 0.3s;
+        }
+
+        .faq-q:hover { color: var(--gold); }
+
+        .faq-q .arrow {
+            transition: transform 0.3s;
+            color: var(--gold-dim);
+        }
+
+        .faq-a {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .faq-item.open .faq-a {
+            max-height: 200px;
+            padding-top: 0.8rem;
+        }
+
+        .faq-item.open .arrow { transform: rotate(180deg); }
+
+        /* Guarantee */
+        .guarantee {
+            text-align: center;
+            padding: 2.5rem 2rem;
+            margin: 1rem 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .guarantee-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+
+        .guarantee h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .guarantee p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        footer { padding: 3rem 2rem; border-top: 1px solid var(--border); text-align: center; }
+        footer p { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; }
+        footer .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold-dim); letter-spacing: 3px; margin-bottom: 0.5rem; }
+        footer a { color: var(--text-muted); text-decoration: none; }
+        footer a:hover { color: var(--gold); }
+
+        @media (max-width: 768px) {
+            nav { padding: 0.8rem 1.5rem; }
+            .page { padding: 6rem 1.2rem 2rem; }
+            .page-header h1 { font-size: 1.8rem; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto 3rem; }
+            .anchor-grid { grid-template-columns: 1fr; gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">BDD<span>Board de Décision Digitale</span></a>
+    <a href="/" class="nav-back">← Retour à l'accueil</a>
+</nav>
+
+<div class="page">
+
+    <div class="page-header">
+        <div class="page-label">Tarifs</div>
+        <h1>Choisissez votre plan.<br><em>Commencez à décider mieux.</em></h1>
+        <p>Vous avez déjà testé le Board. Imaginez maintenant avoir accès illimité à vos 22 conseillers, chaque jour.</p>
+    </div>
+
+    <div class="pricing-grid">
+
+        <!-- Découverte -->
+        <div class="pricing-card">
+            <div class="pricing-tier">Découverte</div>
+            <div class="pricing-price">0€</div>
+            <div class="pricing-desc">3 consultations pour tester le Board et sa puissance.</div>
+            <ul class="pricing-features">
+                <li><span class="check">✦</span> 3 consultations gratuites</li>
+                <li><span class="check">✦</span> 22 conseillers disponibles</li>
+                <li><span class="check">✦</span> Résumés automatiques</li>
+                <li><span class="check">✦</span> Rapport de synthèse</li>
+            </ul>
+            <a href="/app" class="pricing-btn outline">Offre actuelle</a>
+        </div>
+
+        <!-- Pro -->
+        <div class="pricing-card featured">
+            <div class="pricing-tier">Pro</div>
+            <div class="pricing-price">19€ <span>/ mois</span></div>
+            <div class="pricing-desc">Consultations illimitées pour les décideurs exigeants.</div>
+            <ul class="pricing-features">
+                <li><span class="check">✦</span> Consultations <strong>illimitées</strong></li>
+                <li><span class="check">✦</span> 22 conseillers disponibles</li>
+                <li><span class="check">✦</span> Résumés automatiques</li>
+                <li><span class="check">✦</span> Rapport de synthèse</li>
+                <li><span class="check">✦</span> Historique des consultations</li>
+                <li><span class="check">✦</span> Accès aux nouveaux conseillers</li>
+            </ul>
+            <a href="#" class="pricing-btn gold" onclick="handleUpgrade('pro')">Passer au plan Pro →</a>
+        </div>
+
+        <!-- Équipe -->
+        <div class="pricing-card">
+            <div class="pricing-tier">Équipe</div>
+            <div class="pricing-price">49€ <span>/ mois</span></div>
+            <div class="pricing-desc">Pour les équipes qui décident ensemble.</div>
+            <ul class="pricing-features">
+                <li><span class="check">✦</span> Tout le plan Pro</li>
+                <li><span class="check">✦</span> Jusqu'à 5 utilisateurs</li>
+                <li><span class="check">✦</span> Boards partagés en équipe</li>
+                <li><span class="check">✦</span> Export PDF des rapports</li>
+                <li><span class="check">✦</span> Support prioritaire</li>
+            </ul>
+            <a href="#" class="pricing-btn dark" onclick="handleUpgrade('team')">Contacter l'équipe →</a>
+        </div>
+
+    </div>
+
+    <!-- Anchor comparison -->
+    <div class="anchor-section">
+        <div class="anchor-title">Combien coûtent les alternatives ?</div>
+        <div class="anchor-grid">
+            <div class="anchor-item">
+                <div class="anchor-price strike">150€</div>
+                <div class="anchor-label">1 heure de coaching business</div>
+            </div>
+            <div class="anchor-item">
+                <div class="anchor-price strike">500€</div>
+                <div class="anchor-label">1 session de conseil stratégique</div>
+            </div>
+            <div class="anchor-item">
+                <div class="anchor-price gold">0.63€</div>
+                <div class="anchor-label">1 jour de BDD Pro</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Guarantee -->
+    <div class="guarantee">
+        <div class="guarantee-icon">🛡️</div>
+        <h3>Satisfait ou remboursé — 14 jours</h3>
+        <p>Si le Board ne transforme pas votre façon de décider dans les 14 premiers jours, on vous rembourse intégralement. Sans questions, sans conditions.</p>
+    </div>
+
+    <!-- FAQ -->
+    <div class="faq-section">
+        <div class="faq-title">Questions fréquentes</div>
+
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Comment fonctionne le paiement ? <span class="arrow">▾</span></div>
+            <div class="faq-a">Le paiement est mensuel, par carte bancaire. Vous pouvez résilier à tout moment depuis votre espace. La résiliation prend effet à la fin du mois en cours.</div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Puis-je changer de plan ? <span class="arrow">▾</span></div>
+            <div class="faq-a">Oui, vous pouvez passer du plan Découverte au plan Pro à tout moment. Le passage est immédiat et vos données sont conservées.</div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Mes consultations sont-elles confidentielles ? <span class="arrow">▾</span></div>
+            <div class="faq-a">Absolument. Vos consultations ne sont jamais partagées, jamais utilisées pour entraîner des modèles IA, et jamais accessibles par d'autres utilisateurs. Vous pouvez supprimer votre historique à tout moment.</div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Qu'est-ce que la garantie 14 jours ? <span class="arrow">▾</span></div>
+            <div class="faq-a">Si vous n'êtes pas satisfait du plan Pro dans les 14 premiers jours, contactez-nous et nous vous remboursons intégralement. Aucune justification nécessaire.</div>
+        </div>
+
+        <div class="faq-item" onclick="this.classList.toggle('open')">
+            <div class="faq-q">Y aura-t-il de nouveaux conseillers ? <span class="arrow">▾</span></div>
+            <div class="faq-a">Oui. De nouveaux conseillers sont ajoutés régulièrement. Les abonnés Pro y ont accès automatiquement dès leur sortie.</div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    <div class="footer-logo">BDD</div>
+    <p>© 2025 Board de Décision Digitale — Tous droits réservés</p>
+    <p style="margin-top:0.5rem;"><a href="/terms">Conditions d'utilisation</a> · <a href="/privacy">Politique de confidentialité</a> · <a href="/contact">Contact</a></p>
+</footer>
+
+<script>
+    function handleUpgrade(plan) {
+        // For now — redirect to contact or show coming soon
+        // When Stripe is integrated, this will redirect to checkout
+        if (plan === 'team') {
+            window.location.href = '/contact';
+            return;
+        }
+
+        // Pro plan — show coming soon message for now
+        const card = document.querySelector('.pricing-card.featured');
+        const btn = card.querySelector('.pricing-btn');
+        btn.textContent = '🚀 Bientôt disponible';
+        btn.style.cursor = 'default';
+        btn.style.opacity = '0.7';
+
+        // Optional: show a small toast
+        const toast = document.createElement('div');
+        toast.style.cssText = 'position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:var(--bg-card);border:1px solid var(--gold-dim);padding:1rem 2rem;border-radius:10px;font-size:0.88rem;color:var(--gold);z-index:9999;animation:fadeInUp 0.3s ease-out;';
+        toast.textContent = '✦ Le paiement arrive très bientôt. Vous serez notifié par email.';
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 4000);
+    }
+</script>
+
+</body>
+</html>
