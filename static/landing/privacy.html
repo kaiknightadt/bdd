@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD — Politique de confidentialité</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0c; --bg-elevated: #111114; --bg-card: #16161a;
+            --gold: #c9a84c; --gold-dim: #a08535; --gold-bright: #e0c266;
+            --text: #e8e4dd; --text-secondary: #9a9590; --text-muted: #6a6560;
+            --border: rgba(255,255,255,0.06); --border-gold: rgba(201,168,76,0.2);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,12,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--gold); letter-spacing: 3px; text-decoration: none; }
+        .nav-logo span { color: var(--text-muted); font-weight: 400; font-size: 0.7rem; letter-spacing: 4px; display: block; text-transform: uppercase; margin-top: -2px; }
+        .nav-back { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: color 0.3s; }
+        .nav-back:hover { color: var(--gold); }
+
+        .page { max-width: 780px; margin: 0 auto; padding: 8rem 2rem 5rem; }
+        .page-label { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1rem; }
+        .page h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .page .updated { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 3rem; }
+
+        .page h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--gold); margin: 2.5rem 0 0.8rem; }
+        .page p { font-size: 0.92rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 1rem; }
+
+        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; }
+        .data-table th, .data-table td { padding: 0.8rem 1rem; text-align: left; font-size: 0.85rem; border-bottom: 1px solid var(--border); }
+        .data-table th { color: var(--gold-dim); font-weight: 500; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; }
+        .data-table td { color: var(--text-secondary); }
+
+        footer { padding: 3rem 2rem; border-top: 1px solid var(--border); text-align: center; }
+        footer p { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; }
+        footer .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold-dim); letter-spacing: 3px; margin-bottom: 0.5rem; }
+        footer a { color: var(--text-muted); text-decoration: none; }
+        footer a:hover { color: var(--gold); }
+
+        @media (max-width: 768px) { nav { padding: 0.8rem 1.5rem; } .page { padding: 6rem 1.5rem 3rem; } .data-table { font-size: 0.8rem; } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">BDD<span>Board de Décision Digitale</span></a>
+    <a href="/" class="nav-back">← Retour à l'accueil</a>
+</nav>
+
+<div class="page">
+    <div class="page-label">Confidentialité</div>
+    <h1>Politique de confidentialité</h1>
+    <p class="updated">Dernière mise à jour : février 2025</p>
+
+    <p>La protection de vos données personnelles est une priorité pour BDD. La présente politique de confidentialité décrit les données que nous collectons, comment nous les utilisons et les droits dont vous disposez, conformément au Règlement Général sur la Protection des Données (RGPD).</p>
+
+    <h2>1. Responsable du traitement</h2>
+    <p>Le responsable du traitement des données est l'éditeur du service BDD — Board de Décision Digitale. Pour exercer vos droits ou pour toute question, contactez-nous via la page <a href="/contact" style="color:var(--gold);text-decoration:none;">Contact</a>.</p>
+
+    <h2>2. Données collectées</h2>
+    <p>Nous collectons uniquement les données strictement nécessaires au fonctionnement du Service :</p>
+
+    <table class="data-table">
+        <tr><th>Donnée</th><th>Finalité</th><th>Durée de conservation</th></tr>
+        <tr><td>Adresse email</td><td>Création de compte, communication</td><td>Durée du compte + 1 an</td></tr>
+        <tr><td>Contenu des consultations</td><td>Génération des réponses IA</td><td>Durée du compte (supprimable)</td></tr>
+        <tr><td>Données de paiement</td><td>Gestion des abonnements</td><td>Traitées par Stripe, non stockées</td></tr>
+        <tr><td>Données de navigation</td><td>Amélioration du Service</td><td>13 mois maximum</td></tr>
+    </table>
+
+    <h2>3. Utilisation des données</h2>
+    <p>Vos données sont utilisées exclusivement pour fournir et améliorer le Service. Vos consultations (les problèmes soumis au Board et les réponses générées) ne sont jamais partagées avec des tiers, jamais utilisées pour entraîner des modèles d'intelligence artificielle, et jamais accessibles par d'autres utilisateurs.</p>
+
+    <h2>4. Sous-traitants</h2>
+    <p>Pour le fonctionnement du Service, nous faisons appel aux sous-traitants suivants, tous conformes au RGPD :</p>
+
+    <table class="data-table">
+        <tr><th>Sous-traitant</th><th>Service</th><th>Localisation</th></tr>
+        <tr><td>OpenAI</td><td>Génération des réponses IA</td><td>États-Unis (clauses contractuelles types)</td></tr>
+        <tr><td>Render</td><td>Hébergement de l'application</td><td>États-Unis / Europe</td></tr>
+        <tr><td>Stripe</td><td>Traitement des paiements</td><td>Europe</td></tr>
+    </table>
+
+    <h2>5. Transferts hors UE</h2>
+    <p>Certains de nos sous-traitants sont situés aux États-Unis. Ces transferts sont encadrés par des clauses contractuelles types approuvées par la Commission européenne, garantissant un niveau de protection adéquat de vos données.</p>
+
+    <h2>6. Cookies</h2>
+    <p>Le Service utilise uniquement des cookies strictement nécessaires au fonctionnement de l'application (session, authentification). Aucun cookie publicitaire ou de traçage n'est utilisé. Aucun outil d'analyse tiers n'est intégré sans votre consentement explicite.</p>
+
+    <h2>7. Vos droits</h2>
+    <p>Conformément au RGPD, vous disposez des droits suivants sur vos données personnelles : droit d'accès (obtenir une copie de vos données), droit de rectification (corriger des données inexactes), droit à l'effacement (supprimer votre compte et toutes vos données), droit à la portabilité (recevoir vos données dans un format structuré), droit d'opposition (vous opposer à certains traitements), et droit à la limitation du traitement.</p>
+    <p>Pour exercer ces droits, contactez-nous via la page <a href="/contact" style="color:var(--gold);text-decoration:none;">Contact</a>. Nous répondrons dans un délai maximum de 30 jours. Vous disposez également du droit d'introduire une réclamation auprès de la CNIL (Commission Nationale de l'Informatique et des Libertés).</p>
+
+    <h2>8. Sécurité</h2>
+    <p>Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, perte ou altération. Les communications sont chiffrées via HTTPS. Les données sensibles sont stockées de manière sécurisée avec chiffrement au repos.</p>
+
+    <h2>9. Suppression des données</h2>
+    <p>Vous pouvez supprimer votre historique de consultations à tout moment depuis votre espace personnel. La suppression de votre compte entraîne l'effacement définitif de toutes vos données dans un délai de 30 jours.</p>
+
+    <h2>10. Modifications</h2>
+    <p>Cette politique peut être mise à jour. En cas de modification substantielle, nous vous en informerons par email ou via une notification dans le Service. La date de dernière mise à jour est indiquée en haut de cette page.</p>
+</div>
+
+<footer>
+    <div class="footer-logo">BDD</div>
+    <p>© 2025 Board de Décision Digitale — Tous droits réservés</p>
+    <p style="margin-top:0.5rem;"><a href="/terms">Conditions d'utilisation</a> · <a href="/privacy">Politique de confidentialité</a> · <a href="/contact">Contact</a></p>
+</footer>
+
+</body>
+</html>

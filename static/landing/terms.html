@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD — Conditions d'utilisation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0c; --bg-elevated: #111114; --bg-card: #16161a;
+            --gold: #c9a84c; --gold-dim: #a08535; --gold-bright: #e0c266;
+            --text: #e8e4dd; --text-secondary: #9a9590; --text-muted: #6a6560;
+            --border: rgba(255,255,255,0.06); --border-gold: rgba(201,168,76,0.2);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,12,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--gold); letter-spacing: 3px; text-decoration: none; }
+        .nav-logo span { color: var(--text-muted); font-weight: 400; font-size: 0.7rem; letter-spacing: 4px; display: block; text-transform: uppercase; margin-top: -2px; }
+        .nav-back { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: color 0.3s; }
+        .nav-back:hover { color: var(--gold); }
+
+        .page { max-width: 780px; margin: 0 auto; padding: 8rem 2rem 5rem; }
+        .page-label { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1rem; }
+        .page h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .page .updated { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 3rem; }
+
+        .page h2 { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; color: var(--gold); margin: 2.5rem 0 0.8rem; }
+        .page p { font-size: 0.92rem; line-height: 1.8; color: var(--text-secondary); margin-bottom: 1rem; }
+
+        footer { padding: 3rem 2rem; border-top: 1px solid var(--border); text-align: center; }
+        footer p { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; }
+        footer .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold-dim); letter-spacing: 3px; margin-bottom: 0.5rem; }
+        footer a { color: var(--text-muted); text-decoration: none; }
+        footer a:hover { color: var(--gold); }
+
+        @media (max-width: 768px) { nav { padding: 0.8rem 1.5rem; } .page { padding: 6rem 1.5rem 3rem; } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">BDD<span>Board de Décision Digitale</span></a>
+    <a href="/" class="nav-back">← Retour à l'accueil</a>
+</nav>
+
+<div class="page">
+    <div class="page-label">Légal</div>
+    <h1>Conditions d'utilisation</h1>
+    <p class="updated">Dernière mise à jour : février 2025</p>
+
+    <h2>1. Objet</h2>
+    <p>Les présentes conditions générales d'utilisation (ci-après « CGU ») ont pour objet de définir les modalités d'accès et d'utilisation du service BDD — Board de Décision Digitale (ci-après « le Service »), accessible à l'adresse du site. En utilisant le Service, vous acceptez sans réserve les présentes CGU.</p>
+
+    <h2>2. Description du Service</h2>
+    <p>BDD est une application web qui permet aux utilisateurs de soumettre des problématiques décisionnelles à un panel de conseillers virtuels propulsés par l'intelligence artificielle. Chaque conseiller est une simulation inspirée de personnalités historiques, contemporaines ou fictives, et répond selon une modélisation de leur pensée et philosophie connues.</p>
+    <p>Les réponses générées par le Service sont fournies à titre informatif et ludique uniquement. Elles ne constituent en aucun cas un conseil professionnel, juridique, financier, médical ou psychologique.</p>
+
+    <h2>3. Accès au Service</h2>
+    <p>Le Service est accessible gratuitement dans sa version Découverte (3 consultations). L'accès aux formules payantes (Pro, Équipe) est conditionné à la souscription d'un abonnement. L'éditeur se réserve le droit de modifier, suspendre ou interrompre tout ou partie du Service à tout moment, avec ou sans préavis.</p>
+
+    <h2>4. Responsabilités de l'utilisateur</h2>
+    <p>L'utilisateur s'engage à utiliser le Service de bonne foi et dans le respect des lois en vigueur. Il est seul responsable des décisions qu'il prend sur la base des réponses fournies par le Service. L'utilisation du Service à des fins illicites, diffamatoires, harcelantes ou contraires à l'ordre public est strictement interdite.</p>
+
+    <h2>5. Propriété intellectuelle</h2>
+    <p>L'ensemble des éléments du Service (design, code, textes, prompts, identité visuelle) est protégé par le droit de la propriété intellectuelle. Toute reproduction, distribution ou utilisation non autorisée est interdite. Les noms et images des personnalités utilisées comme base d'inspiration pour les conseillers virtuels restent la propriété de leurs ayants droit respectifs. BDD ne prétend pas représenter ces personnes ni agir en leur nom.</p>
+
+    <h2>6. Limitation de responsabilité</h2>
+    <p>Le Service est fourni « en l'état ». L'éditeur ne garantit pas l'exactitude, la pertinence ou l'exhaustivité des réponses générées par l'intelligence artificielle. En aucun cas l'éditeur ne pourra être tenu responsable de dommages directs ou indirects résultant de l'utilisation du Service, y compris les pertes financières, les pertes de données ou les décisions prises sur la base des conseils générés.</p>
+
+    <h2>7. Abonnements et paiements</h2>
+    <p>Les abonnements payants sont souscrits pour une durée mensuelle, renouvelable automatiquement sauf résiliation par l'utilisateur avant la date de renouvellement. La résiliation prend effet à la fin de la période en cours. Aucun remboursement au prorata ne sera effectué pour la période entamée.</p>
+
+    <h2>8. Modification des CGU</h2>
+    <p>L'éditeur se réserve le droit de modifier les présentes CGU à tout moment. Les modifications entrent en vigueur dès leur publication sur le site. L'utilisation continue du Service après modification vaut acceptation des nouvelles CGU.</p>
+
+    <h2>9. Droit applicable</h2>
+    <p>Les présentes CGU sont régies par le droit français. En cas de litige, les tribunaux compétents seront ceux du ressort du siège social de l'éditeur, sauf disposition légale contraire.</p>
+
+    <h2>10. Contact</h2>
+    <p>Pour toute question relative aux présentes CGU, veuillez nous contacter via la page <a href="/contact" style="color:var(--gold);text-decoration:none;">Contact</a>.</p>
+</div>
+
+<footer>
+    <div class="footer-logo">BDD</div>
+    <p>© 2025 Board de Décision Digitale — Tous droits réservés</p>
+    <p style="margin-top:0.5rem;"><a href="/terms">Conditions d'utilisation</a> · <a href="/privacy">Politique de confidentialité</a> · <a href="/contact">Contact</a></p>
+</footer>
+
+</body>
+</html>

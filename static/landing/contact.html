@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD — Contact</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0c; --bg-elevated: #111114; --bg-card: #16161a;
+            --gold: #c9a84c; --gold-dim: #a08535; --gold-bright: #e0c266;
+            --gold-glow: rgba(201,168,76,0.15);
+            --text: #e8e4dd; --text-secondary: #9a9590; --text-muted: #6a6560;
+            --border: rgba(255,255,255,0.06); --border-gold: rgba(201,168,76,0.2);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); -webkit-font-smoothing: antialiased; }
+
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; padding: 1rem 3rem; display: flex; justify-content: space-between; align-items: center; background: rgba(10,10,12,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; color: var(--gold); letter-spacing: 3px; text-decoration: none; }
+        .nav-logo span { color: var(--text-muted); font-weight: 400; font-size: 0.7rem; letter-spacing: 4px; display: block; text-transform: uppercase; margin-top: -2px; }
+        .nav-back { color: var(--text-secondary); text-decoration: none; font-size: 0.85rem; transition: color 0.3s; }
+        .nav-back:hover { color: var(--gold); }
+
+        .page { max-width: 780px; margin: 0 auto; padding: 8rem 2rem 5rem; }
+        .page-label { font-size: 0.7rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold-dim); margin-bottom: 1rem; }
+        .page h1 { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .page .intro { font-size: 1rem; color: var(--text-secondary); line-height: 1.7; margin-bottom: 3rem; font-weight: 300; }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-card {
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            border-color: var(--border-gold);
+            transform: translateY(-2px);
+        }
+
+        .contact-card-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+
+        .contact-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .contact-card a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .contact-card a:hover { color: var(--gold-bright); }
+
+        .divider {
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0; right: 0;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .divider span {
+            background: var(--bg);
+            padding: 0 1.5rem;
+            position: relative;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .contact-form {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+        }
+
+        .form-group { margin-bottom: 1.5rem; }
+
+        .form-group label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.9rem 1.1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: var(--gold-dim);
+        }
+
+        .form-group select { cursor: pointer; }
+        .form-group select option { background: var(--bg-card); }
+
+        .form-group textarea {
+            min-height: 140px;
+            resize: vertical;
+            line-height: 1.6;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .btn-send {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gold);
+            color: var(--bg);
+            border: none;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-send:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 8px 30px rgba(201,168,76,0.3);
+            transform: translateY(-1px);
+        }
+
+        .btn-send:active { transform: translateY(0); }
+
+        .form-note {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 3rem 2rem;
+        }
+
+        .success-message.visible { display: block; }
+
+        .success-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        .success-message h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+        }
+
+        .success-message p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        footer { padding: 3rem 2rem; border-top: 1px solid var(--border); text-align: center; }
+        footer p { font-size: 0.75rem; color: var(--text-muted); letter-spacing: 1px; }
+        footer .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.2rem; color: var(--gold-dim); letter-spacing: 3px; margin-bottom: 0.5rem; }
+        footer a { color: var(--text-muted); text-decoration: none; }
+        footer a:hover { color: var(--gold); }
+
+        @media (max-width: 768px) {
+            nav { padding: 0.8rem 1.5rem; }
+            .page { padding: 6rem 1.5rem 3rem; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="nav-logo">BDD<span>Board de Décision Digitale</span></a>
+    <a href="/" class="nav-back">← Retour à l'accueil</a>
+</nav>
+
+<div class="page">
+    <div class="page-label">Contact</div>
+    <h1>Une question ? Un retour ?</h1>
+    <p class="intro">Nous lisons chaque message. Comptez sur une réponse sous 48 heures maximum.</p>
+
+    <div class="contact-grid">
+        <div class="contact-card">
+            <div class="contact-card-icon">📧</div>
+            <h3>Email direct</h3>
+            <p>Pour toute question générale ou demande de support :<br><a href="mailto:contact@bdd-app.com">contact@bdd-app.com</a></p>
+        </div>
+        <div class="contact-card">
+            <div class="contact-card-icon">💼</div>
+            <h3>Partenariats</h3>
+            <p>Intégrations, licences équipe ou marque blanche :<br><a href="mailto:partenariats@bdd-app.com">partenariats@bdd-app.com</a></p>
+        </div>
+    </div>
+
+    <div class="divider"><span>ou envoyez un message</span></div>
+
+    <div class="contact-form" id="contactForm">
+        <div class="form-row">
+            <div class="form-group">
+                <label>Prénom</label>
+                <input type="text" id="firstName" placeholder="Votre prénom" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="votre@email.com" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Sujet</label>
+            <select id="subject">
+                <option value="general">Question générale</option>
+                <option value="support">Support technique</option>
+                <option value="billing">Facturation / Abonnement</option>
+                <option value="feature">Suggestion de fonctionnalité</option>
+                <option value="bug">Signaler un bug</option>
+                <option value="partnership">Partenariat</option>
+                <option value="press">Presse / Média</option>
+                <option value="other">Autre</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Message</label>
+            <textarea id="message" placeholder="Décrivez votre demande en quelques lignes..." required></textarea>
+        </div>
+
+        <button class="btn-send" onclick="sendMessage()">Envoyer le message →</button>
+        <p class="form-note">Nous ne partageons jamais votre email avec des tiers.</p>
+    </div>
+
+    <div class="success-message" id="successMessage">
+        <div class="success-icon">✦</div>
+        <h3>Message envoyé</h3>
+        <p>Merci pour votre message. Nous reviendrons vers vous sous 48 heures.</p>
+    </div>
+</div>
+
+<footer>
+    <div class="footer-logo">BDD</div>
+    <p>© 2025 Board de Décision Digitale — Tous droits réservés</p>
+    <p style="margin-top:0.5rem;"><a href="/terms">Conditions d'utilisation</a> · <a href="/privacy">Politique de confidentialité</a> · <a href="/contact">Contact</a></p>
+</footer>
+
+<script>
+    function sendMessage() {
+        const name = document.getElementById('firstName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name || !email || !message) {
+            alert('Merci de remplir tous les champs obligatoires.');
+            return;
+        }
+
+        // Hide form, show success
+        document.getElementById('contactForm').style.display = 'none';
+        document.getElementById('successMessage').classList.add('visible');
+
+        // In production, this would POST to an API endpoint or mailto service
+        // e.g. EmailJS, Formspree, or a custom Flask endpoint
+    }
+</script>
+
+</body>
+</html>

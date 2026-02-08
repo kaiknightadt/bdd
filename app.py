@@ -1046,6 +1046,21 @@ def demo():
     return send_from_directory("static/landing", "demo.html")
 
 
+@app.route("/terms")
+def terms():
+    return send_from_directory("static/landing", "terms.html")
+
+
+@app.route("/privacy")
+def privacy():
+    return send_from_directory("static/landing", "privacy.html")
+
+
+@app.route("/contact")
+def contact():
+    return send_from_directory("static/landing", "contact.html")
+
+
 @app.route("/app")
 def board():
     return render_template("index.html")
