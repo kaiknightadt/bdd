@@ -1,5 +1,6 @@
 import os
 import json
+import requests as http_requests
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify, Response, stream_with_context, send_from_directory, session, redirect
 from openai import OpenAI
@@ -66,6 +67,66 @@ def save_contact_message(name, email, subject, message):
         "message": message
     }).execute()
     return True
+
+
+def send_notification_email(name, email, subject, message):
+    """Send email notification via Resend API."""
+    resend_key = os.getenv("RESEND_API_KEY")
+    notify_to = os.getenv("NOTIFY_EMAIL", "kaidenvialle@gmail.com")
+
+    if not resend_key:
+        print("RESEND_API_KEY not set, skipping email notification")
+        return False
+
+    subject_map = {
+        "general": "Question générale",
+        "support": "Support technique",
+        "billing": "Facturation / Abonnement",
+        "feature": "Suggestion de fonctionnalité",
+        "bug": "Signaler un bug",
+        "partnership": "Partenariat",
+        "press": "Presse / Média",
+        "other": "Autre"
+    }
+
+    subject_label = subject_map.get(subject, subject)
+
+    body = f"""Nouveau message depuis le formulaire de contact BDD.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Prénom : {name}
+Email : {email}
+Sujet : {subject_label}
+Date : {datetime.now().strftime('%d/%m/%Y à %H:%M')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Message :
+
+{message}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Répondre directement à : {email}
+"""
+
+    try:
+        resp = http_requests.post(
+            "https://api.resend.com/emails",
+            headers={
+                "Authorization": f"Bearer {resend_key}",
+                "Content-Type": "application/json"
+            },
+            json={
+                "from": "BDD Contact <onboarding@resend.dev>",
+                "to": [notify_to],
+                "subject": f"[BDD Contact] {subject_label} — {name}",
+                "text": body,
+                "reply_to": email
+            }
+        )
+        return resp.status_code == 200
+    except Exception as e:
+        print(f"Email notification error: {e}")
+        return False
 
 def get_client():
     api_key = os.getenv("OPENAI_API_KEY")
@@ -1294,7 +1355,7 @@ def consult():
 
 @app.route("/api/contact", methods=["POST"])
 def api_contact():
-    """Save contact form message to Supabase."""
+    """Save contact form message to Supabase and notify by email."""
     data = request.json
     name = data.get("name", "").strip()
     email = data.get("email", "").strip()
@@ -1306,6 +1367,8 @@ def api_contact():
 
     try:
         save_contact_message(name, email, subject, message)
+        # Send email notification (non-blocking — don't fail if email fails)
+        send_notification_email(name, email, subject, message)
         return jsonify({"ok": True})
     except Exception as e:
         return jsonify({"error": "Erreur serveur."}), 500
