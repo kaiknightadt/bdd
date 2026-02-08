@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD — Démonstration en direct</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --bg-elevated: #111114;
+            --bg-card: #16161a;
+            --gold: #c9a84c;
+            --gold-dim: #a08535;
+            --gold-bright: #e0c266;
+            --gold-glow: rgba(201, 168, 76, 0.15);
+            --text: #e8e4dd;
+            --text-secondary: #9a9590;
+            --text-muted: #6a6560;
+            --border: rgba(255,255,255,0.06);
+            --border-gold: rgba(201, 168, 76, 0.2);
+
+            --gandhi-accent: #c4a05a;
+            --bezos-accent: #d4a054;
+            --arnault-accent: #8b7fc4;
+            --ammar-accent: #d4c45a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ========== NAV ========== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10,10,12,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 3px;
+            text-decoration: none;
+        }
+
+        .nav-logo span {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            display: block;
+            text-transform: uppercase;
+            margin-top: -2px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-back {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.3s;
+        }
+
+        .nav-back:hover { color: var(--gold); }
+
+        .btn-nav-cta {
+            padding: 0.6rem 1.6rem;
+            background: var(--gold);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .btn-nav-cta:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        /* ========== DEMO HEADER ========== */
+        .demo-header {
+            padding: 7rem 2rem 3rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .demo-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-gold), transparent);
+        }
+
+        .demo-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--border-gold);
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            background: rgba(201,168,76,0.04);
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .demo-badge::before {
+            content: '';
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+        }
+
+        .demo-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.8rem, 4vw, 2.8rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.8rem;
+            animation: fadeInUp 0.6s ease-out 0.1s both;
+        }
+
+        .demo-header h1 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .demo-header p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            animation: fadeInUp 0.6s ease-out 0.2s both;
+        }
+
+        /* ========== CONTEXT CARD ========== */
+        .demo-context {
+            max-width: 860px;
+            margin: 2.5rem auto 0;
+            padding: 0 2rem;
+            animation: fadeInUp 0.6s ease-out 0.3s both;
+        }
+
+        .context-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .context-top {
+            padding: 2rem 2.5rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .context-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(201,168,76,0.15), rgba(201,168,76,0.05));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            border: 2px solid var(--border-gold);
+        }
+
+        .context-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .context-info .role {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .context-problem {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            font-style: italic;
+            line-height: 1.6;
+            color: var(--text);
+            padding: 1.5rem 2.5rem;
+            border-top: 1px solid var(--border);
+            background: rgba(201,168,76,0.02);
+        }
+
+        .context-board-bar {
+            padding: 1rem 2.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+        }
+
+        .context-board-label {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+        }
+
+        .context-board-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .board-tag {
+            padding: 0.35rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            background: var(--bg);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        /* ========== CONSULTATION AREA ========== */
+        .demo-board {
+            max-width: 860px;
+            margin: 2.5rem auto 0;
+            padding: 0 2rem 6rem;
+        }
+
+        .advisor-response {
+            margin-bottom: 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .advisor-response.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .advisor-response-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .ar-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            border: 2px solid var(--border);
+            transition: all 0.5s;
+            background: var(--bg-card);
+        }
+
+        .ar-avatar.speaking {
+            box-shadow: 0 0 30px rgba(201,168,76,0.3), 0 0 60px rgba(201,168,76,0.1);
+        }
+
+        .ar-avatar.gandhi { border-color: rgba(196,160,90,0.3); }
+        .ar-avatar.gandhi.speaking { border-color: var(--gandhi-accent); box-shadow: 0 0 30px rgba(196,160,90,0.4); }
+
+        .ar-avatar.bezos { border-color: rgba(212,160,84,0.3); }
+        .ar-avatar.bezos.speaking { border-color: var(--bezos-accent); box-shadow: 0 0 30px rgba(212,160,84,0.4); }
+
+        .ar-avatar.arnault { border-color: rgba(139,127,196,0.3); }
+        .ar-avatar.arnault.speaking { border-color: var(--arnault-accent); box-shadow: 0 0 30px rgba(139,127,196,0.4); }
+
+        .ar-avatar.ammar { border-color: rgba(212,196,90,0.3); }
+        .ar-avatar.ammar.speaking { border-color: var(--ammar-accent); box-shadow: 0 0 30px rgba(212,196,90,0.4); }
+
+        .ar-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .ar-name.gandhi { color: var(--gandhi-accent); }
+        .ar-name.bezos { color: var(--bezos-accent); }
+        .ar-name.arnault { color: var(--arnault-accent); }
+        .ar-name.ammar { color: var(--ammar-accent); }
+
+        .ar-title {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        .ar-body {
+            margin-left: 3.5rem;
+        }
+
+        .ar-text {
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            line-height: 1.75;
+            color: var(--text-secondary);
+            max-height: 500px;
+            overflow: hidden;
+            transition: max-height 0.5s ease, padding 0.5s ease, opacity 0.5s ease;
+        }
+
+        .ar-text.gandhi { background: rgba(196,160,90,0.06); border: 1px solid rgba(196,160,90,0.12); }
+        .ar-text.bezos { background: rgba(212,160,84,0.06); border: 1px solid rgba(212,160,84,0.12); }
+        .ar-text.arnault { background: rgba(139,127,196,0.06); border: 1px solid rgba(139,127,196,0.12); }
+        .ar-text.ammar { background: rgba(212,196,90,0.06); border: 1px solid rgba(212,196,90,0.12); }
+
+        .ar-text.collapsed {
+            max-height: 0;
+            padding: 0 1.5rem;
+            opacity: 0;
+            border-color: transparent;
+        }
+
+        .cursor-blink {
+            display: inline-block;
+            width: 2px;
+            height: 1em;
+            background: var(--gold);
+            margin-left: 2px;
+            animation: blink 0.8s infinite;
+            vertical-align: text-bottom;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; } 50% { opacity: 0; }
+        }
+
+        .ar-summary {
+            margin-top: 0.6rem;
+            padding: 0.8rem 1.2rem;
+            background: rgba(201,168,76,0.06);
+            border: 1px solid rgba(201,168,76,0.15);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--gold);
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.5s ease;
+            display: none;
+        }
+
+        .ar-summary.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .ar-summary::before { content: '💡 '; }
+
+        .btn-expand {
+            display: none;
+            margin-top: 0.5rem;
+            padding: 0.35rem 0.9rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-muted);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-expand.visible { display: inline-block; }
+        .btn-expand:hover { border-color: var(--gold-dim); color: var(--text-secondary); }
+
+        /* ========== SYNTHESIS ========== */
+        .synthesis {
+            margin-top: 2rem;
+            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-gold);
+            border-radius: 12px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .synthesis::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--gandhi-accent), var(--bezos-accent), var(--arnault-accent), var(--ammar-accent));
+        }
+
+        .synthesis.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .synthesis-label {
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+            margin-bottom: 1rem;
+        }
+
+        .synthesis h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+            color: var(--gold);
+        }
+
+        .synthesis-text {
+            font-size: 0.92rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        /* ========== BOTTOM CTA ========== */
+        .demo-cta {
+            text-align: center;
+            margin-top: 4rem;
+            padding: 4rem 2rem;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease 0.3s;
+        }
+
+        .demo-cta.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .demo-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            margin-bottom: 1rem;
+        }
+
+        .demo-cta h2 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .demo-cta p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gold);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-primary:hover::after { left: 100%; }
+
+        .btn-primary:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 8px 40px rgba(201,168,76,0.3);
+            transform: translateY(-2px);
+        }
+
+        .demo-cta .sub {
+            margin-top: 1rem;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== PROGRESS BAR ========== */
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            z-index: 1000;
+            background: rgba(201,168,76,0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--gold-dim), var(--gold-bright));
+            transition: width 0.5s ease;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            nav { padding: 0.8rem 1.5rem; }
+            .nav-back { display: none; }
+            .context-top { flex-direction: column; align-items: center; text-align: center; }
+            .ar-body { margin-left: 0; }
+            .demo-board { padding: 0 1rem 4rem; }
+            .demo-context { padding: 0 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <a href="/" class="nav-logo">BDD<span>Board de Décision Digitale</span></a>
+    <div class="nav-right">
+        <a href="/" class="nav-back">← Retour à l'accueil</a>
+        <a href="/app" class="btn-nav-cta">Essayer gratuitement</a>
+    </div>
+</nav>
+
+<!-- PROGRESS -->
+<div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+<!-- HEADER -->
+<div class="demo-header">
+    <div class="demo-badge">Démonstration interactive</div>
+    <h1>Voyez le Board <em>en action</em></h1>
+    <p>Une consultation réelle, jouée devant vos yeux. Chaque conseiller répond avec sa propre perspective.</p>
+</div>
+
+<!-- CONTEXT -->
+<div class="demo-context">
+    <div class="context-card">
+        <div class="context-top">
+            <div class="context-avatar">👩‍💻</div>
+            <div class="context-info">
+                <h3>Léa, 34 ans</h3>
+                <div class="role">Fondatrice d'une agence de communication · 8 employés · 4 ans d'existence</div>
+            </div>
+        </div>
+        <div class="context-problem">
+            « Mon plus gros client représente 40% de mon chiffre d'affaires et me demande une exclusivité. Si j'accepte, je deviens dépendante. Si je refuse, je risque de le perdre. Qu'est-ce que je fais ? »
+        </div>
+        <div class="context-board-bar">
+            <div class="context-board-label">Son board de conseillers</div>
+            <div class="context-board-tags">
+                <span class="board-tag">🕊 Gandhi</span>
+                <span class="board-tag">📦 Jeff Bezos</span>
+                <span class="board-tag">💎 B. Arnault</span>
+                <span class="board-tag">⚡ O. Ammar</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BOARD RESPONSES -->
+<div class="demo-board">
+
+    <!-- Gandhi -->
+    <div class="advisor-response" id="resp-gandhi">
+        <div class="advisor-response-header">
+            <div class="ar-avatar gandhi" id="av-gandhi">🕊</div>
+            <div>
+                <div class="ar-name gandhi">Gandhi</div>
+                <div class="ar-title">Le Sage de la Non-Violence</div>
+            </div>
+        </div>
+        <div class="ar-body">
+            <div class="ar-text gandhi" id="text-gandhi"></div>
+            <div class="ar-summary" id="sum-gandhi"></div>
+            <button class="btn-expand" id="exp-gandhi" onclick="toggleExpand('gandhi')">▼ Lire le conseil complet</button>
+        </div>
+    </div>
+
+    <!-- Bezos -->
+    <div class="advisor-response" id="resp-bezos">
+        <div class="advisor-response-header">
+            <div class="ar-avatar bezos" id="av-bezos">📦</div>
+            <div>
+                <div class="ar-name bezos">Jeff Bezos</div>
+                <div class="ar-title">Le Bâtisseur</div>
+            </div>
+        </div>
+        <div class="ar-body">
+            <div class="ar-text bezos" id="text-bezos"></div>
+            <div class="ar-summary" id="sum-bezos"></div>
+            <button class="btn-expand" id="exp-bezos" onclick="toggleExpand('bezos')">▼ Lire le conseil complet</button>
+        </div>
+    </div>
+
+    <!-- Arnault -->
+    <div class="advisor-response" id="resp-arnault">
+        <div class="advisor-response-header">
+            <div class="ar-avatar arnault" id="av-arnault">💎</div>
+            <div>
+                <div class="ar-name arnault">Bernard Arnault</div>
+                <div class="ar-title">L'Empereur du Luxe</div>
+            </div>
+        </div>
+        <div class="ar-body">
+            <div class="ar-text arnault" id="text-arnault"></div>
+            <div class="ar-summary" id="sum-arnault"></div>
+            <button class="btn-expand" id="exp-arnault" onclick="toggleExpand('arnault')">▼ Lire le conseil complet</button>
+        </div>
+    </div>
+
+    <!-- Ammar -->
+    <div class="advisor-response" id="resp-ammar">
+        <div class="advisor-response-header">
+            <div class="ar-avatar ammar" id="av-ammar">⚡</div>
+            <div>
+                <div class="ar-name ammar">Oussama Ammar</div>
+                <div class="ar-title">Le Provocateur</div>
+            </div>
+        </div>
+        <div class="ar-body">
+            <div class="ar-text ammar" id="text-ammar"></div>
+            <div class="ar-summary" id="sum-ammar"></div>
+            <button class="btn-expand" id="exp-ammar" onclick="toggleExpand('ammar')">▼ Lire le conseil complet</button>
+        </div>
+    </div>
+
+    <!-- Synthesis -->
+    <div class="synthesis" id="synthesis">
+        <div class="synthesis-label">📋 Rapport de synthèse</div>
+        <h3>Ce que le Board vous recommande</h3>
+        <div class="synthesis-text" id="synthesis-text"></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="demo-cta" id="demoCta">
+        <h2>C'était la réponse de <em>4 conseillers</em>.<br>Imaginez avec les <em>22</em>.</h2>
+        <p>Composez votre propre Board et soumettez votre vrai dilemme.</p>
+        <a href="/app" class="btn-primary">Créer mon Board gratuitement →</a>
+        <p class="sub">3 consultations offertes · Sans carte bancaire · 30 secondes</p>
+    </div>
+</div>
+
+<script>
+    // Pre-written advisor responses
+    const RESPONSES = {
+        gandhi: {
+            text: `Ma chère Léa, je comprends la tension que tu ressens. La peur de perdre est un conseiller trompeur — elle nous pousse à accepter des chaînes au nom de la sécurité. Mais laisse-moi te poser cette question : un arbre qui ne tient que par une seule racine, que se passe-t-il quand cette racine pourrit ?\n\nL'exclusivité que ce client te demande n'est pas un partenariat, c'est une forme de domination douce. Il t'offre une certitude immédiate en échange de ta liberté future. C'est exactement le marché que les empires coloniaux proposaient : la protection en échange de la souveraineté.\n\nMa conviction profonde est celle-ci : la dépendance n'est jamais une stratégie, c'est une abdication. Refuse l'exclusivité, mais fais-le avec amour et respect. Explique à ce client que ta valeur vient justement de la diversité de tes expériences avec d'autres clients. Propose-lui une priorité, pas une exclusivité. Et surtout, utilise cette peur que tu ressens comme un signal : il est temps de diversifier, pas de te concentrer.`,
+            summary: `Refuse l'exclusivité avec respect — la dépendance n'est jamais une stratégie, propose une priorité et diversifie.`
+        },
+        bezos: {
+            text: `Ce problème est une question de porte. Est-ce une décision à sens unique — une "one-way door" — ou une décision réversible ? C'est la première chose à déterminer, parce que la plupart des gens traitent les décisions réversibles comme si elles étaient irréversibles, et ça les paralyse.\n\nDans ton cas, refuser l'exclusivité est une two-way door. Tu peux refuser aujourd'hui et renégocier demain si les conditions changent. Accepter l'exclusivité, en revanche, est beaucoup plus proche d'une one-way door — une fois que tu as restructuré ton business autour d'un seul client, revenir en arrière coûte très cher.\n\nMainenant, appliquons le test de minimisation des regrets. Dans 10 ans, qu'est-ce que tu regretteras le plus ? Avoir refusé et perdu un gros client que tu aurais pu remplacer, ou avoir accepté et réalisé 3 ans plus tard que tu avais construit une prison dorée ?\n\nMon conseil : refuse l'exclusivité, mais construis un flywheel. Chaque nouveau client que tu acquiers rend ton agence plus attractive pour le suivant. Ton gros client n'est pas ta fin — c'est le carburant de ta croissance. Et s'il part parce que tu as refusé, il ne méritait pas d'être le centre de ton business.`,
+            summary: `C'est une two-way door — refuse l'exclusivité, construis un flywheel de clients et ne regrette rien dans 10 ans.`
+        },
+        arnault: {
+            text: `La question que tu poses révèle un diagnostic plus profond que le dilemme lui-même : si un seul client représente 40% de ton chiffre d'affaires, le problème n'est pas l'exclusivité qu'il demande — c'est la structure de dépendance que tu as laissée s'installer.\n\nDans le luxe, nous avons une règle cardinale : ne jamais laisser un distributeur, un marché ou un client devenir si important qu'il puisse dicter les conditions. Louis Vuitton ne négocie pas avec un revendeur qui menace de partir. C'est le revendeur qui ne peut pas se passer de Louis Vuitton. La différence, c'est le positionnement.\n\nTa réponse doit se jouer sur deux temporalités. À court terme, propose une exclusivité sectorielle plutôt que totale — il est le seul client de son secteur, mais tu restes libre de travailler avec d'autres industries. À long terme, investis dans ta marque. Ton agence doit devenir si désirable que les clients acceptent tes conditions, pas l'inverse. Quand tu es irremplaçable, personne ne te pose d'ultimatum.`,
+            summary: `Propose une exclusivité sectorielle, pas totale — et investis dans ta marque pour devenir irremplaçable.`
+        },
+        ammar: {
+            text: `OK Léa, on va être honnêtes deux minutes. Tu te racontes une histoire et je vais te le dire clairement : ton vrai problème, ce n'est pas l'exclusivité. Ton vrai problème, c'est que tu as passé 4 ans à construire une agence où un seul client peut te faire trembler. Ça, c'est un problème structurel, pas un dilemme stratégique.\n\nLa question n'est pas "est-ce que j'accepte l'exclusivité". La question c'est "pourquoi est-ce que je n'ai pas 5 clients à 15% au lieu d'un client à 40%". Et la réponse, tu la connais : parce que c'était confortable. Parce que chercher de nouveaux clients c'est dur, c'est ingrat, et ça fait peur.\n\nAlors voici ce que tu fais. Demain matin — pas la semaine prochaine, demain — tu refuses l'exclusivité poliment mais fermement. Ensuite tu prends ton téléphone et tu contactes 10 prospects cette semaine. Pas 3, pas 5 : dix. Si ton client part, tu auras 6 mois de trésorerie pour rebondir. S'il reste, tu auras quand même diversifié. Dans les deux cas, tu gagnes. Le seul scénario perdant, c'est celui où tu restes assise à hésiter. Arrête de réfléchir, agis.`,
+            summary: `Refuse demain, contacte 10 prospects cette semaine — ton vrai problème c'est d'avoir laissé la dépendance s'installer.`
+        }
+    };
+
+    const SYNTHESIS_TEXT = `Les quatre conseillers convergent sur un point fondamental : <strong>refuser l'exclusivité totale</strong>. Mais chacun éclaire une facette différente du problème.\n\n<strong>Gandhi</strong> rappelle que l'exclusivité est une forme de dépendance déguisée en sécurité. <strong>Bezos</strong> applique son framework des "portes" — refuser est réversible, accepter ne l'est pas. <strong>Arnault</strong> déplace le sujet vers le positionnement : l'objectif n'est pas de négocier, c'est de devenir irremplaçable. <strong>Ammar</strong> secoue le cadre entier : le vrai problème est structurel et exige une action immédiate.\n\n<strong>Plan d'action recommandé :</strong>\n\nPremièrement, refuser l'exclusivité totale mais proposer une exclusivité sectorielle ou une priorité contractuelle. Deuxièmement, lancer immédiatement un effort de prospection intensif pour ramener ce client sous la barre des 25% du CA. Troisièmement, investir dans la marque de l'agence pour inverser le rapport de force à moyen terme.\n\nLa décision est claire. Le seul risque réel, c'est l'inaction.`;
+
+    // Streaming simulation
+    const CHAR_DELAY = 18;
+    let currentStep = 0;
+
+    function typeText(elementId, text, callback) {
+        const el = document.getElementById(elementId);
+        let i = 0;
+        el.innerHTML = '<span class="cursor-blink"></span>';
+
+        function type() {
+            if (i < text.length) {
+                const cursor = el.querySelector('.cursor-blink');
+                const char = text[i] === '\n' ? '<br>' : text[i];
+                if (cursor) cursor.insertAdjacentHTML('beforebegin', char);
+                i++;
+                // Variable speed for realism
+                const delay = text[i-1] === '.' ? CHAR_DELAY * 4 :
+                              text[i-1] === ',' ? CHAR_DELAY * 2 :
+                              text[i-1] === '\n' ? CHAR_DELAY * 3 :
+                              CHAR_DELAY + Math.random() * 8;
+                setTimeout(type, delay);
+            } else {
+                const cursor = el.querySelector('.cursor-blink');
+                if (cursor) cursor.remove();
+                if (callback) callback();
+            }
+        }
+        type();
+    }
+
+    function updateProgress(pct) {
+        document.getElementById('progressFill').style.width = pct + '%';
+    }
+
+    function showAdvisor(key, afterDone) {
+        const resp = document.getElementById(`resp-${key}`);
+        const avatar = document.getElementById(`av-${key}`);
+        const summary = document.getElementById(`sum-${key}`);
+        const textEl = document.getElementById(`text-${key}`);
+        const expBtn = document.getElementById(`exp-${key}`);
+
+        // Show card + speaking state
+        resp.classList.add('visible');
+        avatar.classList.add('speaking');
+
+        // Scroll into view
+        resp.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Stream text
+        typeText(`text-${key}`, RESPONSES[key].text, () => {
+            // Done speaking
+            avatar.classList.remove('speaking');
+
+            // Show summary + collapse
+            setTimeout(() => {
+                summary.textContent = RESPONSES[key].summary;
+                summary.classList.add('visible');
+                textEl.classList.add('collapsed');
+                expBtn.classList.add('visible');
+
+                if (afterDone) setTimeout(afterDone, 600);
+            }, 400);
+        });
+    }
+
+    function showSynthesis() {
+        const synth = document.getElementById('synthesis');
+        const synthText = document.getElementById('synthesis-text');
+        const cta = document.getElementById('demoCta');
+
+        synth.classList.add('visible');
+        synth.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        // Type synthesis
+        let i = 0;
+        const text = SYNTHESIS_TEXT;
+        synthText.innerHTML = '<span class="cursor-blink"></span>';
+
+        function typeSynth() {
+            if (i < text.length) {
+                const cursor = synthText.querySelector('.cursor-blink');
+                // Handle HTML tags
+                if (text[i] === '<') {
+                    const endTag = text.indexOf('>', i);
+                    const tag = text.substring(i, endTag + 1);
+                    if (cursor) cursor.insertAdjacentHTML('beforebegin', tag);
+                    i = endTag + 1;
+                } else {
+                    const char = text[i] === '\n' ? '<br>' : text[i];
+                    if (cursor) cursor.insertAdjacentHTML('beforebegin', char);
+                    i++;
+                }
+                const delay = text[i-1] === '.' ? 50 : text[i-1] === '\n' ? 40 : 12 + Math.random() * 6;
+                setTimeout(typeSynth, delay);
+            } else {
+                const cursor = synthText.querySelector('.cursor-blink');
+                if (cursor) cursor.remove();
+                updateProgress(100);
+
+                // Show CTA
+                setTimeout(() => {
+                    cta.classList.add('visible');
+                    cta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 800);
+            }
+        }
+        setTimeout(typeSynth, 600);
+    }
+
+    function toggleExpand(key) {
+        const textEl = document.getElementById(`text-${key}`);
+        const btn = document.getElementById(`exp-${key}`);
+        if (textEl.classList.contains('collapsed')) {
+            textEl.classList.remove('collapsed');
+            btn.textContent = '▲ Replier';
+        } else {
+            textEl.classList.add('collapsed');
+            btn.textContent = '▼ Lire le conseil complet';
+        }
+    }
+
+    // Start the sequence after page load
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            updateProgress(5);
+            showAdvisor('gandhi', () => {
+                updateProgress(25);
+                showAdvisor('bezos', () => {
+                    updateProgress(50);
+                    showAdvisor('arnault', () => {
+                        updateProgress(75);
+                        showAdvisor('ammar', () => {
+                            updateProgress(90);
+                            setTimeout(showSynthesis, 800);
+                        });
+                    });
+                });
+            });
+        }, 1200);
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1611 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD — Board de Décision Digitale</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0c;
+            --bg-elevated: #111114;
+            --bg-card: #16161a;
+            --bg-card-hover: #1c1c22;
+            --gold: #c9a84c;
+            --gold-dim: #a08535;
+            --gold-bright: #e0c266;
+            --gold-glow: rgba(201, 168, 76, 0.15);
+            --text: #e8e4dd;
+            --text-secondary: #9a9590;
+            --text-muted: #6a6560;
+            --border: rgba(255,255,255,0.06);
+            --border-gold: rgba(201, 168, 76, 0.2);
+            --accent-red: #c44;
+            --accent-blue: #4a7ec4;
+            --accent-green: #5aad7a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-dim) var(--bg);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ========== NOISE TEXTURE OVERLAY ========== */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ========== NAV ========== */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 1000;
+            padding: 1.2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10,10,12,0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            transition: all 0.4s;
+        }
+
+        .nav-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 3px;
+        }
+
+        .nav-logo span {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            display: block;
+            text-transform: uppercase;
+            margin-top: -2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover { color: var(--gold); }
+
+        .btn-nav-cta {
+            padding: 0.6rem 1.6rem;
+            background: var(--gold);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.82rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-nav-cta:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        /* ========== HERO ========== */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 40%, rgba(201,168,76,0.06) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 20% 80%, rgba(90,50,20,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 20%, rgba(50,40,80,0.06) 0%, transparent 50%);
+            z-index: 0;
+        }
+
+        .hero-particles {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--gold);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float-particle 8s infinite ease-in-out;
+        }
+
+        @keyframes float-particle {
+            0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
+            50% { opacity: 0.4; transform: translateY(-100px) scale(1.5); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            border: 1px solid var(--border-gold);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 2.5rem;
+            background: rgba(201,168,76,0.04);
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 6vw, 4.8rem);
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 1.8rem;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .hero-sub {
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 680px;
+            margin: 0 auto 3rem;
+            font-weight: 300;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.6s both;
+        }
+
+        .btn-primary {
+            padding: 1rem 2.5rem;
+            background: var(--gold);
+            color: var(--bg);
+            border: none;
+            border-radius: 4px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-primary:hover::after { left: 100%; }
+
+        .btn-primary:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 8px 40px rgba(201,168,76,0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2.5rem;
+            background: transparent;
+            color: var(--text);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
+        .hero-proof {
+            margin-top: 4rem;
+            display: flex;
+            gap: 3rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 0.8s ease-out 0.8s both;
+        }
+
+        .proof-item {
+            text-align: center;
+        }
+
+        .proof-number {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .proof-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-top: 0.2rem;
+        }
+
+        /* ========== SECTION STYLING ========== */
+        section {
+            padding: 7rem 2rem;
+            position: relative;
+        }
+
+        .section-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            max-width: 700px;
+            font-weight: 300;
+        }
+
+        /* ========== PAIN SECTION ========== */
+        .pain {
+            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-elevated) 100%);
+        }
+
+        .pain-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+        }
+
+        .pain-card {
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pain-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent-red);
+            opacity: 0.6;
+        }
+
+        .pain-card:hover {
+            border-color: rgba(204,68,68,0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .pain-icon {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+        }
+
+        .pain-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.15rem;
+            margin-bottom: 0.8rem;
+            color: var(--text);
+        }
+
+        .pain-card p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .pain-stat {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.3rem 0.8rem;
+            background: rgba(204,68,68,0.08);
+            border: 1px solid rgba(204,68,68,0.15);
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: var(--accent-red);
+        }
+
+        /* ========== SCENARIO SECTION ========== */
+        .scenarios {
+            background: var(--bg-elevated);
+        }
+
+        .scenario-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 2rem;
+            margin-top: 3.5rem;
+        }
+
+        .scenario-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s;
+        }
+
+        .scenario-card:hover {
+            border-color: var(--border-gold);
+            transform: translateY(-6px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .scenario-header {
+            padding: 2rem 2rem 1.2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .scenario-persona {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .scenario-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+        }
+
+        .scenario-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .scenario-role {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .scenario-problem {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .scenario-board {
+            padding: 1.5rem 2rem;
+        }
+
+        .scenario-board-label {
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+            margin-bottom: 0.8rem;
+        }
+
+        .scenario-advisors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .scenario-advisor-tag {
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .scenario-insight {
+            padding: 1rem 1.2rem;
+            background: var(--gold-glow);
+            border: 1px solid var(--border-gold);
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: var(--gold-bright);
+            line-height: 1.5;
+        }
+
+        .scenario-insight::before {
+            content: '💡 ';
+        }
+
+        /* ========== HOW IT WORKS ========== */
+        .how-it-works {
+            background: var(--bg);
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3.5rem;
+            position: relative;
+        }
+
+        .steps::before {
+            content: '';
+            position: absolute;
+            top: 3rem;
+            left: 10%;
+            right: 10%;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-dim), transparent);
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--bg-card);
+            border: 2px solid var(--gold-dim);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin: 0 auto 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .step p {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* ========== ADVISORS GALLERY ========== */
+        .advisors-section {
+            background: var(--bg-elevated);
+            overflow: hidden;
+        }
+
+        .advisors-scroll {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 3rem;
+            animation: scroll-advisors 40s linear infinite;
+            width: max-content;
+        }
+
+        .advisors-scroll:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll-advisors {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .advisor-preview {
+            flex-shrink: 0;
+            width: 180px;
+            padding: 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .advisor-preview:hover {
+            border-color: var(--border-gold);
+            transform: scale(1.05);
+        }
+
+        .advisor-preview-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .advisor-preview-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+        }
+
+        .advisor-preview-title {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== COMPARISON SECTION ========== */
+        .comparison {
+            background: var(--bg);
+        }
+
+        .comparison-table {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 3.5rem;
+            max-width: 900px;
+        }
+
+        .comparison-col {
+            padding: 2.5rem;
+            border-radius: 12px;
+        }
+
+        .comparison-col.before {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+        }
+
+        .comparison-col.after {
+            background: rgba(201,168,76,0.04);
+            border: 1px solid var(--border-gold);
+        }
+
+        .comparison-col h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .comparison-col.before h3 { color: var(--text-muted); }
+        .comparison-col.after h3 { color: var(--gold); }
+
+        .comparison-item {
+            display: flex;
+            gap: 0.8rem;
+            align-items: flex-start;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .comparison-item .icon {
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .comparison-col.before .comparison-item { color: var(--text-secondary); }
+        .comparison-col.after .comparison-item { color: var(--text); }
+
+        /* ========== TESTIMONIALS ========== */
+        .testimonials {
+            background: var(--bg-elevated);
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+        }
+
+        .testimonial {
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            position: relative;
+        }
+
+        .testimonial-quote {
+            font-family: 'Playfair Display', serif;
+            font-size: 1rem;
+            font-style: italic;
+            line-height: 1.7;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+        }
+
+        .testimonial-quote::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--gold-dim);
+            line-height: 0;
+            position: absolute;
+            top: 2rem;
+            left: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .testimonial-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-elevated);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .testimonial-name {
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .testimonial-role {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== PRICING ========== */
+        .pricing {
+            background: var(--bg);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3.5rem;
+            max-width: 1000px;
+        }
+
+        .pricing-card {
+            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            position: relative;
+            transition: all 0.4s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--gold-dim);
+            background: rgba(201,168,76,0.03);
+        }
+
+        .pricing-card.featured::before {
+            content: 'POPULAIRE';
+            position: absolute;
+            top: -12px;
+            right: 2rem;
+            padding: 0.3rem 1rem;
+            background: var(--gold);
+            color: var(--bg);
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            border-radius: 4px;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+        }
+
+        .pricing-tier {
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-price {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+
+        .pricing-price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        .pricing-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            gap: 0.6rem;
+            align-items: center;
+        }
+
+        .pricing-features li:last-child { border-bottom: none; }
+
+        .pricing-btn {
+            width: 100%;
+            padding: 0.9rem;
+            border-radius: 6px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            display: block;
+            text-decoration: none;
+        }
+
+        .pricing-btn.outline {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+
+        .pricing-btn.outline:hover {
+            border-color: var(--gold-dim);
+            color: var(--gold);
+        }
+
+        .pricing-btn.gold {
+            background: var(--gold);
+            border: 1px solid var(--gold);
+            color: var(--bg);
+        }
+
+        .pricing-btn.gold:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 8px 30px rgba(201,168,76,0.3);
+        }
+
+        .pricing-anchor {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-anchor strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        /* ========== FAQ ========== */
+        .faq {
+            background: var(--bg-elevated);
+        }
+
+        .faq-list {
+            max-width: 800px;
+            margin-top: 3rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 1.5rem 0;
+            background: none;
+            border: none;
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 1rem;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s;
+        }
+
+        .faq-question:hover { color: var(--gold); }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            color: var(--gold-dim);
+            transition: transform 0.3s;
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+        }
+
+        .faq-answer.open {
+            max-height: 300px;
+            padding-bottom: 1.5rem;
+        }
+
+        .faq-answer p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        /* ========== FINAL CTA ========== */
+        .final-cta {
+            background: var(--bg);
+            text-align: center;
+            padding: 8rem 2rem;
+            position: relative;
+        }
+
+        .final-cta-bg {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse 50% 50% at 50% 60%, rgba(201,168,76,0.06) 0%, transparent 60%);
+        }
+
+        .final-cta .section-inner {
+            position: relative;
+            z-index: 1;
+        }
+
+        .final-cta h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4vw, 3.2rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .final-cta h2 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .urgency-bar {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 1.5rem;
+            background: rgba(204,68,68,0.06);
+            border: 1px solid rgba(204,68,68,0.15);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--accent-red);
+            margin-bottom: 2rem;
+        }
+
+        .urgency-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-red);
+            animation: pulse-dot 1.5s infinite;
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        footer .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: var(--gold-dim);
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            section { padding: 4rem 1.5rem; }
+            .steps { grid-template-columns: 1fr; }
+            .steps::before { display: none; }
+            .comparison-table { grid-template-columns: 1fr; }
+            .hero-proof { gap: 2rem; }
+            .scenario-cards { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-logo">BDD<span>Board de Décision Digitale</span></div>
+    <div class="nav-links">
+        <a href="#scenarios">Cas d'usage</a>
+        <a href="#how">Comment ça marche</a>
+        <a href="#pricing">Tarifs</a>
+        <a href="#faq">FAQ</a>
+        <a href="/app" class="btn-nav-cta">Essayer gratuitement</a>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-particles">
+        <div class="particle" style="left:10%; top:30%; animation-delay:0s"></div>
+        <div class="particle" style="left:25%; top:60%; animation-delay:1.5s"></div>
+        <div class="particle" style="left:40%; top:20%; animation-delay:3s"></div>
+        <div class="particle" style="left:60%; top:70%; animation-delay:0.8s"></div>
+        <div class="particle" style="left:75%; top:40%; animation-delay:2.2s"></div>
+        <div class="particle" style="left:85%; top:55%; animation-delay:4s"></div>
+        <div class="particle" style="left:50%; top:85%; animation-delay:1s"></div>
+        <div class="particle" style="left:15%; top:75%; animation-delay:3.5s"></div>
+    </div>
+
+    <div class="hero-content">
+        <div class="hero-badge">Accès anticipé — Places limitées</div>
+        <h1>Et si Gandhi, Steve Jobs<br>et Beyoncé prenaient<br>vos <em>décisions</em> avec vous ?</h1>
+        <p class="hero-sub">
+            BDD réunit les plus grands esprits de l'histoire autour d'une table virtuelle.<br>
+            Soumettez votre problème. Recevez leurs conseils. Décidez avec clarté.
+        </p>
+        <div class="hero-ctas">
+            <a href="/app" class="btn-primary">Composer mon board →</a>
+            <a href="/demo" class="btn-secondary">Voir un exemple →</a>
+        </div>
+        <div class="hero-proof">
+            <div class="proof-item">
+                <div class="proof-number">22</div>
+                <div class="proof-label">Conseillers disponibles</div>
+            </div>
+            <div class="proof-item">
+                <div class="proof-number">&lt; 30s</div>
+                <div class="proof-label">Par conseil personnalisé</div>
+            </div>
+            <div class="proof-item">
+                <div class="proof-number">∞</div>
+                <div class="proof-label">Combinaisons de boards</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PAIN POINTS -->
+<section class="pain">
+    <div class="section-inner reveal">
+        <div class="section-label">Le problème</div>
+        <h2 class="section-title">Chaque mauvaise décision<br>vous coûte du temps, de l'argent<br>et de la <span style="color:var(--accent-red)">confiance en vous</span></h2>
+        <p class="section-subtitle">
+            Les entrepreneurs prennent en moyenne 35 000 décisions par jour. Pourtant, 72% se sentent seuls face aux choix qui comptent vraiment.
+        </p>
+
+        <div class="pain-grid">
+            <div class="pain-card">
+                <div class="pain-icon">🌀</div>
+                <h3>Le syndrome de la boucle mentale</h3>
+                <p>Vous tournez en rond pendant des jours sur une décision que quelqu'un de plus expérimenté trancherait en 5 minutes. Ce temps perdu ne revient jamais.</p>
+                <div class="pain-stat">⏱ 11h/semaine perdues en hésitations</div>
+            </div>
+            <div class="pain-card">
+                <div class="pain-icon">🪞</div>
+                <h3>L'angle mort de la solitude</h3>
+                <p>Vous demandez conseil à votre entourage… qui pense exactement comme vous. Zéro perspective nouvelle. Zéro remise en question. Les mêmes erreurs en boucle.</p>
+                <div class="pain-stat">⚠️ 68% des échecs = manque de perspectives</div>
+            </div>
+            <div class="pain-card">
+                <div class="pain-icon">💸</div>
+                <h3>Le coût invisible de l'inaction</h3>
+                <p>Pendant que vous hésitez, vos concurrents avancent. Le marché n'attend pas. Et la peur de mal choisir vous paralyse plus que le mauvais choix lui-même.</p>
+                <div class="pain-stat">📉 3 mois de retard moyen par décision reportée</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SCENARIOS -->
+<section class="scenarios" id="scenarios">
+    <div class="section-inner reveal">
+        <div class="section-label">En situation</div>
+        <h2 class="section-title">Ils ont soumis leur dilemme au Board.<br>Voici ce qui s'est passé.</h2>
+        <p class="section-subtitle">Chaque décision devient plus claire quand vous avez les bons esprits autour de la table.</p>
+
+        <div class="scenario-cards">
+            <!-- Scenario 1 -->
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-persona">
+                        <div class="scenario-avatar" style="background:rgba(201,168,76,0.1);">👩‍💻</div>
+                        <div>
+                            <div class="scenario-name">Léa, 34 ans</div>
+                            <div class="scenario-role">Fondatrice d'une agence de communication</div>
+                        </div>
+                    </div>
+                    <div class="scenario-problem">« Mon plus gros client me demande une exclusivité. Si j'accepte, je suis dépendante. Si je refuse, je perds 40% de mon CA. »</div>
+                </div>
+                <div class="scenario-board">
+                    <div class="scenario-board-label">Son board</div>
+                    <div class="scenario-advisors">
+                        <span class="scenario-advisor-tag">🕊 Gandhi</span>
+                        <span class="scenario-advisor-tag">📦 Jeff Bezos</span>
+                        <span class="scenario-advisor-tag">💎 B. Arnault</span>
+                        <span class="scenario-advisor-tag">⚡ O. Ammar</span>
+                    </div>
+                    <div class="scenario-insight">Propose une exclusivité temporaire de 6 mois avec clause de sortie, et utilise ce temps pour construire un pipeline de 3 nouveaux clients.</div>
+                </div>
+            </div>
+
+            <!-- Scenario 2 -->
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-persona">
+                        <div class="scenario-avatar" style="background:rgba(90,173,122,0.1);">👨‍🍳</div>
+                        <div>
+                            <div class="scenario-name">Marc, 41 ans</div>
+                            <div class="scenario-role">Restaurateur qui veut se lancer dans le digital</div>
+                        </div>
+                    </div>
+                    <div class="scenario-problem">« J'ai un resto qui marche bien physiquement. Tout le monde me dit d'aller sur les réseaux. Mais je déteste ça et ça me prend un temps fou. »</div>
+                </div>
+                <div class="scenario-board">
+                    <div class="scenario-board-label">Son board</div>
+                    <div class="scenario-advisors">
+                        <span class="scenario-advisor-tag">🎭 Luchini</span>
+                        <span class="scenario-advisor-tag">🌿 Giono</span>
+                        <span class="scenario-advisor-tag">🎬 Chalamet</span>
+                        <span class="scenario-advisor-tag">👑 Beyoncé</span>
+                    </div>
+                    <div class="scenario-insight">Reste fidèle à ce qui fait ta magie — l'authenticité en cuisine. Filme un humain vrai, pas un influenceur. Les réseaux récompensent l'âme, pas le marketing.</div>
+                </div>
+            </div>
+
+            <!-- Scenario 3 -->
+            <div class="scenario-card">
+                <div class="scenario-header">
+                    <div class="scenario-persona">
+                        <div class="scenario-avatar" style="background:rgba(138,196,212,0.1);">👩‍🔬</div>
+                        <div>
+                            <div class="scenario-name">Sophie, 28 ans</div>
+                            <div class="scenario-role">Salariée qui rêve de se lancer à son compte</div>
+                        </div>
+                    </div>
+                    <div class="scenario-problem">« J'ai une idée de business, des compétences, mais une peur paralysante de quitter mon CDI. Je gagne 3 200€/mois. Et si ça ne marchait pas ? »</div>
+                </div>
+                <div class="scenario-board">
+                    <div class="scenario-board-label">Son board</div>
+                    <div class="scenario-advisors">
+                        <span class="scenario-advisor-tag">🏔️ David-Néel</span>
+                        <span class="scenario-advisor-tag">✝️ Jésus</span>
+                        <span class="scenario-advisor-tag">🎤 Kanye</span>
+                        <span class="scenario-advisor-tag">📈 Buffett</span>
+                    </div>
+                    <div class="scenario-insight">L'obstacle est mental, pas financier. Garde ton CDI 6 mois de plus en lançant le soir. Si ça génère 1 000€/mois, c'est le signal. Le vrai risque, c'est de ne jamais essayer.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-it-works" id="how">
+    <div class="section-inner reveal">
+        <div class="section-label">Comment ça marche</div>
+        <h2 class="section-title">3 étapes. 2 minutes.<br>Une clarté que vous n'avez <em style="color:var(--gold);font-style:italic">jamais eue</em>.</h2>
+
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Composez votre Board</h3>
+                <p>Choisissez parmi 22 personnalités — stratèges, artistes, philosophes, entrepreneurs. Chaque combinaison crée une dynamique unique.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Soumettez votre dilemme</h3>
+                <p>Décrivez votre situation en quelques phrases. Pas de jargon, pas de template. Parlez comme à un ami de confiance.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Recevez le verdict</h3>
+                <p>Chaque conseiller répond avec sa perspective unique. Un résumé en une phrase par avis + un rapport de synthèse qui croise toutes les visions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ADVISORS SCROLL -->
+<section class="advisors-section">
+    <div class="section-inner reveal">
+        <div class="section-label">Vos conseillers</div>
+        <h2 class="section-title">22 esprits. Des siècles de sagesse.<br>Un seul objectif : <em style="color:var(--gold);font-style:italic">vous éclairer</em>.</h2>
+    </div>
+    <div class="advisors-scroll">
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🕊</div><div class="advisor-preview-name">Gandhi</div><div class="advisor-preview-title">Le Sage</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">⚔️</div><div class="advisor-preview-name">Sun Tzu</div><div class="advisor-preview-title">Le Stratège</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">💡</div><div class="advisor-preview-name">Steve Jobs</div><div class="advisor-preview-title">Le Visionnaire</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏛</div><div class="advisor-preview-name">Socrate</div><div class="advisor-preview-title">Le Philosophe</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📈</div><div class="advisor-preview-name">Buffett</div><div class="advisor-preview-title">L'Investisseur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🚀</div><div class="advisor-preview-name">Elon Musk</div><div class="advisor-preview-title">Le Disrupteur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📦</div><div class="advisor-preview-name">Jeff Bezos</div><div class="advisor-preview-title">Le Bâtisseur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">✝️</div><div class="advisor-preview-name">Jésus</div><div class="advisor-preview-title">Le Guide</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎤</div><div class="advisor-preview-name">Kanye West</div><div class="advisor-preview-title">Le Créateur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">👑</div><div class="advisor-preview-name">Beyoncé</div><div class="advisor-preview-title">La Reine</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎬</div><div class="advisor-preview-name">Chalamet</div><div class="advisor-preview-title">L'Artiste</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">💎</div><div class="advisor-preview-name">B. Arnault</div><div class="advisor-preview-title">L'Empereur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎭</div><div class="advisor-preview-name">Luchini</div><div class="advisor-preview-title">L'Électron Libre</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏴‍☠️</div><div class="advisor-preview-name">Luffy</div><div class="advisor-preview-title">Le Capitaine</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">✍️</div><div class="advisor-preview-name">J. Cameron</div><div class="advisor-preview-title">La Muse</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🌿</div><div class="advisor-preview-name">Giono</div><div class="advisor-preview-title">Le Poète</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏔️</div><div class="advisor-preview-name">David-Néel</div><div class="advisor-preview-title">L'Exploratrice</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">⚡</div><div class="advisor-preview-name">O. Ammar</div><div class="advisor-preview-title">Le Provocateur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🕺</div><div class="advisor-preview-name">Les Twins</div><div class="advisor-preview-title">Les Phénomènes</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📜</div><div class="advisor-preview-name">Chouard</div><div class="advisor-preview-title">Le Citoyen</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎙️</div><div class="advisor-preview-name">É. Baer</div><div class="advisor-preview-title">Le Conteur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏛️</div><div class="advisor-preview-name">Darmanin</div><div class="advisor-preview-title">L'Homme d'État</div></div>
+        <!-- Duplicate for infinite scroll -->
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🕊</div><div class="advisor-preview-name">Gandhi</div><div class="advisor-preview-title">Le Sage</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">⚔️</div><div class="advisor-preview-name">Sun Tzu</div><div class="advisor-preview-title">Le Stratège</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">💡</div><div class="advisor-preview-name">Steve Jobs</div><div class="advisor-preview-title">Le Visionnaire</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏛</div><div class="advisor-preview-name">Socrate</div><div class="advisor-preview-title">Le Philosophe</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📈</div><div class="advisor-preview-name">Buffett</div><div class="advisor-preview-title">L'Investisseur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🚀</div><div class="advisor-preview-name">Elon Musk</div><div class="advisor-preview-title">Le Disrupteur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📦</div><div class="advisor-preview-name">Jeff Bezos</div><div class="advisor-preview-title">Le Bâtisseur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">✝️</div><div class="advisor-preview-name">Jésus</div><div class="advisor-preview-title">Le Guide</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎤</div><div class="advisor-preview-name">Kanye West</div><div class="advisor-preview-title">Le Créateur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">👑</div><div class="advisor-preview-name">Beyoncé</div><div class="advisor-preview-title">La Reine</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎬</div><div class="advisor-preview-name">Chalamet</div><div class="advisor-preview-title">L'Artiste</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">💎</div><div class="advisor-preview-name">B. Arnault</div><div class="advisor-preview-title">L'Empereur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎭</div><div class="advisor-preview-name">Luchini</div><div class="advisor-preview-title">L'Électron Libre</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏴‍☠️</div><div class="advisor-preview-name">Luffy</div><div class="advisor-preview-title">Le Capitaine</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">✍️</div><div class="advisor-preview-name">J. Cameron</div><div class="advisor-preview-title">La Muse</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🌿</div><div class="advisor-preview-name">Giono</div><div class="advisor-preview-title">Le Poète</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🏔️</div><div class="advisor-preview-name">David-Néel</div><div class="advisor-preview-title">L'Exploratrice</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">⚡</div><div class="advisor-preview-name">O. Ammar</div><div class="advisor-preview-title">Le Provocateur</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🕺</div><div class="advisor-preview-name">Les Twins</div><div class="advisor-preview-title">Les Phénomènes</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">📜</div><div class="advisor-preview-name">Chouard</div><div class="advisor-preview-title">Le Citoyen</div></div>
+        <div class="advisor-preview"><div class="advisor-preview-emoji">🎙️</div><div class="advisor-preview-name">É. Baer</div><div class="advisor-preview-title">Le Conteur</div></div>
+    </div>
+</section>
+
+<!-- BEFORE/AFTER COMPARISON -->
+<section class="comparison">
+    <div class="section-inner reveal">
+        <div class="section-label">Avant / Après</div>
+        <h2 class="section-title">Ce qui change quand vous avez<br>un Board à portée de main</h2>
+
+        <div class="comparison-table">
+            <div class="comparison-col before">
+                <h3>❌ Sans le Board</h3>
+                <div class="comparison-item"><span class="icon">→</span> Vous demandez conseil à votre conjoint(e) qui dit "fais ce que tu sens"</div>
+                <div class="comparison-item"><span class="icon">→</span> Vous googlez "faut-il quitter son CDI" à 2h du matin</div>
+                <div class="comparison-item"><span class="icon">→</span> Vous payez un coach 150€/h pour une perspective unique</div>
+                <div class="comparison-item"><span class="icon">→</span> Vous repoussez la décision de semaine en semaine</div>
+                <div class="comparison-item"><span class="icon">→</span> Vous restez dans votre bulle de pensée</div>
+            </div>
+            <div class="comparison-col after">
+                <h3>✦ Avec le Board</h3>
+                <div class="comparison-item"><span class="icon">→</span> 22 perspectives radicalement différentes sur votre problème</div>
+                <div class="comparison-item"><span class="icon">→</span> Des réponses en 30 secondes, disponibles 24h/24</div>
+                <div class="comparison-item"><span class="icon">→</span> Le prix d'un café pour l'avis de Buffett, Jobs et Gandhi réunis</div>
+                <div class="comparison-item"><span class="icon">→</span> Un rapport de synthèse qui tranche et clarifie</div>
+                <div class="comparison-item"><span class="icon">→</span> Des angles morts révélés que vous n'auriez jamais vus seul</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+    <div class="section-inner reveal">
+        <div class="section-label">Ils l'utilisent</div>
+        <h2 class="section-title">Ce qu'ils disent après<br>leur premier Board</h2>
+
+        <div class="testimonial-grid">
+            <div class="testimonial">
+                <div class="testimonial-quote">J'ai soumis mon dilemme de pivot à un board Jobs + Bezos + Arnault. En 2 minutes j'avais plus de clarté que pendant 3 semaines de rumination. C'est presque déstabilisant de voir ses angles morts révélés aussi vite.</div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">🚀</div>
+                    <div>
+                        <div class="testimonial-name">Thomas D.</div>
+                        <div class="testimonial-role">Fondateur SaaS · Lyon</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-quote">Quand Luchini m'a cité La Fontaine pour parler de mon associé toxique, j'ai eu un fou rire… puis un déclic. C'est ça la force du Board : ça désacralise le problème et ça ouvre des portes inattendues.</div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">🎯</div>
+                    <div>
+                        <div class="testimonial-name">Camille R.</div>
+                        <div class="testimonial-role">Consultante indépendante · Paris</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-quote">Le combo Gandhi + Kanye + Ammar c'est de la dynamite. Le sage, le fou et le pragmatique. En 3 avis contradictoires, j'ai trouvé MA réponse, celle qui me ressemblait vraiment. Merci.</div>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar">✨</div>
+                    <div>
+                        <div class="testimonial-name">Maryam K.</div>
+                        <div class="testimonial-role">Créatrice de contenus · Bordeaux</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+    <div class="section-inner reveal">
+        <div class="section-label">Tarifs</div>
+        <h2 class="section-title">Un Board personnel pour<br>le prix d'un <em style="color:var(--gold);font-style:italic">café par jour</em></h2>
+        <p class="section-subtitle">Pas d'abonnement piège. Pas de frais cachés. Annulable en 1 clic.</p>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="pricing-tier">Découverte</div>
+                <div class="pricing-price">0€</div>
+                <div class="pricing-desc">Testez le Board avec 3 consultations gratuites. Sans carte bancaire.</div>
+                <ul class="pricing-features">
+                    <li><span style="color:var(--gold)">✦</span> 3 consultations offertes</li>
+                    <li><span style="color:var(--gold)">✦</span> Jusqu'à 5 conseillers par board</li>
+                    <li><span style="color:var(--gold)">✦</span> Résumé en une phrase</li>
+                    <li><span style="color:var(--text-muted)">○</span> <span style="color:var(--text-muted)">Rapport de synthèse</span></li>
+                    <li><span style="color:var(--text-muted)">○</span> <span style="color:var(--text-muted)">Historique des consultations</span></li>
+                </ul>
+                <a href="/app" class="pricing-btn outline">Commencer gratuitement</a>
+            </div>
+
+            <div class="pricing-card featured">
+                <div class="pricing-tier">Pro</div>
+                <div class="pricing-price">19€<span>/mois</span></div>
+                <div class="pricing-desc">Décisions illimitées. Tous les conseillers. Toute la puissance du Board.</div>
+                <ul class="pricing-features">
+                    <li><span style="color:var(--gold)">✦</span> Consultations illimitées</li>
+                    <li><span style="color:var(--gold)">✦</span> 22 conseillers disponibles</li>
+                    <li><span style="color:var(--gold)">✦</span> Résumé en une phrase par avis</li>
+                    <li><span style="color:var(--gold)">✦</span> Rapport de synthèse croisé</li>
+                    <li><span style="color:var(--gold)">✦</span> Historique complet</li>
+                </ul>
+                <a href="/app" class="pricing-btn gold">Prendre le plan Pro →</a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="pricing-tier">Équipe</div>
+                <div class="pricing-price">49€<span>/mois</span></div>
+                <div class="pricing-desc">Pour les équipes qui prennent des décisions ensemble. Jusqu'à 5 membres.</div>
+                <ul class="pricing-features">
+                    <li><span style="color:var(--gold)">✦</span> Tout le plan Pro</li>
+                    <li><span style="color:var(--gold)">✦</span> 5 sièges utilisateurs</li>
+                    <li><span style="color:var(--gold)">✦</span> Boards partagés</li>
+                    <li><span style="color:var(--gold)">✦</span> Conseillers personnalisés (bientôt)</li>
+                    <li><span style="color:var(--gold)">✦</span> Export PDF des consultations</li>
+                </ul>
+                <a href="#" class="pricing-btn outline">Contacter l'équipe</a>
+            </div>
+        </div>
+        <p class="pricing-anchor">Comparé à un coaching business à <strong>150€/heure</strong>, le Board Pro revient à <strong>0,63€ par jour</strong>.<br>L'investissement se rembourse dès la première bonne décision.</p>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq" id="faq">
+    <div class="section-inner reveal">
+        <div class="section-label">Questions fréquentes</div>
+        <h2 class="section-title">Tout ce que vous vous demandez<br>(avant de vous lancer)</h2>
+
+        <div class="faq-list">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Est-ce que les conseillers sont vraiment fidèles aux personnalités réelles ?
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Chaque conseiller est programmé avec un prompt de plusieurs centaines de mots qui capture leur philosophie, leur style de communication, leurs cadres de décision et leurs biais assumés. Ce n'est pas une imitation superficielle — c'est une modélisation de leur pensée basée sur leurs écrits, discours et biographies. Le but n'est pas de prétendre parler à la personne réelle, mais de bénéficier de perspectives inspirées de leur vision du monde.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Comment choisir les bons conseillers pour mon problème ?
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>La magie du Board, c'est le contraste. Mélangez des profils opposés : un pragmatique (Buffett) avec un créatif (Kanye), un philosophe (Socrate) avec un exécuteur (Musk). Les insights les plus puissants naissent de la friction entre perspectives radicalement différentes. Commencez avec 4-5 conseillers pour vos premières consultations.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Est-ce que ça marche pour des décisions personnelles aussi ?
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Absolument. Relation amoureuse compliquée ? Demandez à Jésus et Julia Cameron. Reconversion professionnelle ? Alexandra David-Néel et Oussama Ammar. Le Board n'est pas limité au business — c'est un outil de réflexion pour toutes les décisions qui comptent dans votre vie.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    Mes données et mes questions sont-elles confidentielles ?
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>Oui. Vos consultations ne sont jamais partagées, jamais utilisées pour entraîner des modèles, et jamais accessibles à quiconque d'autre que vous. Vous pouvez supprimer votre historique à tout moment.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFaq(this)">
+                    C'est quoi la différence avec juste demander à ChatGPT de jouer un rôle ?
+                    <span class="faq-toggle">+</span>
+                </button>
+                <div class="faq-answer">
+                    <p>ChatGPT, c'est un prompt bricolé dans une interface générique. BDD, c'est une expérience conçue : chaque personnalité a un prompt de 400+ mots soigneusement calibré, des portraits cinématiques, des réponses individuelles streamées en parallèle, des résumés automatiques en une phrase, et un rapport de synthèse qui croise tous les avis. C'est la différence entre écouter la radio et aller à un concert privé.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="cta">
+    <div class="final-cta-bg"></div>
+    <div class="section-inner">
+        <div class="urgency-bar">
+            <span class="urgency-dot"></span>
+            127 personnes ont composé leur Board cette semaine
+        </div>
+        <h2>La prochaine décision que vous prendrez<br>pourrait <em>tout changer</em>.</h2>
+        <p class="section-subtitle" style="text-align:center; margin: 0 auto 2.5rem;">
+            Celle que vous n'avez pas encore prise vous coûte chaque jour un peu plus.<br>
+            Composez votre Board. Posez votre question. Avancez.
+        </p>
+        <a href="/app" class="btn-primary" style="font-size:1rem; padding:1.2rem 3rem;">
+            Composer mon Board →
+        </a>
+        <p style="margin-top:1.2rem; font-size:0.78rem; color:var(--text-muted);">
+            3 consultations offertes · Sans carte bancaire · Prêt en 30 secondes
+        </p>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-logo">BDD</div>
+    <p>© 2025 Board de Décision Digitale — Tous droits réservés</p>
+    <p style="margin-top:0.5rem;">Conditions d'utilisation · Politique de confidentialité · Contact</p>
+</footer>
+
+<script>
+    // Reveal on scroll
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // FAQ toggle
+    function toggleFaq(btn) {
+        const answer = btn.nextElementSibling;
+        const toggle = btn.querySelector('.faq-toggle');
+        const isOpen = answer.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+        document.querySelectorAll('.faq-toggle').forEach(t => t.textContent = '+');
+
+        if (!isOpen) {
+            answer.classList.add('open');
+            toggle.textContent = '−';
+        }
+    }
+
+    // Nav scroll effect
+    window.addEventListener('scroll', () => {
+        const nav = document.querySelector('nav');
+        if (window.scrollY > 100) {
+            nav.style.padding = '0.8rem 3rem';
+            nav.style.borderBottomColor = 'rgba(201,168,76,0.1)';
+        } else {
+            nav.style.padding = '1.2rem 3rem';
+            nav.style.borderBottomColor = 'rgba(255,255,255,0.06)';
+        }
+    });
+
+    // Animated counter
+    function animateCounters() {
+        document.querySelectorAll('.proof-number').forEach(el => {
+            const text = el.textContent;
+            if (!isNaN(parseInt(text))) {
+                const target = parseInt(text);
+                let current = 0;
+                const increment = Math.ceil(target / 40);
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(timer);
+                    }
+                    el.textContent = current;
+                }, 30);
+            }
+        });
+    }
+
+    // Trigger counter animation when hero is visible
+    const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                heroObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.5 });
+
+    const proofSection = document.querySelector('.hero-proof');
+    if (proofSection) heroObserver.observe(proofSection);
+</script>
+
+</body>
+</html>

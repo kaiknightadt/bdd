@@ -1,0 +1,1579 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD — Board de Décision Digitale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #111118;
+            --bg-card: #16161f;
+            --bg-card-hover: #1c1c28;
+            --border: #2a2a3a;
+            --gold: #c9a84c;
+            --gold-dim: #8a7235;
+            --gold-glow: rgba(201, 168, 76, 0.15);
+            --gold-glow-strong: rgba(201, 168, 76, 0.3);
+            --text-primary: #e8e4dc;
+            --text-secondary: #9a9688;
+            --text-muted: #5a5750;
+            --gandhi-accent: #7eb89a;
+            --gandhi-bg: rgba(126, 184, 154, 0.08);
+            --gandhi-border: rgba(126, 184, 154, 0.25);
+            --suntzu-accent: #c47a5a;
+            --suntzu-bg: rgba(196, 122, 90, 0.08);
+            --suntzu-border: rgba(196, 122, 90, 0.25);
+            --jobs-accent: #b0b0b0;
+            --jobs-bg: rgba(176, 176, 176, 0.08);
+            --jobs-border: rgba(176, 176, 176, 0.25);
+            --socrate-accent: #a89bcc;
+            --socrate-bg: rgba(168, 155, 204, 0.08);
+            --socrate-border: rgba(168, 155, 204, 0.25);
+            --buffett-accent: #5aad7a;
+            --buffett-bg: rgba(90, 173, 122, 0.08);
+            --buffett-border: rgba(90, 173, 122, 0.25);
+            --musk-accent: #5b9bd5;
+            --musk-bg: rgba(91, 155, 213, 0.08);
+            --musk-border: rgba(91, 155, 213, 0.25);
+            --bezos-accent: #d4a054;
+            --bezos-bg: rgba(212, 160, 84, 0.08);
+            --bezos-border: rgba(212, 160, 84, 0.25);
+            --jesus-accent: #dcc07a;
+            --jesus-bg: rgba(220, 192, 122, 0.08);
+            --jesus-border: rgba(220, 192, 122, 0.25);
+            --kanye-accent: #d45a7a;
+            --kanye-bg: rgba(212, 90, 122, 0.08);
+            --kanye-border: rgba(212, 90, 122, 0.25);
+            --beyonce-accent: #d4a0d4;
+            --beyonce-bg: rgba(212, 160, 212, 0.08);
+            --beyonce-border: rgba(212, 160, 212, 0.25);
+            --chalamet-accent: #7ac4b8;
+            --chalamet-bg: rgba(122, 196, 184, 0.08);
+            --chalamet-border: rgba(122, 196, 184, 0.25);
+            --arnault-accent: #8b7fc4;
+            --arnault-bg: rgba(139, 127, 196, 0.08);
+            --arnault-border: rgba(139, 127, 196, 0.25);
+            --luchini-accent: #d49a5a;
+            --luchini-bg: rgba(212, 154, 90, 0.08);
+            --luchini-border: rgba(212, 154, 90, 0.25);
+            --luffy-accent: #e05555;
+            --luffy-bg: rgba(224, 85, 85, 0.08);
+            --luffy-border: rgba(224, 85, 85, 0.25);
+            --cameron-accent: #d4a0c4;
+            --cameron-bg: rgba(212, 160, 196, 0.08);
+            --cameron-border: rgba(212, 160, 196, 0.25);
+            --giono-accent: #8bb86a;
+            --giono-bg: rgba(139, 184, 106, 0.08);
+            --giono-border: rgba(139, 184, 106, 0.25);
+            --davidneel-accent: #8ac4d4;
+            --davidneel-bg: rgba(138, 196, 212, 0.08);
+            --davidneel-border: rgba(138, 196, 212, 0.25);
+            --ammar-accent: #d4c45a;
+            --ammar-bg: rgba(212, 196, 90, 0.08);
+            --ammar-border: rgba(212, 196, 90, 0.25);
+            --lestwins-accent: #d47a5a;
+            --lestwins-bg: rgba(212, 122, 90, 0.08);
+            --lestwins-border: rgba(212, 122, 90, 0.25);
+            --chouard-accent: #7ab89a;
+            --chouard-bg: rgba(122, 184, 154, 0.08);
+            --chouard-border: rgba(122, 184, 154, 0.25);
+            --baer-accent: #c4a07a;
+            --baer-bg: rgba(196, 160, 122, 0.08);
+            --baer-border: rgba(196, 160, 122, 0.25);
+            --darmanin-accent: #5a7ac4;
+            --darmanin-bg: rgba(90, 122, 196, 0.08);
+            --darmanin-border: rgba(90, 122, 196, 0.25);
+            --report-accent: #7a8ec4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            max-width: 100vw;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(201, 168, 76, 0.03) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(126, 184, 154, 0.02) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 50%, rgba(196, 122, 90, 0.02) 0%, transparent 40%);
+            pointer-events: none; z-index: 0;
+        }
+
+        /* ============================
+           SCREEN MANAGEMENT
+        ============================ */
+        .screen { display: none; }
+        .screen.active { display: block; }
+
+        /* ============================
+           HOME SCREEN
+        ============================ */
+        .home-container {
+            position: relative; z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .home-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .home-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.8rem;
+        }
+
+        .home-header h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            line-height: 1.2;
+            margin-bottom: 0.8rem;
+        }
+
+        .home-header p {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            line-height: 1.6;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* Section labels (shared) */
+        .section-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .section-label::before {
+            content: '';
+            display: inline-block;
+            width: 20px; height: 1px;
+            background: var(--gold-dim);
+        }
+
+        /* Advisor selection grid */
+        .advisor-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .advisor-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            position: relative;
+            user-select: none;
+        }
+
+        .advisor-card:hover {
+            border-color: var(--gold-dim);
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+        }
+
+        .advisor-card.selected {
+            border-color: var(--gold);
+            background: rgba(201, 168, 76, 0.06);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        .advisor-card .card-avatar {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 2px solid var(--border);
+            transition: border-color 0.3s;
+        }
+
+        .advisor-card.selected .card-avatar {
+            border-color: var(--gold);
+        }
+
+        .advisor-card .card-avatar img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 15%;
+        }
+
+        .card-info { flex: 1; min-width: 0; }
+
+        .card-info h3 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .card-info .card-title {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-info .card-desc {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .card-check {
+            position: absolute;
+            top: 0.8rem; right: 0.8rem;
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 0.75rem;
+            color: transparent;
+        }
+
+        .advisor-card.selected .card-check {
+            background: var(--gold);
+            border-color: var(--gold);
+            color: var(--bg-primary);
+        }
+
+        /* Home bottom bar */
+        .home-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .selection-count {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .selection-count strong {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .btn-start {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.8rem 2.5rem;
+            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-start:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px var(--gold-glow-strong);
+        }
+
+        .btn-start:disabled { opacity: 0.35; cursor: not-allowed; }
+
+        /* ============================
+           BOARD SCREEN
+        ============================ */
+        .board-container {
+            position: relative; z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        .board-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .board-brand {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .board-brand-logo {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .board-brand h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .btn-back {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 500;
+            padding: 0.5rem 1.2rem;
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-back:hover {
+            border-color: var(--text-muted);
+            color: var(--text-primary);
+        }
+
+        /* Input */
+        .input-section { margin-bottom: 2rem; }
+
+        .input-wrapper {
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-wrapper:focus-within {
+            border-color: var(--gold-dim);
+            box-shadow: 0 0 30px var(--gold-glow);
+        }
+
+        .input-wrapper textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 1.2rem;
+            background: transparent;
+            border: none;
+            color: var(--text-primary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 1rem;
+            line-height: 1.7;
+            resize: vertical;
+            outline: none;
+        }
+
+        .input-wrapper textarea::placeholder { color: var(--text-muted); }
+
+        .input-actions {
+            display: flex;
+            justify-content: flex-end;
+            padding: 0.6rem 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-consult {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            padding: 0.65rem 1.8rem;
+            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-consult:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px var(--gold-glow-strong);
+        }
+
+        .btn-consult:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-consult.loading { position: relative; color: transparent; }
+
+        .btn-consult.loading::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 18px; height: 18px;
+            margin: -9px 0 0 -9px;
+            border: 2px solid var(--bg-primary);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Table */
+        .table-container {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .oval-table {
+            width: 500px; height: 110px;
+            background: radial-gradient(ellipse, #1e1c15 0%, #15140e 60%, #0f0e0a 100%);
+            border-radius: 50%;
+            border: 2px solid var(--gold-dim);
+            box-shadow: 0 10px 60px rgba(0,0,0,0.5),
+                        inset 0 0 40px rgba(201, 168, 76, 0.05),
+                        0 0 80px var(--gold-glow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .table-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold-dim);
+        }
+
+        /* Advisors row */
+        .advisors-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .advisor-seat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 0;
+        }
+
+        .advisor-avatar {
+            width: 110px; height: 110px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 0.6rem;
+            transition: all 0.5s;
+        }
+
+        .advisor-avatar img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            object-position: center 15%;
+            border-radius: 50%;
+            transition: all 0.5s;
+        }
+
+        .advisor-avatar.speaking { animation: pulse-glow 2s ease-in-out infinite; }
+        .advisor-avatar.speaking img { filter: brightness(1.15); }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.04); }
+        }
+
+        .advisor-seat .advisor-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.1rem;
+        }
+
+        .advisor-seat .advisor-title {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.04em;
+            margin-bottom: 1rem;
+        }
+
+        /* Advisor color schemes */
+        .advisor-seat[data-advisor="gandhi"] .advisor-avatar { border: 3px solid var(--gandhi-border); }
+        .advisor-seat[data-advisor="gandhi"] .advisor-name { color: var(--gandhi-accent); }
+        .advisor-seat[data-advisor="gandhi"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(126,184,154,0.4), 0 0 80px rgba(126,184,154,0.15);
+            border-color: var(--gandhi-accent);
+        }
+        .advisor-seat[data-advisor="gandhi"] .response-card {
+            background: var(--gandhi-bg); border: 1px solid var(--gandhi-border);
+        }
+
+        .advisor-seat[data-advisor="suntzu"] .advisor-avatar { border: 3px solid var(--suntzu-border); }
+        .advisor-seat[data-advisor="suntzu"] .advisor-name { color: var(--suntzu-accent); }
+        .advisor-seat[data-advisor="suntzu"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(196,122,90,0.4), 0 0 80px rgba(196,122,90,0.15);
+            border-color: var(--suntzu-accent);
+        }
+        .advisor-seat[data-advisor="suntzu"] .response-card {
+            background: var(--suntzu-bg); border: 1px solid var(--suntzu-border);
+        }
+
+        .advisor-seat[data-advisor="jobs"] .advisor-avatar { border: 3px solid var(--jobs-border); }
+        .advisor-seat[data-advisor="jobs"] .advisor-name { color: var(--jobs-accent); }
+        .advisor-seat[data-advisor="jobs"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(176,176,176,0.4), 0 0 80px rgba(176,176,176,0.15);
+            border-color: var(--jobs-accent);
+        }
+        .advisor-seat[data-advisor="jobs"] .response-card {
+            background: var(--jobs-bg); border: 1px solid var(--jobs-border);
+        }
+
+        .advisor-seat[data-advisor="socrate"] .advisor-avatar { border: 3px solid var(--socrate-border); }
+        .advisor-seat[data-advisor="socrate"] .advisor-name { color: var(--socrate-accent); }
+        .advisor-seat[data-advisor="socrate"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(168,155,204,0.4), 0 0 80px rgba(168,155,204,0.15);
+            border-color: var(--socrate-accent);
+        }
+        .advisor-seat[data-advisor="socrate"] .response-card {
+            background: var(--socrate-bg); border: 1px solid var(--socrate-border);
+        }
+
+        .advisor-seat[data-advisor="buffett"] .advisor-avatar { border: 3px solid var(--buffett-border); }
+        .advisor-seat[data-advisor="buffett"] .advisor-name { color: var(--buffett-accent); }
+        .advisor-seat[data-advisor="buffett"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(90,173,122,0.4), 0 0 80px rgba(90,173,122,0.15);
+            border-color: var(--buffett-accent);
+        }
+        .advisor-seat[data-advisor="buffett"] .response-card {
+            background: var(--buffett-bg); border: 1px solid var(--buffett-border);
+        }
+
+        .advisor-seat[data-advisor="musk"] .advisor-avatar { border: 3px solid var(--musk-border); }
+        .advisor-seat[data-advisor="musk"] .advisor-name { color: var(--musk-accent); }
+        .advisor-seat[data-advisor="musk"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(91,155,213,0.4), 0 0 80px rgba(91,155,213,0.15);
+            border-color: var(--musk-accent);
+        }
+        .advisor-seat[data-advisor="musk"] .response-card {
+            background: var(--musk-bg); border: 1px solid var(--musk-border);
+        }
+
+        .advisor-seat[data-advisor="bezos"] .advisor-avatar { border: 3px solid var(--bezos-border); }
+        .advisor-seat[data-advisor="bezos"] .advisor-name { color: var(--bezos-accent); }
+        .advisor-seat[data-advisor="bezos"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(212,160,84,0.4), 0 0 80px rgba(212,160,84,0.15);
+            border-color: var(--bezos-accent);
+        }
+        .advisor-seat[data-advisor="bezos"] .response-card {
+            background: var(--bezos-bg); border: 1px solid var(--bezos-border);
+        }
+
+        .advisor-seat[data-advisor="jesus"] .advisor-avatar { border: 3px solid var(--jesus-border); }
+        .advisor-seat[data-advisor="jesus"] .advisor-name { color: var(--jesus-accent); }
+        .advisor-seat[data-advisor="jesus"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(220,192,122,0.4), 0 0 80px rgba(220,192,122,0.15);
+            border-color: var(--jesus-accent);
+        }
+        .advisor-seat[data-advisor="jesus"] .response-card {
+            background: var(--jesus-bg); border: 1px solid var(--jesus-border);
+        }
+
+        .advisor-seat[data-advisor="kanye"] .advisor-avatar { border: 3px solid var(--kanye-border); }
+        .advisor-seat[data-advisor="kanye"] .advisor-name { color: var(--kanye-accent); }
+        .advisor-seat[data-advisor="kanye"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(212,90,122,0.4), 0 0 80px rgba(212,90,122,0.15);
+            border-color: var(--kanye-accent);
+        }
+        .advisor-seat[data-advisor="kanye"] .response-card {
+            background: var(--kanye-bg); border: 1px solid var(--kanye-border);
+        }
+
+        .advisor-seat[data-advisor="beyonce"] .advisor-avatar { border: 3px solid var(--beyonce-border); }
+        .advisor-seat[data-advisor="beyonce"] .advisor-name { color: var(--beyonce-accent); }
+        .advisor-seat[data-advisor="beyonce"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(212,160,212,0.4), 0 0 80px rgba(212,160,212,0.15);
+            border-color: var(--beyonce-accent);
+        }
+        .advisor-seat[data-advisor="beyonce"] .response-card {
+            background: var(--beyonce-bg); border: 1px solid var(--beyonce-border);
+        }
+
+        .advisor-seat[data-advisor="chalamet"] .advisor-avatar { border: 3px solid var(--chalamet-border); }
+        .advisor-seat[data-advisor="chalamet"] .advisor-name { color: var(--chalamet-accent); }
+        .advisor-seat[data-advisor="chalamet"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(122,196,184,0.4), 0 0 80px rgba(122,196,184,0.15);
+            border-color: var(--chalamet-accent);
+        }
+        .advisor-seat[data-advisor="chalamet"] .response-card {
+            background: var(--chalamet-bg); border: 1px solid var(--chalamet-border);
+        }
+
+        .advisor-seat[data-advisor="arnault"] .advisor-avatar { border: 3px solid var(--arnault-border); }
+        .advisor-seat[data-advisor="arnault"] .advisor-name { color: var(--arnault-accent); }
+        .advisor-seat[data-advisor="arnault"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(139,127,196,0.4), 0 0 80px rgba(139,127,196,0.15);
+            border-color: var(--arnault-accent);
+        }
+        .advisor-seat[data-advisor="arnault"] .response-card {
+            background: var(--arnault-bg); border: 1px solid var(--arnault-border);
+        }
+
+        .advisor-seat[data-advisor="luchini"] .advisor-avatar { border: 3px solid var(--luchini-border); }
+        .advisor-seat[data-advisor="luchini"] .advisor-name { color: var(--luchini-accent); }
+        .advisor-seat[data-advisor="luchini"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(212,154,90,0.4), 0 0 80px rgba(212,154,90,0.15);
+            border-color: var(--luchini-accent);
+        }
+        .advisor-seat[data-advisor="luchini"] .response-card {
+            background: var(--luchini-bg); border: 1px solid var(--luchini-border);
+        }
+
+        .advisor-seat[data-advisor="luffy"] .advisor-avatar { border: 3px solid var(--luffy-border); }
+        .advisor-seat[data-advisor="luffy"] .advisor-name { color: var(--luffy-accent); }
+        .advisor-seat[data-advisor="luffy"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(224,85,85,0.4), 0 0 80px rgba(224,85,85,0.15);
+            border-color: var(--luffy-accent);
+        }
+        .advisor-seat[data-advisor="luffy"] .response-card {
+            background: var(--luffy-bg); border: 1px solid var(--luffy-border);
+        }
+
+        .advisor-seat[data-advisor="cameron"] .advisor-avatar { border: 3px solid var(--cameron-border); }
+        .advisor-seat[data-advisor="cameron"] .advisor-name { color: var(--cameron-accent); }
+        .advisor-seat[data-advisor="cameron"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(212,160,196,0.4), 0 0 80px rgba(212,160,196,0.15);
+            border-color: var(--cameron-accent);
+        }
+        .advisor-seat[data-advisor="cameron"] .response-card {
+            background: var(--cameron-bg); border: 1px solid var(--cameron-border);
+        }
+
+        .advisor-seat[data-advisor="giono"] .advisor-avatar { border: 3px solid var(--giono-border); }
+        .advisor-seat[data-advisor="giono"] .advisor-name { color: var(--giono-accent); }
+        .advisor-seat[data-advisor="giono"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(139,184,106,0.4), 0 0 80px rgba(139,184,106,0.15);
+            border-color: var(--giono-accent);
+        }
+        .advisor-seat[data-advisor="giono"] .response-card {
+            background: var(--giono-bg); border: 1px solid var(--giono-border);
+        }
+
+        .advisor-seat[data-advisor="davidneel"] .advisor-avatar { border: 3px solid var(--davidneel-border); }
+        .advisor-seat[data-advisor="davidneel"] .advisor-name { color: var(--davidneel-accent); }
+        .advisor-seat[data-advisor="davidneel"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(138,196,212,0.4), 0 0 80px rgba(138,196,212,0.15);
+            border-color: var(--davidneel-accent);
+        }
+        .advisor-seat[data-advisor="davidneel"] .response-card {
+            background: var(--davidneel-bg); border: 1px solid var(--davidneel-border);
+        }
+
+        .advisor-seat[data-advisor="ammar"] .advisor-avatar { border: 3px solid var(--ammar-border); }
+        .advisor-seat[data-advisor="ammar"] .advisor-name { color: var(--ammar-accent); }
+        .advisor-seat[data-advisor="ammar"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(212,196,90,0.4), 0 0 80px rgba(212,196,90,0.15);
+            border-color: var(--ammar-accent);
+        }
+        .advisor-seat[data-advisor="ammar"] .response-card {
+            background: var(--ammar-bg); border: 1px solid var(--ammar-border);
+        }
+
+        .advisor-seat[data-advisor="lestwins"] .advisor-avatar { border: 3px solid var(--lestwins-border); }
+        .advisor-seat[data-advisor="lestwins"] .advisor-name { color: var(--lestwins-accent); }
+        .advisor-seat[data-advisor="lestwins"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(212,122,90,0.4), 0 0 80px rgba(212,122,90,0.15);
+            border-color: var(--lestwins-accent);
+        }
+        .advisor-seat[data-advisor="lestwins"] .response-card {
+            background: var(--lestwins-bg); border: 1px solid var(--lestwins-border);
+        }
+
+        .advisor-seat[data-advisor="chouard"] .advisor-avatar { border: 3px solid var(--chouard-border); }
+        .advisor-seat[data-advisor="chouard"] .advisor-name { color: var(--chouard-accent); }
+        .advisor-seat[data-advisor="chouard"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(122,184,154,0.4), 0 0 80px rgba(122,184,154,0.15);
+            border-color: var(--chouard-accent);
+        }
+        .advisor-seat[data-advisor="chouard"] .response-card {
+            background: var(--chouard-bg); border: 1px solid var(--chouard-border);
+        }
+
+        .advisor-seat[data-advisor="baer"] .advisor-avatar { border: 3px solid var(--baer-border); }
+        .advisor-seat[data-advisor="baer"] .advisor-name { color: var(--baer-accent); }
+        .advisor-seat[data-advisor="baer"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(196,160,122,0.4), 0 0 80px rgba(196,160,122,0.15);
+            border-color: var(--baer-accent);
+        }
+        .advisor-seat[data-advisor="baer"] .response-card {
+            background: var(--baer-bg); border: 1px solid var(--baer-border);
+        }
+
+        .advisor-seat[data-advisor="darmanin"] .advisor-avatar { border: 3px solid var(--darmanin-border); }
+        .advisor-seat[data-advisor="darmanin"] .advisor-name { color: var(--darmanin-accent); }
+        .advisor-seat[data-advisor="darmanin"] .advisor-avatar.speaking {
+            box-shadow: 0 0 40px rgba(90,122,196,0.4), 0 0 80px rgba(90,122,196,0.15);
+            border-color: var(--darmanin-accent);
+        }
+        .advisor-seat[data-advisor="darmanin"] .response-card {
+            background: var(--darmanin-bg); border: 1px solid var(--darmanin-border);
+        }
+
+        /* Response cards */
+        .response-card {
+            width: 100%;
+            border-radius: 12px;
+            padding: 1.5rem;
+            min-height: 60px;
+            min-width: 0;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+        }
+
+        .response-card.visible { opacity: 1; transform: translateY(0); }
+
+        .advisor-summary {
+            width: 100%;
+            margin-top: 0.6rem;
+            padding: 0.8rem 1.2rem;
+            background: rgba(201, 168, 76, 0.08);
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.88rem;
+            font-weight: 500;
+            color: var(--gold);
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(5px);
+            transition: all 0.5s ease;
+            display: none;
+        }
+
+        .advisor-summary.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .advisor-summary::before {
+            content: '💡 ';
+        }
+
+        .response-card.collapsed {
+            max-height: 0;
+            padding: 0 1.5rem;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .btn-expand {
+            display: none;
+            margin-top: 0.5rem;
+            padding: 0.4rem 1rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-expand.visible { display: inline-block; }
+
+        .btn-expand:hover {
+            border-color: var(--gold-dim);
+            color: var(--text-primary);
+        }
+
+        .response-card .response-text {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            max-width: 100%;
+        }
+
+        .cursor-blink {
+            display: inline-block;
+            width: 2px; height: 1em;
+            background: var(--gold);
+            margin-left: 2px;
+            vertical-align: text-bottom;
+            animation: blink 1s step-end infinite;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Report */
+        .report-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+            display: none;
+            min-width: 0; width: 100%;
+        }
+
+        .report-section.visible { display: block; animation: fadeIn 0.6s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .report-label {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--report-accent);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .report-label::before {
+            content: ''; display: inline-block;
+            width: 20px; height: 1px; background: var(--report-accent);
+        }
+
+        .btn-report {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.82rem; font-weight: 500;
+            padding: 0.55rem 1.4rem;
+            background: transparent;
+            color: var(--report-accent);
+            border: 1px solid rgba(122,142,196,0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-report:hover:not(:disabled) {
+            background: rgba(122,142,196,0.1);
+            border-color: rgba(122,142,196,0.5);
+        }
+
+        .btn-report:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .report-content {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.95rem;
+            line-height: 1.8;
+            color: var(--text-primary);
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            white-space: normal;
+            max-width: 100%; width: 100%;
+            overflow-x: auto;
+            box-sizing: border-box;
+        }
+
+        .report-content h1, .report-content h2, .report-content h3 {
+            font-family: 'Cormorant Garamond', serif;
+            color: var(--report-accent);
+            margin: 1.5rem 0 0.8rem;
+        }
+        .report-content h1 { font-size: 1.5rem; }
+        .report-content h2 { font-size: 1.25rem; }
+        .report-content h3 { font-size: 1.1rem; }
+        .report-content p { margin-bottom: 0.8rem; }
+        .report-content strong { color: var(--gold); }
+        .report-content ul, .report-content ol {
+            padding-left: 1.5rem; margin-bottom: 0.8rem;
+            list-style-position: outside;
+        }
+        .report-content li { margin-bottom: 0.3rem; overflow-wrap: break-word; }
+        .report-content * { max-width: 100%; overflow-wrap: break-word; }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            letter-spacing: 0.04em;
+            border-top: 1px solid var(--border);
+            margin-top: 3rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .home-header h1 { font-size: 2rem; }
+            .advisor-grid { grid-template-columns: 1fr; }
+            .advisors-row { grid-template-columns: 1fr; gap: 2rem; }
+            .oval-table { width: 280px; height: 75px; }
+            .board-container { padding: 1rem; }
+            .board-topbar { flex-direction: column; gap: 1rem; text-align: center; }
+            .home-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <!-- ========================
+         SCREEN 1: HOME
+    ========================= -->
+    <div class="screen active" id="screenHome">
+        <div class="home-container">
+            <header class="home-header">
+                <div class="home-logo">BDD</div>
+                <h1>Board de Décision Digitale</h1>
+                <p>Composez votre board de conseillers, soumettez votre problème, et laissez les plus grands esprits débattre pour vous.</p>
+            </header>
+
+            <div class="section-label">Choisissez vos conseillers</div>
+
+            <div class="advisor-grid" id="advisorGrid">
+
+                <div class="advisor-card" data-id="gandhi" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/gandhi.jpg" alt="Gandhi">
+                    </div>
+                    <div class="card-info">
+                        <h3>Gandhi</h3>
+                        <div class="card-title">Le Sage de la Non-Violence</div>
+                        <div class="card-desc">Éthique, vérité, simplicité. Priorise les valeurs sur le profit.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="suntzu" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/suntzu.jpg" alt="Sun Tzu">
+                    </div>
+                    <div class="card-info">
+                        <h3>Sun Tzu</h3>
+                        <div class="card-title">Le Stratège</div>
+                        <div class="card-desc">Stratégie, rapport de force, timing. Analyse froide et tactique.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="jobs" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/jobs.jpg" alt="Steve Jobs">
+                    </div>
+                    <div class="card-info">
+                        <h3>Steve Jobs</h3>
+                        <div class="card-title">Le Visionnaire</div>
+                        <div class="card-desc">Simplicité, excellence, focus. Le produit avant tout.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="socrate" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/socrate.jpg" alt="Socrate">
+                    </div>
+                    <div class="card-info">
+                        <h3>Socrate</h3>
+                        <div class="card-title">Le Philosophe</div>
+                        <div class="card-desc">Questionnement, logique, maïeutique. Déconstruit tes certitudes.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="buffett" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/buffett.jpg" alt="Warren Buffett">
+                    </div>
+                    <div class="card-info">
+                        <h3>Warren Buffett</h3>
+                        <div class="card-title">L'Investisseur</div>
+                        <div class="card-desc">Long terme, bon sens, valeur intrinsèque. Les chiffres d'abord.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="musk" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/musk.jpg" alt="Elon Musk">
+                    </div>
+                    <div class="card-info">
+                        <h3>Elon Musk</h3>
+                        <div class="card-title">Le Disrupteur</div>
+                        <div class="card-desc">Principes premiers, 10x thinking, exécution rapide. Pense grand.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="bezos" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/bezos.jpg" alt="Jeff Bezos">
+                    </div>
+                    <div class="card-info">
+                        <h3>Jeff Bezos</h3>
+                        <div class="card-title">Le Bâtisseur</div>
+                        <div class="card-desc">Obsession client, Day 1, systèmes, flywheel. Construit pour durer.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="jesus" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/jesus.jpg" alt="Jésus">
+                    </div>
+                    <div class="card-info">
+                        <h3>Jésus</h3>
+                        <div class="card-title">Le Guide Spirituel</div>
+                        <div class="card-desc">Foi, amour, service. Élève le regard au-dessus du matériel.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="kanye" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/kanye.jpg" alt="Kanye West">
+                    </div>
+                    <div class="card-info">
+                        <h3>Kanye West</h3>
+                        <div class="card-title">Le Créateur</div>
+                        <div class="card-desc">Créativité radicale, foi en soi, vision sans compromis.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="beyonce" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/beyonce.jpg" alt="Beyoncé">
+                    </div>
+                    <div class="card-info">
+                        <h3>Beyoncé</h3>
+                        <div class="card-title">La Reine</div>
+                        <div class="card-desc">Travail acharné, excellence, contrôle de son récit.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="chalamet" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/chalamet.jpg" alt="Timothée Chalamet">
+                    </div>
+                    <div class="card-info">
+                        <h3>Timothée Chalamet</h3>
+                        <div class="card-title">L'Artiste</div>
+                        <div class="card-desc">Fraîcheur, spontanéité, authenticité. Le cœur avant la stratégie.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="arnault" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/arnault.jpg" alt="Bernard Arnault">
+                    </div>
+                    <div class="card-info">
+                        <h3>Bernard Arnault</h3>
+                        <div class="card-title">L'Empereur du Luxe</div>
+                        <div class="card-desc">Marque, désirabilité, vision dynastique. La valeur avant le volume.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="luchini" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/luchini.jpg" alt="Fabrice Luchini">
+                    </div>
+                    <div class="card-info">
+                        <h3>Fabrice Luchini</h3>
+                        <div class="card-title">L'Électron Libre</div>
+                        <div class="card-desc">Littérature, lucidité, verve. La culture éclaire tout.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="luffy" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/luffy.jpg" alt="Monkey D. Luffy">
+                    </div>
+                    <div class="card-info">
+                        <h3>Monkey D. Luffy</h3>
+                        <div class="card-title">Le Capitaine</div>
+                        <div class="card-desc">Courage, nakamas, liberté. N'abandonne jamais, fonce.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="cameron" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/cameron.jpg" alt="Julia Cameron">
+                    </div>
+                    <div class="card-info">
+                        <h3>Julia Cameron</h3>
+                        <div class="card-title">La Muse</div>
+                        <div class="card-desc">Créativité, flux, morning pages. Débloque ton artiste intérieur.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="giono" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/giono.jpg" alt="Jean Giono">
+                    </div>
+                    <div class="card-info">
+                        <h3>Jean Giono</h3>
+                        <div class="card-title">Le Conteur de la Terre</div>
+                        <div class="card-desc">Nature, simplicité, beauté. Reviens à l'essentiel.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="davidneel" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/davidneel.jpg" alt="Alexandra David-Néel">
+                    </div>
+                    <div class="card-info">
+                        <h3>Alexandra David-Néel</h3>
+                        <div class="card-title">L'Exploratrice</div>
+                        <div class="card-desc">Détachement, liberté, sagesse orientale. Brise tes chaînes.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="ammar" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/ammar.jpg" alt="Oussama Ammar">
+                    </div>
+                    <div class="card-info">
+                        <h3>Oussama Ammar</h3>
+                        <div class="card-title">Le Provocateur</div>
+                        <div class="card-desc">Exécution, vérité brutale, startup. Arrête de réfléchir, lance.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="lestwins" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/lestwins.jpg" alt="Les Twins">
+                    </div>
+                    <div class="card-info">
+                        <h3>Les Twins</h3>
+                        <div class="card-title">Les Phénomènes</div>
+                        <div class="card-desc">Instinct, authenticité, énergie. Le feeling avant la théorie.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="chouard" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/chouard.jpg" alt="Étienne Chouard">
+                    </div>
+                    <div class="card-info">
+                        <h3>Étienne Chouard</h3>
+                        <div class="card-title">Le Citoyen</div>
+                        <div class="card-desc">Pouvoir, justice, démocratie. Qui écrit les règles du jeu ?</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="baer" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/baer.jpg" alt="Édouard Baer">
+                    </div>
+                    <div class="card-info">
+                        <h3>Édouard Baer</h3>
+                        <div class="card-title">Le Conteur</div>
+                        <div class="card-desc">Récit, charme, légèreté. Chaque problème est une histoire.</div>
+                    </div>
+                </div>
+
+                <div class="advisor-card" data-id="darmanin" onclick="toggleAdvisor(this)">
+                    <div class="card-check">✓</div>
+                    <div class="card-avatar">
+                        <img src="/static/img/darmanin.jpg" alt="Gérald Darmanin">
+                    </div>
+                    <div class="card-info">
+                        <h3>Gérald Darmanin</h3>
+                        <div class="card-title">L'Homme d'État</div>
+                        <div class="card-desc">Ordre, autorité, volonté. Décider et aller jusqu'au bout.</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="home-bottom">
+                <div class="selection-count">
+                    <strong id="selectedCount">0</strong> conseiller(s) sélectionné(s)
+                </div>
+                <button class="btn-start" id="btnStart" disabled onclick="goToBoard()">
+                    Lancer le Board
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ========================
+         SCREEN 2: BOARD
+    ========================= -->
+    <div class="screen" id="screenBoard">
+        <div class="board-container">
+
+            <div class="board-topbar">
+                <div class="board-brand">
+                    <div class="board-brand-logo">BDD</div>
+                    <h2>Board de Décision Digitale</h2>
+                </div>
+                <button class="btn-back" onclick="goHome()">← Modifier le board</button>
+            </div>
+
+            <section class="input-section">
+                <div class="section-label">Votre problème</div>
+                <div class="input-wrapper">
+                    <textarea id="problemInput" placeholder="Décrivez votre problème business, stratégique ou personnel. Soyez précis : contexte, enjeux, contraintes..."></textarea>
+                    <div class="input-actions">
+                        <button class="btn-consult" id="consultBtn" onclick="startConsultation()">
+                            Consulter le Board
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="board-section" id="boardSection">
+                <div class="section-label">Le Board</div>
+                <div class="table-container">
+                    <div class="oval-table">
+                        <span class="table-text">Table décisionnaire</span>
+                    </div>
+                </div>
+                <div class="advisors-row" id="advisorsRow"></div>
+            </section>
+
+            <section class="report-section" id="reportSection">
+                <div class="report-header">
+                    <div class="report-label">Rapport de synthèse</div>
+                    <button class="btn-report" id="reportBtn" onclick="generateReport()">Générer le rapport</button>
+                </div>
+                <div class="report-content" id="reportContent"></div>
+            </section>
+
+            <footer class="footer">
+                BDD — Board de Décision Digitale • Les avis exprimés sont générés par IA et ne constituent pas des conseils professionnels.
+            </footer>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
+    <script>
+        let selectedAdvisors = new Set();
+        let currentProblem = '';
+        let advisorResponses = {};
+        let isConsulting = false;
+
+        const ADVISORS_META = {
+            gandhi: { name: 'Gandhi', title: 'Le Sage de la Non-Violence', img: '/static/img/gandhi.jpg' },
+            suntzu: { name: 'Sun Tzu', title: 'Le Stratège', img: '/static/img/suntzu.jpg' },
+            jobs: { name: 'Steve Jobs', title: 'Le Visionnaire', img: '/static/img/jobs.jpg' },
+            socrate: { name: 'Socrate', title: 'Le Philosophe', img: '/static/img/socrate.jpg' },
+            buffett: { name: 'Warren Buffett', title: "L'Investisseur", img: '/static/img/buffett.jpg' },
+            musk: { name: 'Elon Musk', title: 'Le Disrupteur', img: '/static/img/musk.jpg' },
+            bezos: { name: 'Jeff Bezos', title: 'Le Bâtisseur', img: '/static/img/bezos.jpg' },
+            jesus: { name: 'Jésus', title: 'Le Guide Spirituel', img: '/static/img/jesus.jpg' },
+            kanye: { name: 'Kanye West', title: 'Le Créateur', img: '/static/img/kanye.jpg' },
+            beyonce: { name: 'Beyoncé', title: 'La Reine', img: '/static/img/beyonce.jpg' },
+            chalamet: { name: 'Timothée Chalamet', title: "L'Artiste", img: '/static/img/chalamet.jpg' },
+            arnault: { name: 'Bernard Arnault', title: "L'Empereur du Luxe", img: '/static/img/arnault.jpg' },
+            luchini: { name: 'Fabrice Luchini', title: "L'Électron Libre", img: '/static/img/luchini.jpg' },
+            luffy: { name: 'Monkey D. Luffy', title: 'Le Capitaine', img: '/static/img/luffy.jpg' },
+            cameron: { name: 'Julia Cameron', title: 'La Muse', img: '/static/img/cameron.jpg' },
+            giono: { name: 'Jean Giono', title: 'Le Conteur de la Terre', img: '/static/img/giono.jpg' },
+            davidneel: { name: 'Alexandra David-Néel', title: "L'Exploratrice", img: '/static/img/davidneel.jpg' },
+            ammar: { name: 'Oussama Ammar', title: 'Le Provocateur', img: '/static/img/ammar.jpg' },
+            lestwins: { name: 'Les Twins', title: 'Les Phénomènes', img: '/static/img/lestwins.jpg' },
+            chouard: { name: 'Étienne Chouard', title: 'Le Citoyen', img: '/static/img/chouard.jpg' },
+            baer: { name: 'Édouard Baer', title: 'Le Conteur', img: '/static/img/baer.jpg' },
+            darmanin: { name: 'Gérald Darmanin', title: "L'Homme d'État", img: '/static/img/darmanin.jpg' }
+        };
+
+        // === HOME ===
+        function toggleAdvisor(card) {
+            const id = card.dataset.id;
+            if (selectedAdvisors.has(id)) {
+                selectedAdvisors.delete(id);
+                card.classList.remove('selected');
+            } else {
+                selectedAdvisors.add(id);
+                card.classList.add('selected');
+            }
+            document.getElementById('selectedCount').textContent = selectedAdvisors.size;
+            document.getElementById('btnStart').disabled = selectedAdvisors.size === 0;
+        }
+
+        function goToBoard() {
+            if (selectedAdvisors.size === 0) return;
+            buildBoardSeats();
+            document.getElementById('screenHome').classList.remove('active');
+            document.getElementById('screenBoard').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function goHome() {
+            document.getElementById('screenBoard').classList.remove('active');
+            document.getElementById('screenHome').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // === BUILD SEATS ===
+        function buildBoardSeats() {
+            const row = document.getElementById('advisorsRow');
+            row.innerHTML = '';
+            selectedAdvisors.forEach(id => {
+                const m = ADVISORS_META[id];
+                if (!m) return;
+                const seat = document.createElement('div');
+                seat.className = 'advisor-seat';
+                seat.dataset.advisor = id;
+                seat.innerHTML = `
+                    <div class="advisor-avatar" id="avatar-${id}">
+                        <img src="${m.img}" alt="${m.name}">
+                    </div>
+                    <div class="advisor-name">${m.name}</div>
+                    <div class="advisor-title">${m.title}</div>
+                    <div class="response-card" id="card-${id}">
+                        <div class="response-text" id="response-${id}"></div>
+                    </div>
+                    <div class="advisor-summary" id="summary-${id}"></div>
+                    <button class="btn-expand" id="expand-${id}" onclick="toggleExpand('${id}')">▼ Lire le conseil complet</button>
+                `;
+                row.appendChild(seat);
+            });
+        }
+
+        // === CONSULTATION ===
+        async function startConsultation() {
+            const problem = document.getElementById('problemInput').value.trim();
+            if (!problem || isConsulting) return;
+            currentProblem = problem;
+            advisorResponses = {};
+            isConsulting = true;
+
+            const btn = document.getElementById('consultBtn');
+            btn.classList.add('loading');
+            btn.disabled = true;
+
+            selectedAdvisors.forEach(id => {
+                const card = document.getElementById(`card-${id}`);
+                const resp = document.getElementById(`response-${id}`);
+                if (card) card.classList.remove('visible');
+                if (resp) resp.innerHTML = '';
+                const avatar = document.getElementById(`avatar-${id}`);
+                if (avatar) avatar.classList.remove('speaking');
+                const summary = document.getElementById(`summary-${id}`);
+                if (summary) { summary.classList.remove('visible'); summary.textContent = ''; }
+                const expandBtn = document.getElementById(`expand-${id}`);
+                if (expandBtn) expandBtn.classList.remove('visible');
+            });
+
+            document.getElementById('reportSection').classList.remove('visible');
+            document.getElementById('reportContent').innerHTML = '';
+
+            try {
+                const response = await fetch('/api/consult', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ problem, advisors: Array.from(selectedAdvisors) })
+                });
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+                    for (const line of lines) {
+                        if (!line.startsWith('data: ')) continue;
+                        try { handleEvent(JSON.parse(line.slice(6))); } catch (e) {}
+                    }
+                }
+            } catch (err) { console.error('Consultation error:', err); }
+
+            isConsulting = false;
+            btn.classList.remove('loading');
+            btn.disabled = false;
+        }
+
+        function handleEvent(data) {
+            switch (data.type) {
+                case 'advisor_start': {
+                    const card = document.getElementById(`card-${data.advisor}`);
+                    const resp = document.getElementById(`response-${data.advisor}`);
+                    const avatar = document.getElementById(`avatar-${data.advisor}`);
+                    if (card) card.classList.add('visible');
+                    if (avatar) avatar.classList.add('speaking');
+                    if (resp) resp.innerHTML = '<span class="cursor-blink"></span>';
+                    break;
+                }
+                case 'token': {
+                    const resp = document.getElementById(`response-${data.advisor}`);
+                    if (!resp) break;
+                    const cursor = resp.querySelector('.cursor-blink');
+                    if (cursor) cursor.remove();
+                    resp.textContent += data.content;
+                    const c = document.createElement('span');
+                    c.className = 'cursor-blink';
+                    resp.appendChild(c);
+                    resp.parentElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    break;
+                }
+                case 'advisor_end': {
+                    const resp = document.getElementById(`response-${data.advisor}`);
+                    const avatar = document.getElementById(`avatar-${data.advisor}`);
+                    if (resp) { const c = resp.querySelector('.cursor-blink'); if (c) c.remove(); }
+                    if (avatar) avatar.classList.remove('speaking');
+                    advisorResponses[data.advisor] = data.full_response;
+                    break;
+                }
+                case 'advisor_summary': {
+                    const summary = document.getElementById(`summary-${data.advisor}`);
+                    const card = document.getElementById(`card-${data.advisor}`);
+                    const expandBtn = document.getElementById(`expand-${data.advisor}`);
+                    if (summary) {
+                        summary.textContent = data.summary;
+                        summary.classList.add('visible');
+                    }
+                    // Collapse the full response, show expand button
+                    if (card) card.classList.add('collapsed');
+                    if (expandBtn) expandBtn.classList.add('visible');
+                    break;
+                }
+                case 'done':
+                    document.getElementById('reportSection').classList.add('visible');
+                    break;
+                case 'error': {
+                    const resp = document.getElementById(`response-${data.advisor}`);
+                    if (resp) resp.innerHTML = `<span style="color:#e05555">Erreur : ${data.message}</span>`;
+                    break;
+                }
+            }
+        }
+
+        // === REPORT ===
+        async function generateReport() {
+            const btn = document.getElementById('reportBtn');
+            const content = document.getElementById('reportContent');
+            btn.disabled = true;
+            btn.textContent = 'Génération en cours...';
+            content.innerHTML = '<span class="cursor-blink"></span>';
+
+            try {
+                const response = await fetch('/api/report', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ problem: currentProblem, responses: advisorResponses })
+                });
+                const reader = response.body.getReader();
+                const decoder = new TextDecoder();
+                let buffer = '';
+                let fullReport = '';
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    buffer += decoder.decode(value, { stream: true });
+                    const lines = buffer.split('\n');
+                    buffer = lines.pop();
+                    for (const line of lines) {
+                        if (!line.startsWith('data: ')) continue;
+                        try {
+                            const d = JSON.parse(line.slice(6));
+                            if (d.type === 'token') {
+                                fullReport += d.content;
+                                content.innerHTML = marked.parse(fullReport) + '<span class="cursor-blink"></span>';
+                            } else if (d.type === 'done') {
+                                content.innerHTML = marked.parse(fullReport);
+                            }
+                        } catch (e) {}
+                    }
+                }
+            } catch (err) {
+                content.innerHTML = '<span style="color:#e05555">Erreur lors de la génération du rapport.</span>';
+            }
+            btn.disabled = false;
+            btn.textContent = 'Régénérer le rapport';
+        }
+
+        document.getElementById('problemInput').addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') startConsultation();
+        });
+
+        function toggleExpand(id) {
+            const card = document.getElementById(`card-${id}`);
+            const btn = document.getElementById(`expand-${id}`);
+            if (!card || !btn) return;
+            if (card.classList.contains('collapsed')) {
+                card.classList.remove('collapsed');
+                btn.textContent = '▲ Replier';
+            } else {
+                card.classList.add('collapsed');
+                btn.textContent = '▼ Lire le conseil complet';
+            }
+        }
+    </script>
+</body>
+</html>
