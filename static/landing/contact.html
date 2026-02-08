@@ -230,21 +230,6 @@
     <h1>Une question ? Un retour ?</h1>
     <p class="intro">Nous lisons chaque message. Comptez sur une réponse sous 48 heures maximum.</p>
 
-    <div class="contact-grid">
-        <div class="contact-card">
-            <div class="contact-card-icon">📧</div>
-            <h3>Email direct</h3>
-            <p>Pour toute question générale ou demande de support :<br><a href="mailto:contact@bdd-app.com">contact@bdd-app.com</a></p>
-        </div>
-        <div class="contact-card">
-            <div class="contact-card-icon">💼</div>
-            <h3>Partenariats</h3>
-            <p>Intégrations, licences équipe ou marque blanche :<br><a href="mailto:partenariats@bdd-app.com">partenariats@bdd-app.com</a></p>
-        </div>
-    </div>
-
-    <div class="divider"><span>ou envoyez un message</span></div>
-
     <div class="contact-form" id="contactForm">
         <div class="form-row">
             <div class="form-group">
@@ -276,7 +261,7 @@
             <textarea id="message" placeholder="Décrivez votre demande en quelques lignes..." required></textarea>
         </div>
 
-        <button class="btn-send" onclick="sendMessage()">Envoyer le message →</button>
+        <button class="btn-send" id="sendBtn" onclick="sendMessage()">Envoyer le message →</button>
         <p class="form-note">Nous ne partageons jamais votre email avec des tiers.</p>
     </div>
 
@@ -294,22 +279,39 @@
 </footer>
 
 <script>
-    function sendMessage() {
+    async function sendMessage() {
         const name = document.getElementById('firstName').value.trim();
         const email = document.getElementById('email').value.trim();
+        const subject = document.getElementById('subject').value;
         const message = document.getElementById('message').value.trim();
+        const btn = document.getElementById('sendBtn');
 
         if (!name || !email || !message) {
             alert('Merci de remplir tous les champs obligatoires.');
             return;
         }
 
-        // Hide form, show success
-        document.getElementById('contactForm').style.display = 'none';
-        document.getElementById('successMessage').classList.add('visible');
+        btn.textContent = 'Envoi en cours...';
+        btn.disabled = true;
 
-        // In production, this would POST to an API endpoint or mailto service
-        // e.g. EmailJS, Formspree, or a custom Flask endpoint
+        try {
+            const resp = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, subject, message })
+            });
+
+            if (resp.ok) {
+                document.getElementById('contactForm').style.display = 'none';
+                document.getElementById('successMessage').classList.add('visible');
+            } else {
+                btn.textContent = 'Erreur — Réessayer';
+                btn.disabled = false;
+            }
+        } catch (err) {
+            btn.textContent = 'Erreur — Réessayer';
+            btn.disabled = false;
+        }
     }
 </script>
 

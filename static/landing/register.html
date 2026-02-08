@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BDD — Accéder au Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0c; --bg-elevated: #111114; --bg-card: #16161a;
+            --gold: #c9a84c; --gold-dim: #a08535; --gold-bright: #e0c266;
+            --gold-glow: rgba(201,168,76,0.15);
+            --text: #e8e4dd; --text-secondary: #9a9590; --text-muted: #6a6560;
+            --border: rgba(255,255,255,0.06); --border-gold: rgba(201,168,76,0.2);
+            --accent-red: #c44;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 50% 40%, rgba(201,168,76,0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .gate-card {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .gate-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 3px;
+            margin-bottom: 0.3rem;
+        }
+
+        .gate-logo-sub {
+            font-size: 0.65rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .gate-card h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 0.6rem;
+        }
+
+        .gate-card h2 em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .gate-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .gate-form {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .gate-input {
+            width: 100%;
+            padding: 0.95rem 1.2rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.92rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .gate-input:focus { border-color: var(--gold-dim); }
+
+        .gate-input::placeholder { color: var(--text-muted); }
+
+        .gate-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--gold);
+            color: var(--bg);
+            border: none;
+            border-radius: 8px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 0.92rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gate-btn:hover {
+            background: var(--gold-bright);
+            box-shadow: 0 8px 30px rgba(201,168,76,0.3);
+            transform: translateY(-1px);
+        }
+
+        .gate-btn:disabled {
+            opacity: 0.6;
+            cursor: wait;
+        }
+
+        .gate-perks {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .gate-perk {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .gate-perk span { color: var(--gold); margin-right: 0.3rem; }
+
+        .gate-footer {
+            margin-top: 1.5rem;
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .gate-footer a { color: var(--text-muted); }
+        .gate-footer a:hover { color: var(--gold); }
+
+        .gate-error {
+            display: none;
+            padding: 0.6rem 1rem;
+            background: rgba(204,68,68,0.08);
+            border: 1px solid rgba(204,68,68,0.2);
+            border-radius: 6px;
+            font-size: 0.82rem;
+            color: var(--accent-red);
+        }
+
+        .gate-error.visible { display: block; }
+
+        .back-link {
+            display: block;
+            margin-top: 2rem;
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover { color: var(--gold); }
+    </style>
+</head>
+<body>
+
+<div class="gate-card">
+    <div class="gate-logo">BDD</div>
+    <div class="gate-logo-sub">Board de Décision Digitale</div>
+
+    <h2>Accédez à votre Board<br><em>gratuitement</em></h2>
+    <p class="gate-subtitle">Entrez votre email pour débloquer 3 consultations offertes avec les 22 conseillers.</p>
+
+    <div class="gate-error" id="gateError"></div>
+
+    <div class="gate-form">
+        <input type="text" class="gate-input" id="gateName" placeholder="Votre prénom" required>
+        <input type="email" class="gate-input" id="gateEmail" placeholder="votre@email.com" required>
+        <button class="gate-btn" id="gateBtn" onclick="register()">Accéder au Board →</button>
+    </div>
+
+    <div class="gate-perks">
+        <div class="gate-perk"><span>✦</span> 3 consultations gratuites</div>
+        <div class="gate-perk"><span>✦</span> 22 conseillers disponibles</div>
+        <div class="gate-perk"><span>✦</span> Résumés + rapport de synthèse inclus</div>
+    </div>
+
+    <p class="gate-footer">
+        En continuant, vous acceptez nos <a href="/terms">CGU</a> et notre <a href="/privacy">politique de confidentialité</a>.<br>
+        Pas de spam. Désabonnement en 1 clic.
+    </p>
+</div>
+
+<a href="/" class="back-link">← Retour à l'accueil</a>
+
+<script>
+    async function register() {
+        const name = document.getElementById('gateName').value.trim();
+        const email = document.getElementById('gateEmail').value.trim();
+        const btn = document.getElementById('gateBtn');
+        const error = document.getElementById('gateError');
+
+        error.classList.remove('visible');
+
+        if (!name || !email) {
+            error.textContent = 'Merci de remplir tous les champs.';
+            error.classList.add('visible');
+            return;
+        }
+
+        if (!email.includes('@') || !email.includes('.')) {
+            error.textContent = 'Merci d\'entrer une adresse email valide.';
+            error.classList.add('visible');
+            return;
+        }
+
+        btn.textContent = 'Chargement...';
+        btn.disabled = true;
+
+        try {
+            const resp = await fetch('/api/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email })
+            });
+
+            if (resp.ok) {
+                window.location.href = '/app';
+            } else {
+                const data = await resp.json();
+                error.textContent = data.error || 'Une erreur est survenue.';
+                error.classList.add('visible');
+                btn.textContent = 'Accéder au Board →';
+                btn.disabled = false;
+            }
+        } catch (err) {
+            error.textContent = 'Erreur de connexion. Réessayez.';
+            error.classList.add('visible');
+            btn.textContent = 'Accéder au Board →';
+            btn.disabled = false;
+        }
+    }
+
+    // Enter key submits
+    document.querySelectorAll('.gate-input').forEach(input => {
+        input.addEventListener('keydown', e => { if (e.key === 'Enter') register(); });
+    });
+</script>
+
+</body>
+</html>

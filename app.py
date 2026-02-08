@@ -1,12 +1,71 @@
 import os
 import json
-from flask import Flask, render_template, request, jsonify, Response, stream_with_context, send_from_directory
+from datetime import datetime
+from flask import Flask, render_template, request, jsonify, Response, stream_with_context, send_from_directory, session, redirect
 from openai import OpenAI
+from supabase import create_client
 from dotenv import load_dotenv
 
 load_dotenv()
 
 app = Flask(__name__)
+app.secret_key = os.getenv("SECRET_KEY", "bdd-secret-change-me-in-prod")
+
+# --- Supabase ---
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+MAX_FREE_CONSULTATIONS = 3
+
+
+def get_supabase():
+    return create_client(SUPABASE_URL, SUPABASE_KEY)
+
+
+def save_user(name, email):
+    """Insert or retrieve user from Supabase."""
+    sb = get_supabase()
+    # Check if user already exists
+    existing = sb.table("users").select("*").eq("email", email).execute()
+    if existing.data:
+        return existing.data[0]
+    # Create new user
+    result = sb.table("users").insert({
+        "name": name,
+        "email": email,
+        "consultations_used": 0,
+        "plan": "free"
+    }).execute()
+    return result.data[0] if result.data else None
+
+
+def get_user(email):
+    """Get user from Supabase by email."""
+    sb = get_supabase()
+    result = sb.table("users").select("*").eq("email", email).execute()
+    return result.data[0] if result.data else None
+
+
+def increment_user_consultations(email):
+    """Increment consultation counter in Supabase."""
+    user = get_user(email)
+    if user:
+        new_count = user.get("consultations_used", 0) + 1
+        sb = get_supabase()
+        sb.table("users").update({"consultations_used": new_count}).eq("email", email).execute()
+        return new_count
+    return 0
+
+
+def save_contact_message(name, email, subject, message):
+    """Save contact form message to Supabase."""
+    sb = get_supabase()
+    sb.table("contact_messages").insert({
+        "name": name,
+        "email": email,
+        "subject": subject,
+        "message": message
+    }).execute()
+    return True
 
 def get_client():
     api_key = os.getenv("OPENAI_API_KEY")
@@ -1061,9 +1120,68 @@ def contact():
     return send_from_directory("static/landing", "contact.html")
 
 
+@app.route("/register")
+def register_page():
+    # If already registered, go straight to app
+    if session.get("user_email"):
+        return redirect("/app")
+    return send_from_directory("static/landing", "register.html")
+
+
+@app.route("/api/register", methods=["POST"])
+def api_register():
+    """Capture user email and create session."""
+    data = request.json
+    name = data.get("name", "").strip()
+    email = data.get("email", "").strip().lower()
+
+    if not name or not email:
+        return jsonify({"error": "Prénom et email requis."}), 400
+
+    if "@" not in email or "." not in email:
+        return jsonify({"error": "Email invalide."}), 400
+
+    try:
+        # Store user in Supabase (or retrieve if exists)
+        user = save_user(name, email)
+
+        # Create session synced with DB
+        session["user_name"] = name
+        session["user_email"] = email
+        session["consultations_used"] = user.get("consultations_used", 0) if user else 0
+
+        return jsonify({"ok": True, "name": name})
+    except Exception as e:
+        return jsonify({"error": "Erreur serveur. Réessayez."}), 500
+
+
 @app.route("/app")
 def board():
+    # Check if user is registered
+    if not session.get("user_email"):
+        return redirect("/register")
     return render_template("index.html")
+
+
+@app.route("/api/me")
+def api_me():
+    """Return current user info and consultation count from Supabase."""
+    if not session.get("user_email"):
+        return jsonify({"logged_in": False}), 401
+
+    # Read real count from DB
+    user = get_user(session["user_email"])
+    used = user.get("consultations_used", 0) if user else session.get("consultations_used", 0)
+    session["consultations_used"] = used  # sync session
+
+    return jsonify({
+        "logged_in": True,
+        "name": session.get("user_name", ""),
+        "email": session.get("user_email", ""),
+        "consultations_used": used,
+        "max_consultations": MAX_FREE_CONSULTATIONS,
+        "remaining": MAX_FREE_CONSULTATIONS - used
+    })
 
 
 @app.route("/api/advisors")
@@ -1082,12 +1200,32 @@ def get_advisors():
 @app.route("/api/consult", methods=["POST"])
 def consult():
     """Send the user's problem to selected advisors and stream responses."""
+    # Check session
+    if not session.get("user_email"):
+        return jsonify({"error": "Veuillez vous inscrire pour utiliser le Board.", "redirect": "/register"}), 401
+
+    # Check consultation limit from DB
+    user = get_user(session["user_email"])
+    used = user.get("consultations_used", 0) if user else session.get("consultations_used", 0)
+
+    if used >= MAX_FREE_CONSULTATIONS:
+        return jsonify({
+            "error": "Vous avez utilisé vos 3 consultations gratuites.",
+            "limit_reached": True,
+            "used": used,
+            "max": MAX_FREE_CONSULTATIONS
+        }), 403
+
     data = request.json
     problem = data.get("problem", "")
     selected = data.get("advisors", list(ADVISORS.keys()))
     
     if not problem.strip():
         return jsonify({"error": "Veuillez décrire votre problème."}), 400
+
+    # Increment counter in Supabase
+    new_count = increment_user_consultations(session["user_email"])
+    session["consultations_used"] = new_count
 
     def generate():
         for advisor_key in selected:
@@ -1147,6 +1285,25 @@ def consult():
             "X-Accel-Buffering": "no"
         }
     )
+
+
+@app.route("/api/contact", methods=["POST"])
+def api_contact():
+    """Save contact form message to Supabase."""
+    data = request.json
+    name = data.get("name", "").strip()
+    email = data.get("email", "").strip()
+    subject = data.get("subject", "general")
+    message = data.get("message", "").strip()
+
+    if not name or not email or not message:
+        return jsonify({"error": "Tous les champs sont requis."}), 400
+
+    try:
+        save_contact_message(name, email, subject, message)
+        return jsonify({"ok": True})
+    except Exception as e:
+        return jsonify({"error": "Erreur serveur."}), 500
 
 
 @app.route("/api/report", methods=["POST"])
