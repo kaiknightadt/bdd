@@ -967,6 +967,188 @@
             .home-bottom { flex-direction: column; gap: 1rem; text-align: center; }
         }
 
+        /* Trial counter */
+        .trial-counter {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+        }
+
+        .trial-counter-label {
+            font-size: 0.78rem;
+            color: var(--text-secondary);
+        }
+
+        .trial-dots {
+            display: flex;
+            gap: 0.35rem;
+        }
+
+        .trial-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 1.5px solid var(--gold-dim);
+            background: transparent;
+            transition: all 0.3s;
+        }
+
+        .trial-dot.used {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .trial-dot.empty {
+            background: transparent;
+            border-color: var(--border);
+        }
+
+        .trial-counter-text {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Modal overlay */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-overlay.visible {
+            display: flex;
+        }
+
+        .modal-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            max-width: 460px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            animation: fadeInUp 0.4s ease;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.3rem;
+            transition: color 0.3s;
+        }
+
+        .modal-close:hover {
+            color: var(--text-primary);
+        }
+
+        .modal-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-card h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+        }
+
+        .modal-card h2 em {
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .modal-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid var(--border);
+            background: transparent;
+        }
+
+        .modal-dot.used {
+            background: var(--gold);
+            border-color: var(--gold);
+        }
+
+        .modal-perks {
+            text-align: left;
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .modal-perk {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+        }
+
+        .modal-perk span {
+            color: var(--gold);
+            margin-right: 0.4rem;
+        }
+
+        .modal-btn {
+            display: inline-block;
+            width: 100%;
+            padding: 0.9rem 1.5rem;
+            background: linear-gradient(135deg, var(--gold-dim), var(--gold));
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+
+        .modal-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 25px var(--gold-glow-strong);
+        }
+
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-primary); }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
@@ -983,6 +1165,11 @@
                 <div class="home-logo">BDD</div>
                 <h1>Board de Décision Digitale</h1>
                 <p>Composez votre board de conseillers, soumettez votre problème, et laissez les plus grands esprits débattre pour vous.</p>
+                <div class="trial-counter" id="trialCounterHome" style="display:none; margin: 1rem auto 0; width: fit-content;">
+                    <span class="trial-counter-label">Essais gratuits</span>
+                    <div class="trial-dots" id="trialDotsHome"></div>
+                    <span class="trial-counter-text" id="trialTextHome"></span>
+                </div>
             </header>
 
             <div class="section-label">Choisissez vos conseillers</div>
@@ -1278,7 +1465,14 @@
                     <div class="board-brand-logo">BDD</div>
                     <h2>Board de Décision Digitale</h2>
                 </div>
-                <button class="btn-back" onclick="goHome()">← Modifier le board</button>
+                <div style="display:flex; align-items:center; gap:1rem;">
+                    <div class="trial-counter" id="trialCounterBoard" style="display:none;">
+                        <span class="trial-counter-label">Essais</span>
+                        <div class="trial-dots" id="trialDotsBoard"></div>
+                        <span class="trial-counter-text" id="trialTextBoard"></span>
+                    </div>
+                    <button class="btn-back" onclick="goHome()">← Modifier le board</button>
+                </div>
             </div>
 
             <section class="input-section">
@@ -1318,12 +1512,95 @@
         </div>
     </div>
 
+    <!-- Trial Ended Modal -->
+    <div class="modal-overlay" id="trialEndedModal">
+        <div class="modal-card">
+            <button class="modal-close" onclick="closeTrialModal()">&times;</button>
+            <div class="modal-icon">&#9878;</div>
+            <h2>Vos essais gratuits sont <em>terminés</em></h2>
+            <p class="modal-subtitle">Vous avez utilisé vos 3 consultations gratuites. Passez à un plan payant pour continuer à consulter vos conseillers.</p>
+            <div class="modal-dots" id="modalDots"></div>
+            <div class="modal-perks">
+                <div class="modal-perk"><span>&#10022;</span> Consultations illimitées</div>
+                <div class="modal-perk"><span>&#10022;</span> 22 conseillers disponibles</div>
+                <div class="modal-perk"><span>&#10022;</span> Rapports de synthèse détaillés</div>
+                <div class="modal-perk"><span>&#10022;</span> Accès prioritaire aux nouveaux conseillers</div>
+            </div>
+            <a href="/pricing" class="modal-btn">Découvrir les plans</a>
+        </div>
+    </div>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.1/marked.min.js"></script>
     <script>
         let selectedAdvisors = new Set();
         let currentProblem = '';
         let advisorResponses = {};
         let isConsulting = false;
+        let trialInfo = { used: 0, max: 3, remaining: 3 };
+
+        // === TRIAL MANAGEMENT ===
+        async function loadTrialInfo() {
+            try {
+                const resp = await fetch('/api/me');
+                if (!resp.ok) return;
+                const data = await resp.json();
+                trialInfo.used = data.consultations_used || 0;
+                trialInfo.max = data.max_consultations || 3;
+                trialInfo.remaining = data.remaining != null ? data.remaining : (trialInfo.max - trialInfo.used);
+                updateTrialCounters();
+                if (trialInfo.remaining <= 0) {
+                    showTrialEndedModal();
+                }
+            } catch (e) {
+                console.error('Failed to load trial info:', e);
+            }
+        }
+
+        function updateTrialCounters() {
+            const containers = [
+                { counter: 'trialCounterHome', dots: 'trialDotsHome', text: 'trialTextHome' },
+                { counter: 'trialCounterBoard', dots: 'trialDotsBoard', text: 'trialTextBoard' }
+            ];
+            containers.forEach(({ counter, dots, text }) => {
+                const counterEl = document.getElementById(counter);
+                const dotsEl = document.getElementById(dots);
+                const textEl = document.getElementById(text);
+                if (!counterEl || !dotsEl || !textEl) return;
+                counterEl.style.display = 'flex';
+                dotsEl.innerHTML = '';
+                for (let i = 0; i < trialInfo.max; i++) {
+                    const dot = document.createElement('span');
+                    dot.className = i < trialInfo.used ? 'trial-dot used' : 'trial-dot empty';
+                    dotsEl.appendChild(dot);
+                }
+                textEl.textContent = trialInfo.remaining > 0
+                    ? `${trialInfo.remaining}/${trialInfo.max}`
+                    : `0/${trialInfo.max}`;
+            });
+
+            // Update modal dots
+            const modalDots = document.getElementById('modalDots');
+            if (modalDots) {
+                modalDots.innerHTML = '';
+                for (let i = 0; i < trialInfo.max; i++) {
+                    const dot = document.createElement('span');
+                    dot.className = i < trialInfo.used ? 'modal-dot used' : 'modal-dot';
+                    modalDots.appendChild(dot);
+                }
+            }
+        }
+
+        function showTrialEndedModal() {
+            updateTrialCounters();
+            document.getElementById('trialEndedModal').classList.add('visible');
+        }
+
+        function closeTrialModal() {
+            document.getElementById('trialEndedModal').classList.remove('visible');
+        }
+
+        // Load trial info on page load
+        loadTrialInfo();
 
         const ADVISORS_META = {
             gandhi: { name: 'Gandhi', title: 'Le Sage de la Non-Violence', img: '/static/img/gandhi.jpg' },
@@ -1366,6 +1643,10 @@
 
         function goToBoard() {
             if (selectedAdvisors.size === 0) return;
+            if (trialInfo.remaining <= 0) {
+                showTrialEndedModal();
+                return;
+            }
             buildBoardSeats();
             document.getElementById('screenHome').classList.remove('active');
             document.getElementById('screenBoard').classList.add('active');
@@ -1438,6 +1719,30 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ problem, advisors: Array.from(selectedAdvisors) })
                 });
+
+                if (response.status === 403) {
+                    const errorData = await response.json();
+                    if (errorData.limit_reached) {
+                        trialInfo.used = errorData.used || trialInfo.max;
+                        trialInfo.remaining = 0;
+                        updateTrialCounters();
+                        showTrialEndedModal();
+                        isConsulting = false;
+                        btn.classList.remove('loading');
+                        btn.disabled = false;
+                        return;
+                    }
+                }
+
+                if (!response.ok) {
+                    const errorData = await response.json().catch(() => ({}));
+                    console.error('Consultation error:', errorData.error || response.statusText);
+                    isConsulting = false;
+                    btn.classList.remove('loading');
+                    btn.disabled = false;
+                    return;
+                }
+
                 const reader = response.body.getReader();
                 const decoder = new TextDecoder();
                 let buffer = '';
@@ -1451,6 +1756,14 @@
                         if (!line.startsWith('data: ')) continue;
                         try { handleEvent(JSON.parse(line.slice(6))); } catch (e) {}
                     }
+                }
+
+                // Update trial counter after successful consultation
+                trialInfo.used++;
+                trialInfo.remaining = Math.max(0, trialInfo.max - trialInfo.used);
+                updateTrialCounters();
+                if (trialInfo.remaining <= 0) {
+                    // Don't show modal immediately after consultation - let user see results first
                 }
             } catch (err) { console.error('Consultation error:', err); }
 
